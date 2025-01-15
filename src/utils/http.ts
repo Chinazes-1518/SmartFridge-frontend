@@ -3,7 +3,7 @@ export function APIRequest(
     method: string = 'GET',
     query: any = {},
     body: any = {},
-    useAuth: boolean = false,
+    auth: boolean = false,
 ): Promise {
     return new Promise(async (resolve) => {
         let options: any = {
@@ -12,7 +12,7 @@ export function APIRequest(
                 'Content-Type': 'application/json',
             }
         }
-        if (useAuth) {
+        if (auth) {
             options.headers['x-token'] = `${localStorage.getItem('authToken')}`
         }
 
