@@ -3,7 +3,7 @@
 </script>
 
 <template>
-ddd
+игорь сигма
 </template>
 
 <style scoped>
