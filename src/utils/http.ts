@@ -27,7 +27,6 @@ export function APIRequest(
 
         await fetch(finalPath, options)
             .then(async (res) => {
-                console.log(finalPath, options)
                 return resolve({
                     json: await res.json(),
                     status: res.status,
