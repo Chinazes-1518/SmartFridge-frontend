@@ -1,6 +1,7 @@
 <template>
   <div class="root" id="root">
     <router-view v-slot="{ Component, route }">
+      <Header />
       <div class="layout">
         <transition name="page" mode="out-in">
           <component :is="Component" :key="route.fullPath" />
@@ -11,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-
+import Header from "@/components/Header.vue";
 </script>
 
 <style scoped>

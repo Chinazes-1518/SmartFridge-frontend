@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { APIRequest } from "@/utils/http";
-
-async function sigma() {
-  await APIRequest('', 'GET', {}, {}, false );
-}
+const authed = true
 </script>
 
 <template>
 <div class="d">
   <div class="container">
-    <button class="" @click="sigma()">игорь сигма</button>
-    Привет
+    <div class="info" v-if="!authed">
+      Для работы системы необходимо войти в аккаунт.
+    </div>
+    <div class="" v-else>
+      Вход успешно выполнен!
+    </div>
   </div>
 </div>
 </template>
