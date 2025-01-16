@@ -84,7 +84,8 @@ import {PhBarcode, PhChartLine, PhCheck, PhKey, PhShoppingCartSimple, PhDoor} fr
       border-radius: 15px;
       transition: .1s ease-in;
       justify-content: center;
-      background-color: #FFBD88;
+      background-color: #ffcda6;
+      border: 1px solid #FFBD88;
       display: flex;
       align-items: center;
       gap: 0 10px;
