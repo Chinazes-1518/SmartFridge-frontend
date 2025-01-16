@@ -1,6 +1,10 @@
 @import '@/styles/colors.scss';
 @import '@/styles/fonts.scss';
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   width: 100%;
   position: relative;
