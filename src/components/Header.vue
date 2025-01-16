@@ -23,6 +23,7 @@ import { PhBarcode, PhShoppingCartSimple, PhChartLine, PhKey } from "@phosphor-i
 <style scoped lang="scss">
 .header {
   background: var(--color-sub-background);
+  padding: 5px 0;
 
   &-container {
     margin: 0 auto;
@@ -40,6 +41,7 @@ import { PhBarcode, PhShoppingCartSimple, PhChartLine, PhKey } from "@phosphor-i
     align-items: center;
     justify-content: center;
     gap: 0 30px;
+    margin: 0;
   }
 
   &-button {
