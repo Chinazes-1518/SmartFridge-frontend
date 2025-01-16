@@ -7,7 +7,12 @@ async function sigma() {
 </script>
 
 <template>
-<button class="" @click="sigma()">игорь сигма</button>
+<div class="d">
+  <div class="container">
+    <button class="" @click="sigma()">игорь сигма</button>
+    Привет
+  </div>
+</div>
 </template>
 
 <style scoped>

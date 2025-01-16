@@ -4,7 +4,7 @@ export function APIRequest(
     query: any = {},
     body: any = {},
     auth: boolean = false,
-): Promise {
+): Promise<any> {
     return new Promise(async (resolve) => {
         let options: any = {
             method,
@@ -21,7 +21,7 @@ export function APIRequest(
         }
 
         let finalPath = import.meta.env.VITE_API_URL + path
-        if (query !== {}) {
+        if (query) {
             finalPath += `?${new URLSearchParams(query)}`
         }
 
