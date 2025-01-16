@@ -1,6 +1,6 @@
 <script setup lang="ts">
-const authed = true
-import {PhBarcode, PhChartLine, PhCheck, PhKey, PhShoppingCartSimple, PhDoor} from "@phosphor-icons/vue";
+let authed = false
+import {PhBarcode, PhChartLine, PhCheck, PhKey, PhShoppingCartSimple, PhDoor, PhPlusCircle } from "@phosphor-icons/vue";
 </script>
 
 <template>
@@ -25,7 +25,20 @@ import {PhBarcode, PhChartLine, PhCheck, PhKey, PhShoppingCartSimple, PhDoor} fr
             <PhKey :size="72" />
             <div class="info-card-name">Smart Fridge System</div>
             <div class="info-card-title">Требуется войти в аккаунт</div>
-            <RouterLink to="/login" class="info-card-button-login">Войти</RouterLink>
+            <div class="info-card-login">
+              <div class="info-card-login-part">
+                <div class="info-card-login-text">Логин</div>
+                <input type="text" class="info-card-login-input" placeholder="Введите логин ...">
+              </div>
+              <div class="info-card-login-part">
+                <div class="info-card-login-text">Пароль</div>
+                <input class="info-card-login-input" placeholder="Введите пароль ..." type="password">
+              </div>
+              <div class="info-card-login-part">
+                <button @click="" class="info-card-button" style="font-weight: 600"><PhKey :size="24" />Войти</button>
+                <RouterLink to="" class="info-card-button reg"><PhPlusCircle :size="20" />Зарегистрироваться</RouterLink>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -43,8 +56,8 @@ import {PhBarcode, PhChartLine, PhCheck, PhKey, PhShoppingCartSimple, PhDoor} fr
 
   &-card {
     padding: 25px;
-    background-color: rgba(255, 189, 136, 0.1);
-    border: 1px solid #FFBD88;
+    //background-color: rgba(255, 189, 136, 0.1);
+    //border: 1px solid #FFBD88;
     border-radius: 15px;
     text-align: center;
     max-width: 600px;
@@ -94,8 +107,47 @@ import {PhBarcode, PhChartLine, PhCheck, PhKey, PhShoppingCartSimple, PhDoor} fr
         opacity: .8;
       }
 
-      @media (max-width: 670px) {
+      &.reg {
+        margin-top: 10px;
+        font-size: 0.9rem;
+        padding: 7px 25px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.4);
+        border: 1px solid rgba(183, 183, 183);
+      }
+    }
 
+    &-login {
+      display: flex;
+      flex-direction: column;
+      gap: 30px 0;
+
+      &-text {
+        font-weight: 400;
+        text-align: left;
+      }
+
+      &-input {
+        margin-top: 5px;
+        width: 100% !important;
+        background: #f3ceac;
+        border: 1px solid #ffbd73;
+        padding: 10px 20px;
+        font-weight: 200;
+        border-radius: 0.5rem;
+        outline: 0;
+        transition:
+            border,
+            background 0.25s ease;
+
+        &:hover {
+          border: 1px solid #fca952;
+        }
+
+        &:focus {
+          border: 1px solid #fd9a2f;
+          background: #fcc697;
+        }
       }
     }
   }
