@@ -1,83 +1,77 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-
-let authed = ref( false )
-let reg = ref( true )
-import {
-  PhBarcode,
-  PhChartLine,
-  PhCheck,
-  PhKey,
-  PhShoppingCartSimple,
-  PhDoor,
-  PhPlusCircle,
-  PhPlus,
-  PhArrowCircleLeft
-} from "@phosphor-icons/vue";
+import InfoBlock from "@/components/InfoBlock.vue";
+import { PhBasket } from "@phosphor-icons/vue";
+// import { authed, reg } from "@/components/InfoBlock.vue";
 </script>
 
 <template>
-<div class="d">
-  <div class="container">
-    <div class="info">
-      <div class="info-wrapper">
-        <div class="info-card">
-          <div v-if="authed && !reg">
-            <PhCheck :size="72" />
-            <div class="info-card-name">Smart Fridge System</div>
-            <div class="info-card-title">Вячеслав, Вы успешно вошли в аккаунт!</div>
-            <div class="info-card-subtitle">Для быстрого перемещения по страницам используйте меню ниже</div>
-            <div class="info-card-buttons">
-              <button @click="authed = false; reg = false" class="info-card-button" style="font-weight: 400"><PhDoor :size="24" />Выйти</button>
-              <RouterLink to="/products" class="info-card-button"><PhBarcode :size="24" />Список продуктов</RouterLink>
-              <RouterLink to="/buy" class="info-card-button"><PhShoppingCartSimple :size="24" />Список покупок</RouterLink>
-              <RouterLink to="/analitics" class="info-card-button"><PhChartLine :size="24" />Аналитика</RouterLink>
+<div class="">
+  <InfoBlock />
+  <div class="products">
+    <div class="products-container container">
+      <div class="products-title">Список продуктов</div>
+      <div class="products-space">
+        <div class="products-wrapper">
+          <div class="products-card">
+            <div class="products-card-inner">
+              <div class="products-card-title">Хлеб</div>
+              <div class="products-card-text">Количество: 17 штук.</div>
             </div>
           </div>
-          <div v-if="!authed && !reg">
-            <PhKey :size="72" />
-            <div class="info-card-name">Smart Fridge System</div>
-            <div class="info-card-title">Требуется войти в аккаунт</div>
-            <div class="info-card-login">
-              <div class="info-card-login-part">
-                <div class="info-card-login-text">Логин</div>
-                <input type="text" class="info-card-login-input" placeholder="Введите логин ...">
-              </div>
-              <div class="info-card-login-part">
-                <div class="info-card-login-text">Пароль</div>
-                <input class="info-card-login-input" placeholder="Введите пароль ..." type="password">
-              </div>
-              <div class="info-card-login-part">
-                <button @click="authed = true; reg = false" class="info-card-button info-card-button-login" style="font-weight: 600"><PhKey :size="24" />Войти</button>
-                <button @click="authed = false; reg = true"  class="info-card-button reg"><PhPlusCircle :size="20" />Зарегистрироваться</button>
+          <div class="products-color yellow">
+            <div class="products-color-inner">
+              <div class="products-color-amount">16 дней</div>
+              <!--              <div class="products-color-text">дней</div>-->
+              <div class="products-color-subtext">23.01.2027</div>
+            </div>
+          </div>
+        </div>
+        <div class="products-wrapper">
+          <div class="products-card">
+            <div class="products-card-inner">
+              <div class="products-card-title">Молоко</div>
+              <div class="products-card-text">Количество: 17 штук.</div>
+            </div>
+          </div>
+          <div class="products-color red">
+            <div class="products-color-inner buy">
+              <button class="products-color-buy"><PhBasket :size="24" />Добавить в корзину</button>
+             <div class="">
+               <div class="products-color-amount">16 дней</div>
+               <div class="products-color-subtext">23.01.2027</div>
+             </div>
+            </div>
+          </div>
+        </div>
+        <div class="products-wrapper">
+          <div class="products-card">
+            <div class="products-card-inner">
+              <div class="products-card-title">Говядина</div>
+              <div class="products-card-text">Количество: 17 штук.</div>
+            </div>
+          </div>
+          <div class="products-color red">
+            <div class="products-color-inner buy">
+              <button class="products-color-buy"><PhBasket :size="24" />Добавить в корзину</button>
+              <div class="">
+                <div class="products-color-amount">16 дней</div>
+                <div class="products-color-subtext">23.01.2027</div>
               </div>
             </div>
           </div>
-          <div v-if="!authed && reg">
-            <PhPlusCircle :size="72" />
-            <div class="info-card-name">Smart Fridge System</div>
-            <div class="info-card-title">Зарегистрировать аккаунт</div>
-            <div class="info-card-login">
-              <div class="info-card-login-part">
-                <div class="info-card-login-text">Имя</div>
-                <input type="text" class="info-card-login-input" placeholder="Введите имя ...">
-              </div>
-              <div class="info-card-login-part">
-                <div class="info-card-login-text">Логин</div>
-                <input type="text" class="info-card-login-input" placeholder="Придумайте логин ...">
-              </div>
-              <div class="info-card-login-part">
-                <div class="info-card-login-text">Пароль</div>
-                <input class="info-card-login-input" placeholder="Введите пароль ..." type="password">
-              </div>
-              <div class="info-card-login-part">
-                <div class="info-card-login-text">Пароль от администратора</div>
-                <input type="text" class="info-card-login-input" placeholder="Должен быть выдан">
-              </div>
-              <div class="info-card-login-part">
-                <button @click="authed = false; reg = false" class="info-card-button reg"><PhArrowCircleLeft :size="20" />Вернуться назад</button>
-                <button @click="authed = false; reg = false" class="info-card-button info-card-button-login" style="font-weight: 600"><PhPlusCircle :size="24" />Зарегистрироваться</button>
-              </div>
+        </div>
+        <div class="products-wrapper">
+          <div class="products-card">
+            <div class="products-card-inner">
+              <div class="products-card-title">Дубайский шоколад</div>
+              <div class="products-card-text">Количество: 17 штук.</div>
+            </div>
+          </div>
+          <div class="products-color green">
+            <div class="products-color-inner">
+              <div class="products-color-amount">16 дней</div>
+<!--              <div class="products-color-text">дней</div>-->
+              <div class="products-color-subtext">23.01.2027</div>
             </div>
           </div>
         </div>
@@ -88,120 +82,106 @@ import {
 </template>
 
 <style scoped lang="scss">
-.info {
-  display: flex;
-  height: 100vh;
-  align-items: center;
-  justify-content: center;
+.products {
+  &-title {
+    font-size: 1.7rem;
+    font-weight: 600;
+  }
+
+  &-space {
+    display: flex;
+    flex-direction: column;
+    gap: 20px 0;
+    margin-top: 30px;
+  }
+
+  &-wrapper {
+    display: flex;
+    justify-content: space-between;
+    gap: 0 20px;
+    width: 100%;
+  }
 
   &-card {
-    padding: 25px;
-    //background-color: rgba(255, 189, 136, 0.1);
-    //border: 1px solid #FFBD88;
+    padding: 30px;
+    width: 400px;
+    background: var(--color-sub-background);
+    border: 1px solid var(--color-main);
     border-radius: 15px;
-    text-align: center;
-    max-width: 600px;
+    //height: 100px;
+    display: flex;
+    align-items: center;
+    //justify-content: center;
 
     &-title {
       font-size: 1.5rem;
       font-weight: 600;
-      margin-top: 4px;
-      margin-bottom: 20px;
     }
+  }
 
-    &-name {
-      font-size: 0.7rem;
-      margin-top: 16px;
-      text-transform: uppercase;
-      font-weight: 600;
-      color: #888888;
-    }
+  &-color {
+    width: 50%;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    padding: 15px;
 
-    &-buttons {
-      margin-top: 16px;
+    &-inner.buy {
       width: 100%;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
-
-      @media (max-width: 670px) {
-        display: flex;
-        flex-direction: column;
-      }
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0 30px;
     }
 
-    &-button, &-button-login {
-      width: 100%;
+    &-buy {
       text-align: center;
       padding: 15px 25px;
       border-radius: 15px;
       transition: .1s ease-in;
       justify-content: center;
-      background-color: #ffcda6;
-      border: 1px solid #FFBD88;
+      background-color: rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(250, 247, 247, 0.5);
       display: flex;
       align-items: center;
       gap: 0 15px;
-
-      &-login {
-        margin-top: 10px;
-        background-color: #fcc697 !important;
-        border: 1px solid #fd9a2f;
-      }
+      height: auto;
 
       &:hover {
-        opacity: .8;
-      }
-
-      &.reg {
-        margin-top: 10px;
-        font-size: 0.9rem;
-        padding: 7px 25px;
-        border-radius: 10px;
-        background: rgba(255, 255, 255, 0.4);
-        border: 1px solid rgba(183, 183, 183);
+        background-color: rgba(255, 255, 255, 0.5);
+        border: 1px solid rgba(250, 247, 247, 0.7);
       }
     }
 
-    &-login {
-      display: flex;
-      flex-direction: column;
-      gap: 30px 0;
+    &.green {
+      background: linear-gradient(to right, var(--color-main-background), #75cd74);
+    }
 
-      &-text {
-        font-weight: 400;
-        text-align: left;
-      }
+    &.yellow {
+      background: linear-gradient(to right, var(--color-main-background), #ffda47);
 
-      &-input {
-        margin-top: 8px;
-        width: 100% !important;
-        background: #f3ceac;
-        border: 1px solid #ffbd73;
-        padding: 10px 20px;
-        font-weight: 200;
-        border-radius: 0.5rem;
-        outline: 0;
-        transition:
-            border,
-            background 0.25s ease;
+    }
 
-        &:hover {
-          border: 1px solid #fca952;
-        }
+    &.red {
+      background: linear-gradient(to right, var(--color-main-background), #f35d50);
+    }
 
-        &:focus {
-          border: 1px solid #fd9a2f;
-          background: #fcc697;
-        }
-      }
+    &-amount {
+      font-size: 2.7rem;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    &-text {
+      font-size: 1.6rem;
+      font-weight: 400;
+      text-align: center;
+    }
+
+    &-subtext {
+      text-align: center;
     }
   }
 }
 </style>
 
-<style lang="scss">
-.header {
-  display: none;
-}
-</style>
