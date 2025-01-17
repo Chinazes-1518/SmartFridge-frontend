@@ -1,6 +1,19 @@
 <script setup lang="ts">
-let authed = false
-import {PhBarcode, PhChartLine, PhCheck, PhKey, PhShoppingCartSimple, PhDoor, PhPlusCircle } from "@phosphor-icons/vue";
+import { ref } from 'vue'
+
+let authed = ref( false )
+let reg = ref( true )
+import {
+  PhBarcode,
+  PhChartLine,
+  PhCheck,
+  PhKey,
+  PhShoppingCartSimple,
+  PhDoor,
+  PhPlusCircle,
+  PhPlus,
+  PhArrowCircleLeft
+} from "@phosphor-icons/vue";
 </script>
 
 <template>
@@ -9,19 +22,19 @@ import {PhBarcode, PhChartLine, PhCheck, PhKey, PhShoppingCartSimple, PhDoor, Ph
     <div class="info">
       <div class="info-wrapper">
         <div class="info-card">
-          <div v-if="authed">
+          <div v-if="authed && !reg">
             <PhCheck :size="72" />
             <div class="info-card-name">Smart Fridge System</div>
             <div class="info-card-title">Вячеслав, Вы успешно вошли в аккаунт!</div>
             <div class="info-card-subtitle">Для быстрого перемещения по страницам используйте меню ниже</div>
             <div class="info-card-buttons">
-              <RouterLink to="" class="info-card-button" style="font-weight: 400"><PhDoor :size="24" />Выйти</RouterLink>
+              <button @click="authed = false; reg = false" class="info-card-button" style="font-weight: 400"><PhDoor :size="24" />Выйти</button>
               <RouterLink to="/products" class="info-card-button"><PhBarcode :size="24" />Список продуктов</RouterLink>
               <RouterLink to="/buy" class="info-card-button"><PhShoppingCartSimple :size="24" />Список покупок</RouterLink>
               <RouterLink to="/analitics" class="info-card-button"><PhChartLine :size="24" />Аналитика</RouterLink>
             </div>
           </div>
-          <div v-else>
+          <div v-if="!authed && !reg">
             <PhKey :size="72" />
             <div class="info-card-name">Smart Fridge System</div>
             <div class="info-card-title">Требуется войти в аккаунт</div>
@@ -35,8 +48,35 @@ import {PhBarcode, PhChartLine, PhCheck, PhKey, PhShoppingCartSimple, PhDoor, Ph
                 <input class="info-card-login-input" placeholder="Введите пароль ..." type="password">
               </div>
               <div class="info-card-login-part">
-                <button @click="" class="info-card-button" style="font-weight: 600"><PhKey :size="24" />Войти</button>
-                <RouterLink to="" class="info-card-button reg"><PhPlusCircle :size="20" />Зарегистрироваться</RouterLink>
+                <button @click="authed = true; reg = false" class="info-card-button info-card-button-login" style="font-weight: 600"><PhKey :size="24" />Войти</button>
+                <button @click="authed = false; reg = true"  class="info-card-button reg"><PhPlusCircle :size="20" />Зарегистрироваться</button>
+              </div>
+            </div>
+          </div>
+          <div v-if="!authed && reg">
+            <PhPlusCircle :size="72" />
+            <div class="info-card-name">Smart Fridge System</div>
+            <div class="info-card-title">Зарегистрировать аккаунт</div>
+            <div class="info-card-login">
+              <div class="info-card-login-part">
+                <div class="info-card-login-text">Имя</div>
+                <input type="text" class="info-card-login-input" placeholder="Введите имя ...">
+              </div>
+              <div class="info-card-login-part">
+                <div class="info-card-login-text">Логин</div>
+                <input type="text" class="info-card-login-input" placeholder="Придумайте логин ...">
+              </div>
+              <div class="info-card-login-part">
+                <div class="info-card-login-text">Пароль</div>
+                <input class="info-card-login-input" placeholder="Введите пароль ..." type="password">
+              </div>
+              <div class="info-card-login-part">
+                <div class="info-card-login-text">Пароль от администратора</div>
+                <input type="text" class="info-card-login-input" placeholder="Должен быть выдан">
+              </div>
+              <div class="info-card-login-part">
+                <button @click="authed = false; reg = false" class="info-card-button reg"><PhArrowCircleLeft :size="20" />Вернуться назад</button>
+                <button @click="authed = false; reg = false" class="info-card-button info-card-button-login" style="font-weight: 600"><PhPlusCircle :size="24" />Зарегистрироваться</button>
               </div>
             </div>
           </div>
@@ -101,7 +141,13 @@ import {PhBarcode, PhChartLine, PhCheck, PhKey, PhShoppingCartSimple, PhDoor, Ph
       border: 1px solid #FFBD88;
       display: flex;
       align-items: center;
-      gap: 0 10px;
+      gap: 0 15px;
+
+      &-login {
+        margin-top: 10px;
+        background-color: #fcc697 !important;
+        border: 1px solid #fd9a2f;
+      }
 
       &:hover {
         opacity: .8;
@@ -128,7 +174,7 @@ import {PhBarcode, PhChartLine, PhCheck, PhKey, PhShoppingCartSimple, PhDoor, Ph
       }
 
       &-input {
-        margin-top: 5px;
+        margin-top: 8px;
         width: 100% !important;
         background: #f3ceac;
         border: 1px solid #ffbd73;
