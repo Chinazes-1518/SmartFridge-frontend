@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { APIRequest } from "@/utils/http";
 
-let authed = ref( true )
+import router from "@/router";
+
+let authed = ref( false )
 let reg = ref( false )
 import {
   PhBarcode,
@@ -14,6 +17,24 @@ import {
   PhPlus,
   PhArrowCircleLeft
 } from "@phosphor-icons/vue";
+let login = ref( '' )
+let password = ref( '' )
+
+let authData = ref()
+
+async function submitAuth() {
+  const data = await APIRequest( '/auth/login', 'GET', {
+    login: login.value,
+    password: password.value
+  });
+
+  if (data.status === 200) {
+    authed.value = true
+    localStorage.setItem('authToken', data.json.token)
+    authData.value = data.json
+  }
+
+}
 
 // export {authed, reg}
 </script>
@@ -27,26 +48,26 @@ import {
             <div v-if="authed && !reg">
               <PhCheck :size="72" />
               <div class="info-card-name">Smart Fridge System</div>
-              <div class="info-card-title">Вячеслав, Вы успешно вошли в аккаунт!</div>
+              <div class="info-card-title">{{ authData.name }}, Вы успешно вошли в аккаунт!</div>
             </div>
             <div v-if="!authed && !reg">
               <PhKey :size="72" />
               <div class="info-card-name">Smart Fridge System</div>
               <div class="info-card-title">Требуется войти в аккаунт</div>
-              <div class="info-card-login">
+              <form class="info-card-login" @submit.prevent="submitAuth">
                 <div class="info-card-login-part">
                   <div class="info-card-login-text">Логин</div>
-                  <input type="text" class="info-card-login-input" placeholder="Введите логин ...">
+                  <input type="text" class="info-card-login-input" placeholder="Введите логин ..." v-model="login">
                 </div>
                 <div class="info-card-login-part">
                   <div class="info-card-login-text">Пароль</div>
-                  <input class="info-card-login-input" placeholder="Введите пароль ..." type="password">
+                  <input class="info-card-login-input" placeholder="Введите пароль ..." type="password" v-model="password">
                 </div>
                 <div class="info-card-login-part">
-                  <button @click="authed = true; reg = false" class="info-card-button info-card-button-login" style="font-weight: 600"><PhKey :size="24" />Войти</button>
+                  <button type="submit" class="info-card-button info-card-button-login" style="font-weight: 600"><PhKey :size="24" />Войти</button>
                   <button @click="authed = false; reg = true"  class="info-card-button reg"><PhPlusCircle :size="20" />Зарегистрироваться</button>
                 </div>
-              </div>
+              </form>
             </div>
             <div v-if="!authed && reg">
               <PhPlusCircle :size="72" />

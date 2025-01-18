@@ -25,6 +25,7 @@ export function APIRequest(
             finalPath += `?${new URLSearchParams(query)}`
         }
 
+        console.log(finalPath, options)
         await fetch(finalPath, options)
             .then(async (res) => {
                 return resolve({
@@ -33,9 +34,9 @@ export function APIRequest(
                 })
             })
             .catch((error: Error) => {
-                console.log(`ERROR: ${error.message}`)
+                console.log(`ERROR: ${error}`)
                 return resolve({
-                    error: `ERROR: ${error.message}`,
+                    error: `ERROR: ${error}`,
                 })
             })
     })

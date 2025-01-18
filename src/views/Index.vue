@@ -2,6 +2,7 @@
 import InfoBlock from "@/components/InfoBlock.vue";
 import { PhBasket } from "@phosphor-icons/vue";
 // import { authed, reg } from "@/components/InfoBlock.vue";
+// import { ref } from "vue";
 </script>
 
 <template>
