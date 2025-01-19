@@ -27,7 +27,8 @@ let registerData = ref({
   secret: ''
 })
 
-let error = ref( '' )
+let errorLogin = ref( '' )
+let errorReg = ref( '' )
 
 let authData = ref()
 
@@ -41,25 +42,26 @@ async function submitAuth() {
     authed.value = true
     localStorage.setItem('authToken', data.json.token)
     authData.value = data.json
-  } else if (data.status === 403) {
-    error.value = data.json.error
-    console.log(error.value)
+  } else {
+    errorLogin.value = data.json.detail.error
   }
 }
 
 async function submitReg() {
-  const data = await APIRequest( '/auth/register', 'GET', {
+  const data = await APIRequest( '/auth/register', 'POST', {}, {
     name: registerData.value.username,
     password: registerData.value.password,
     login: registerData.value.login,
     secret: registerData.value.secret
-  })
+  });
 
   if (data.status === 200) {
     localStorage.setItem('authToken', data.json.token)
     authData.value = registerData.value
     authed.value = true
     reg.value = false
+  } else {
+    errorReg.value = data.json.detail.error
   }
 }
 
@@ -90,15 +92,15 @@ async function submitReg() {
                   <div class="info-card-login-text">Пароль</div>
                   <input class="info-card-login-input" placeholder="Введите пароль ..." type="password" v-model="password">
                 </div>
+                <div class="info-card-error" v-if="(!authed || !reg) && errorLogin.length > 0">
+                  <PhXCircle :size="24" />
+                  {{ errorLogin }}
+                </div>
                 <div class="info-card-login-part">
                   <button type="submit" class="info-card-button info-card-button-login" style="font-weight: 600"><PhKey :size="24" />Войти</button>
                   <button @click="authed = false; reg = true"  class="info-card-button reg"><PhPlusCircle :size="20" />Зарегистрироваться</button>
                 </div>
               </form>
-              <div class="info-card-error" v-if="(!authed || !reg) && error.length > 0">
-                <PhXCircle />
-                {{ error }}
-              </div>
             </div>
             <div v-if="!authed && reg">
               <PhPlusCircle :size="72" />
@@ -121,11 +123,16 @@ async function submitReg() {
                   <div class="info-card-login-text">Пароль от администратора</div>
                   <input type="text" class="info-card-login-input" placeholder="Должен быть выдан" v-model="registerData.secret">
                 </div>
+                <div class="info-card-error" v-if="(!authed || !reg) && errorReg.length > 0">
+                  <PhXCircle :size="24" />
+                  {{ errorReg }}
+                </div>
                 <div class="info-card-login-part">
                   <button @click="authed = false; reg = false" class="info-card-button reg"><PhArrowCircleLeft :size="20" />Вернуться назад</button>
                   <button type="submit" class="info-card-button info-card-button-login" style="font-weight: 600"><PhPlusCircle :size="24" />Зарегистрироваться</button>
                 </div>
               </form>
+
             </div>
           </div>
         </div>
@@ -152,7 +159,7 @@ async function submitReg() {
     //border: 1px solid #FFBD88;
     border-radius: 15px;
     text-align: center;
-    max-width: 600px;
+    width: 600px;
 
     &-title {
       font-size: 1.5rem;
@@ -196,7 +203,7 @@ async function submitReg() {
       gap: 0 15px;
 
       &-login {
-        margin-top: 10px;
+        //margin-top: 10px;
         background-color: #fcc697 !important;
         border: 1px solid #fd9a2f;
       }
@@ -206,7 +213,7 @@ async function submitReg() {
       }
 
       &.reg {
-        margin-top: 10px;
+        margin: 10px 0;
         font-size: 0.9rem;
         padding: 7px 25px;
         border-radius: 10px;
@@ -247,6 +254,13 @@ async function submitReg() {
           background: #fcc697;
         }
       }
+    }
+
+    &-error {
+      color: #ff0000;
+      display: flex;
+      align-items: center;
+      gap: 0 10px;
     }
   }
 }

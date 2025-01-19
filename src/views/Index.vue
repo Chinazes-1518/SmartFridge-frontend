@@ -1,8 +1,16 @@
 <script setup lang="ts">
 import InfoBlock from "@/components/InfoBlock.vue";
 import { PhBasket } from "@phosphor-icons/vue";
+import {onMounted} from "vue";
+import {APIRequest} from "@/utils/http";
 // import { authed, reg } from "@/components/InfoBlock.vue";
 // import { ref } from "vue";
+
+// onMounted(async () => {
+//   if (localStorage.getItem("authToken")) {
+//     const data = APIRequest
+//   }
+// })
 </script>
 
 <template>
