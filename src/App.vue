@@ -1,9 +1,13 @@
 <template>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
   <div class="root" id="root">
     <router-view v-slot="{ Component, route }">
       <Header />
       <div class="layout">
-        <transition name="page" mode="out-in">
+        <transition
+            enter-active-class="animate__animated animate__fadeIn"
+            leave-active-class="animate__animated animate__fadeOut"
+            mode="out-in">
           <component :is="Component" :key="route.fullPath" />
         </transition>
       </div>
