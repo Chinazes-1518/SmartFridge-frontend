@@ -47,80 +47,80 @@ const auth = authStore()
 
 <template>
 <div class="">
-  <div class="" v-if="!auth.isAuth">
+  <div class="">
     <InfoBlock />
   </div>
-  <div class="products" v-if="auth.isAuth">
-    <div class="products-container container">
-      <div class="products-title">Список продуктов</div>
-      <div class="products-space">
-        <div class="products-wrapper">
-          <div class="products-card">
-            <div class="products-card-inner">
-              <div class="products-card-title">Хлеб</div>
-              <div class="products-card-text">Количество: 17 штук.</div>
-            </div>
-          </div>
-          <div class="products-color yellow">
-            <div class="products-color-inner">
-              <div class="products-color-amount">16 дней</div>
-              <!--              <div class="products-color-text">дней</div>-->
-              <div class="products-color-subtext">23.01.2027</div>
-            </div>
-          </div>
-        </div>
-        <div class="products-wrapper">
-          <div class="products-card">
-            <div class="products-card-inner">
-              <div class="products-card-title">Молоко</div>
-              <div class="products-card-text">Количество: 17 штук.</div>
-            </div>
-          </div>
-          <div class="products-color red">
-            <div class="products-color-inner buy">
-              <button class="products-color-buy"><PhBasket :size="24" />Добавить в корзину</button>
-             <div class="">
-               <div class="products-color-amount">16 дней</div>
-               <div class="products-color-subtext">23.01.2027</div>
-             </div>
-            </div>
-          </div>
-        </div>
-        <div class="products-wrapper">
-          <div class="products-card">
-            <div class="products-card-inner">
-              <div class="products-card-title">Говядина</div>
-              <div class="products-card-text">Количество: 17 штук.</div>
-            </div>
-          </div>
-          <div class="products-color red">
-            <div class="products-color-inner buy">
-              <button class="products-color-buy"><PhBasket :size="24" />Добавить в корзину</button>
-              <div class="">
-                <div class="products-color-amount">16 дней</div>
-                <div class="products-color-subtext">23.01.2027</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="products-wrapper">
-          <div class="products-card">
-            <div class="products-card-inner">
-              <div class="products-card-title">Дубайский шоколад</div>
-              <div class="products-card-text">Количество: 17 штук.</div>
-            </div>
-          </div>
-          <div class="products-color green">
-            <div class="products-color-inner">
-              <div class="products-color-amount">16 дней</div>
-<!--              <div class="products-color-text">дней</div>-->
-              <div class="products-color-subtext">23.01.2027</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+<!--  <div class="products" v-if="auth.isAuth">-->
+<!--    <div class="products-container container">-->
+<!--      <div class="products-title">Список продуктов</div>-->
+<!--      <div class="products-space">-->
+<!--        <div class="products-wrapper">-->
+<!--          <div class="products-card">-->
+<!--            <div class="products-card-inner">-->
+<!--              <div class="products-card-title">Хлеб</div>-->
+<!--              <div class="products-card-text">Количество: 17 штук.</div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="products-color yellow">-->
+<!--            <div class="products-color-inner">-->
+<!--              <div class="products-color-amount">16 дней</div>-->
+<!--              &lt;!&ndash;              <div class="products-color-text">дней</div>&ndash;&gt;-->
+<!--              <div class="products-color-subtext">23.01.2027</div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="products-wrapper">-->
+<!--          <div class="products-card">-->
+<!--            <div class="products-card-inner">-->
+<!--              <div class="products-card-title">Молоко</div>-->
+<!--              <div class="products-card-text">Количество: 17 штук.</div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="products-color red">-->
+<!--            <div class="products-color-inner buy">-->
+<!--              <button class="products-color-buy"><PhBasket :size="24" />Добавить в корзину</button>-->
+<!--             <div class="">-->
+<!--               <div class="products-color-amount">16 дней</div>-->
+<!--               <div class="products-color-subtext">23.01.2027</div>-->
+<!--             </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="products-wrapper">-->
+<!--          <div class="products-card">-->
+<!--            <div class="products-card-inner">-->
+<!--              <div class="products-card-title">Говядина</div>-->
+<!--              <div class="products-card-text">Количество: 17 штук.</div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="products-color red">-->
+<!--            <div class="products-color-inner buy">-->
+<!--              <button class="products-color-buy"><PhBasket :size="24" />Добавить в корзину</button>-->
+<!--              <div class="">-->
+<!--                <div class="products-color-amount">16 дней</div>-->
+<!--                <div class="products-color-subtext">23.01.2027</div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="products-wrapper">-->
+<!--          <div class="products-card">-->
+<!--            <div class="products-card-inner">-->
+<!--              <div class="products-card-title">Дубайский шоколад</div>-->
+<!--              <div class="products-card-text">Количество: 17 штук.</div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="products-color green">-->
+<!--            <div class="products-color-inner">-->
+<!--              <div class="products-color-amount">16 дней</div>-->
+<!--&lt;!&ndash;              <div class="products-color-text">дней</div>&ndash;&gt;-->
+<!--              <div class="products-color-subtext">23.01.2027</div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
 </div>
 </template>
 
