@@ -21,7 +21,7 @@ let login = ref( '' )
 let password = ref( '' )
 
 let registerData = ref({
-  username: '',
+  name: '',
   password: '',
   login: '',
   secret: ''
@@ -49,7 +49,7 @@ async function submitAuth() {
 
 async function submitReg() {
   const data = await APIRequest( '/auth/register', 'POST', {}, {
-    name: registerData.value.username,
+    name: registerData.value.name,
     password: registerData.value.password,
     login: registerData.value.login,
     secret: registerData.value.secret
@@ -109,7 +109,7 @@ async function submitReg() {
               <form class="info-card-login" @submit.prevent="submitReg">
                 <div class="info-card-login-part">
                   <div class="info-card-login-text">Имя</div>
-                  <input type="text" class="info-card-login-input" placeholder="Введите имя ..." v-model="registerData.username">
+                  <input type="text" class="info-card-login-input" placeholder="Введите имя ..." v-model="registerData.name">
                 </div>
                 <div class="info-card-login-part">
                   <div class="info-card-login-text">Логин</div>
