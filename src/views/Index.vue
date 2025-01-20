@@ -3,19 +3,53 @@ import InfoBlock from "@/components/InfoBlock.vue";
 import { PhBasket } from "@phosphor-icons/vue";
 import {onMounted} from "vue";
 import {APIRequest} from "@/utils/http";
+import {ref} from 'vue'
+import router from '@/router'
+
 // import { authed, reg } from "@/components/InfoBlock.vue";
 // import { ref } from "vue";
 
-// onMounted(async () => {
-//   if (localStorage.getItem("authToken")) {
-//     const data = APIRequest
-//   }
-// })
+let userData = ref({
+  username: '',
+  login: ''
+})
+
+let auth = ref( true )
+
+
+onMounted(async () => {
+  if (localStorage.getItem("authToken")) {
+    const data = APIRequest("/auth/verify", "GET", {
+      token: localStorage.getItem("authToken")
+    })
+
+
+    if (data.status === 200) {
+      userData.value = data.json
+      auth.value = true
+    } else {
+      // alert(data.json.detail.error)
+    }
+  } else {
+    auth.value = false
+  }
+})
+
+async function addBuyList(f: any) {
+  const data = await APIRequest("/buylist/add", "POST", {}, {}, true)
+  if (data.status === 200) {
+    alert("Успешно!");
+  } else {
+    alert(`Ошибка: ${data.json.detail.error}`)
+  }
+}
 </script>
 
 <template>
 <div class="">
-  <InfoBlock />
+  <div class="" v-if="!auth">
+    <InfoBlock />
+  </div>
   <div class="products">
     <div class="products-container container">
       <div class="products-title">Список продуктов</div>
