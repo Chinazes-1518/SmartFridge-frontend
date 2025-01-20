@@ -13,7 +13,7 @@ export function APIRequest(
             }
         }
         if (auth) {
-            options.headers['x-token'] = `${localStorage.getItem('authToken')}`
+            options.headers['token'] = `${localStorage.getItem('authToken')}`
         }
 
         if (method !== 'GET') {
