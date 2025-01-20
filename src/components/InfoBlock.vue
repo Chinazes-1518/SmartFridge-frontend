@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { APIRequest } from "@/utils/http";
+import { authStore } from "@/utils/auth";
+
+const auth = authStore()
 
 import router from "@/router";
 
-let authed = ref( false )
 let reg = ref( false )
 import {
   PhBarcode,
@@ -39,9 +41,10 @@ async function submitAuth() {
   });
 
   if (data.status === 200) {
-    authed.value = true
     localStorage.setItem('authToken', data.json.token)
-    authData.value = data.json
+    await auth.prepareStore()
+    // await router.push("/")
+
   } else {
     errorLogin.value = data.json.detail.error
   }
@@ -57,29 +60,26 @@ async function submitReg() {
 
   if (data.status === 200) {
     localStorage.setItem('authToken', data.json.token)
-    authData.value = registerData.value
-    authed.value = true
-    reg.value = false
+    await auth.prepareStore()
   } else {
     errorReg.value = data.json.detail.error
   }
 }
 
-// export {authed, reg}
 </script>
 
 <template>
   <div class="d">
     <div class="container">
-      <div class="info" :class="{ authed: authed }">
+      <div class="info" :class="{ authed: auth.isAuth }">
         <div class="info-wrapper">
           <div class="info-card">
-            <div v-if="authed && !reg">
+            <div v-if="auth.isAuth && !reg">
               <PhCheck :size="72" />
               <div class="info-card-name">Smart Fridge System</div>
-              <div class="info-card-title">{{ authData.name }}, Вы успешно вошли в аккаунт!</div>
+              <div class="info-card-title">{{ auth.user.name }}, Вы успешно вошли в аккаунт!</div>
             </div>
-            <div v-if="!authed && !reg">
+            <div v-if="!auth.isAuth && !reg">
               <PhKey :size="72" />
               <div class="info-card-name">Smart Fridge System</div>
               <div class="info-card-title">Требуется войти в аккаунт</div>
@@ -92,17 +92,17 @@ async function submitReg() {
                   <div class="info-card-login-text">Пароль</div>
                   <input class="info-card-login-input" placeholder="Введите пароль ..." type="password" v-model="password">
                 </div>
-                <div class="info-card-error" v-if="(!authed || !reg) && errorLogin.length > 0">
+                <div class="info-card-error" v-if="(!auth.isAuth || !reg) && errorLogin.length > 0">
                   <PhXCircle :size="24" />
                   {{ errorLogin }}
                 </div>
                 <div class="info-card-login-part">
                   <button type="submit" class="info-card-button info-card-button-login" style="font-weight: 600"><PhKey :size="24" />Войти</button>
-                  <button @click="authed = false; reg = true"  class="info-card-button reg"><PhPlusCircle :size="20" />Зарегистрироваться</button>
+                  <button @click="reg = true"  class="info-card-button reg"><PhPlusCircle :size="20" />Зарегистрироваться</button>
                 </div>
               </form>
             </div>
-            <div v-if="!authed && reg">
+            <div v-if="!auth.isAuth && reg">
               <PhPlusCircle :size="72" />
               <div class="info-card-name">Smart Fridge System</div>
               <div class="info-card-title">Зарегистрировать аккаунт</div>
@@ -123,12 +123,12 @@ async function submitReg() {
                   <div class="info-card-login-text">Пароль от администратора</div>
                   <input type="text" class="info-card-login-input" placeholder="Должен быть выдан" v-model="registerData.secret">
                 </div>
-                <div class="info-card-error" v-if="(!authed || !reg) && errorReg.length > 0">
+                <div class="info-card-error" v-if="(!auth.isAuth || !reg) && errorReg.length > 0">
                   <PhXCircle :size="24" />
                   {{ errorReg }}
                 </div>
                 <div class="info-card-login-part">
-                  <button @click="authed = false; reg = false" class="info-card-button reg"><PhArrowCircleLeft :size="20" />Вернуться назад</button>
+                  <button @click="reg = false" class="info-card-button reg"><PhArrowCircleLeft :size="20" />Вернуться назад</button>
                   <button type="submit" class="info-card-button info-card-button-login" style="font-weight: 600"><PhPlusCircle :size="24" />Зарегистрироваться</button>
                 </div>
               </form>
