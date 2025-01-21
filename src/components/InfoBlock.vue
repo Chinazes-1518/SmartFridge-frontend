@@ -74,7 +74,7 @@ async function submitReg() {
       <div class="info" :class="{ authed: auth.isAuth }">
         <div class="info-wrapper">
           <div class="info-card">
-            <div v-if="auth.isAuth && !reg">
+            <div v-if="auth.isAuth">
               <PhCheck :size="72" />
               <div class="info-card-name">Smart Fridge System</div>
               <div class="info-card-title">{{ auth.user.name }}, Вы успешно вошли в аккаунт!</div>
