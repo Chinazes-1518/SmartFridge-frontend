@@ -21,10 +21,10 @@ onMounted(async () => {
 
 function date(f) {
   const date = new Date(Date.parse(f))
-  const day = date.getDate().lengh === 1 ? date.getDate() : `0${date.getDate()}`
-  const month = date.getMonth().lengh === 1 ? date.getMonth() + 1 : `0${date.getMonth() + 1}`
+  const day = date.getDate() > 10 ? date.getDate() : `0${date.getDate()}`
+  const month = date.getMonth() > 10 ? date.getMonth() + 1 : `0${date.getMonth() + 1}`
 
-  const difference = (date - Date.now) > 0 ? Math.ceil((Date.now() - date) / 1000 / 60 / 60 / 24) : 0
+  const difference = (date - Date.now()) > 0 ? Math.ceil((date - Date.now()) / 1000 / 60 / 60 / 24) : 0
   const finalDate = `${day}.${month}.${date.getFullYear()}`
 
   return [finalDate, difference]
