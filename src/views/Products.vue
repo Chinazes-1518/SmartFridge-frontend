@@ -63,7 +63,7 @@ function date(f) {
                   </thead>
                   <tbody>
                   <tr class="products-card-table-tr" v-for="(item, itemID) in type.items">
-                    <td class="products-card-table-td"><code>{{ itemID }}</code></td>
+                    <td class="products-card-table-td"><code>{{ item.prod_id }}</code></td>
                     <td class="products-card-table-td">{{ date(item.production_date)[0] }}</td>
                     <td class="products-card-table-td expiry">{{ date(item.expiry_date)[0] }} (<div class="products-card-table-time">{{ date(item.expiry_date)[1] }} дней</div>)</td>
                   </tr>
