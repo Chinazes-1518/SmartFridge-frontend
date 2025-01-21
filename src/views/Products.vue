@@ -20,7 +20,7 @@ onMounted(async () => {
 })
 
 function date(f) {
-  date = new Date(Date.parse(f))
+  const date = new Date(Date.parse(f))
   const day = date.getDate().lengh === 1 ? date.getDate() : `0${date.getDate()}`
   const month = date.getMonth().lengh === 1 ? date.getMonth() + 1 : `0${date.getMonth() + 1}`
 
