@@ -2,6 +2,7 @@ import { ref } from 'vue';
 import {defineStore} from "pinia";
 
 import { APIRequest } from "@/utils/http";
+import router from "@/router";
 
 export const authStore = defineStore("auth", () => {
     const isAuth = ref( false )
@@ -29,10 +30,20 @@ export const authStore = defineStore("auth", () => {
                 console.log(data.json.detail.error)
             }
         }
+    }
 
+    const logout = () => {
+        localStorage.removeItem("authToken");
+        isAuth.value = false
+        user.value = {
+            id: 0,
+            name: '',
+            login: ''
+        }
+        router.push("/")
     }
 
     prepareStore()
-    return { isAuth, user, prepareStore }
+    return { isAuth, user, logout, prepareStore }
 })
 
