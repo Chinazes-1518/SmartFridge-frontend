@@ -1,20 +1,22 @@
 <template>
-<div class="header">
+  <div class="header-overflow" @click="toggled = false" :class="{active:toggled}"></div>
+<div class="header" :class="{shadow:scrolled}">
   <div class="header-container">
     <div class="header-space">
-      <div class="header-column">
-        <ul class="header-list">
-          <li><RouterLink to="/scan" class="header-button"><PhQrCode :size="24" />Сканировать код</RouterLink></li>
-          <li><RouterLink to="/products" class="header-button"><PhListDashes :size="24" />Список продуктов</RouterLink></li>
-          <li><RouterLink to="/buy" class="header-button"><PhBasket :size="24" />Список покупок</RouterLink></li>
-          <li><RouterLink to="/analitics" class="header-button"><PhChartLine :size="24" />Аналитика</RouterLink></li>
-        </ul>
+      <div class="header-column tglbtn">
+        <button @click="toggled = !toggled" class="header-toggle-btn"><PhList :size="32" /></button>
       </div>
-      <div class="header-column">
-        <ul class="header-list left">
-          <li v-if="!auth.isAuth"><button @click="auth.logout" class="header-button" style="font-weight: 400"><PhKey :size="24" />Войти</button></li>
+      <div class="header-column toggle" :class="{active:toggled}">
+        <ul class="header-list">
+          <li><RouterLink to="/scan" @click="toggled = false" class="header-button"><PhQrCode :size="24" />Сканировать код</RouterLink></li>
+          <li><RouterLink to="/products" @click="toggled = false" class="header-button"><PhListDashes :size="24" />Список продуктов</RouterLink></li>
+          <li><RouterLink to="/buy" @click="toggled = false" class="header-button"><PhBasket :size="24" />Список покупок</RouterLink></li>
+          <li><RouterLink to="/analitics" @click="toggled = false" class="header-button"><PhChartLine :size="24" />Аналитика</RouterLink></li>
+        </ul>
+        <ul class="header-list left" :class="{authed: auth.isAuth}">
+          <li v-if="!auth.isAuth"><button @click="auth.logout; toggled = false" class="header-button" style="font-weight: 400"><PhKey :size="24" />Войти</button></li>
           <li v-if="auth.isAuth"><div class="header-username"><PhUser :size="24" />{{ auth.user.name }}</div></li>
-          <li v-if="auth.isAuth"><button @click="auth.logout" class="header-button" style="font-weight: 400"><PhDoorOpen :size="24" />Выйти</button></li>
+          <li v-if="auth.isAuth"><button @click="auth.logout; toggled = false" class="header-button" style="font-weight: 400"><PhDoorOpen :size="24" />Выйти</button></li>
         </ul>
       </div>
     </div>
@@ -24,17 +26,43 @@
 
 <script setup lang="ts">
 import {
-  PhBarcode, PhBasket, PhChartLine, PhKey, PhUser, PhDoorOpen, PhListDashes, PhQrCode
-} from "@phosphor-icons/vue";
+  PhBarcode, PhBasket, PhChartLine, PhKey, PhUser, PhDoorOpen, PhListDashes, PhQrCode, PhList } from "@phosphor-icons/vue";
 import {authStore} from "@/utils/auth";
 
+import {onUnmounted, ref} from "vue";
+
 const auth = authStore()
+
+let scrolled = ref(false);
+let toggled = ref(false);
+
+const handleScroll = () => {
+  scrolled.value = window.scrollY > 0;
+}
+
+const scrollInterval = setInterval(() => {
+  handleScroll();
+}, 20);
+
+onUnmounted(() => {
+  clearInterval(scrollInterval);
+  toggled.value = false;
+});
 </script>
 
 <style scoped lang="scss">
 .header {
   background: var(--color-sub-background);
   padding: 5px 0;
+  position: fixed;
+  width: 100%;
+  z-index: 1000;
+  transition: 0.2s ease;
+
+
+  &.shadow {
+    box-shadow: 0 15px 15px rgb(0 0 0 / 7%);
+  }
 
   &-container {
     margin: 0 auto;
@@ -50,6 +78,15 @@ const auth = authStore()
     //justify-content: space-between;
   }
 
+  &-column {
+    &.toggle {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
   &-list {
     display: flex;
     align-items: center;
@@ -57,10 +94,6 @@ const auth = authStore()
     gap: 0 40px;
     padding: 0;
     margin: 0;
-
-    &.left {
-      gap: 0 30px;
-    }
   }
 
   &-button {
@@ -87,6 +120,70 @@ const auth = authStore()
     border: 1px solid var(--color-main);
     border-radius: 15px;
     height: 40px;
+  }
+
+  &-toggle-btn {
+    display: none;
+  }
+}
+
+@media (max-width: 1300px) {
+  .header {
+    min-height: 54px;
+    align-items: center;
+    &-space {
+      display: block;
+    }
+
+    &-toggle-btn {
+      display: block;
+      text-align: right;
+      padding: 15px 0;
+    }
+
+    &-column.toggle {
+      display: none;
+
+      &.active {
+        display: flex;
+        flex-direction: column;
+        cursor: pointer;
+      }
+    }
+
+    &-column.tglbtn {
+      display: flex;
+      justify-content: right;
+    }
+
+    &-list {
+      width: 100%;
+      flex-direction: column;
+      justify-content: left;
+      align-items: start;
+
+      &.left.authed {
+        margin-top: 20px;
+      }
+    }
+
+    &-username {
+      padding: 0;
+      border: none;
+      background: none;
+    }
+
+    &-overflow.active {
+      position: fixed;
+      width: 100vh;
+      height: 100vh;
+      z-index: 500;
+      background: rgba(0, 0, 0, 0.4);
+    }
+
+    &-button, &-username {
+      gap: 0 20px;
+    }
   }
 }
 </style>
