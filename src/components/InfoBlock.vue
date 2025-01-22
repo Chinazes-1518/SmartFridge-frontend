@@ -71,7 +71,7 @@ async function submitReg() {
 <template>
   <div class="d">
     <div class="container">
-      <div class="info" :class="{ authed: auth.isAuth }">
+      <div class="info">
         <div class="info-wrapper">
           <div class="info-card">
             <div v-if="auth.isAuth">
@@ -144,7 +144,7 @@ async function submitReg() {
 <style scoped lang="scss">
 .info {
   display: flex;
-  height: 100vh;
+  min-height: calc(100vh - 84px);
   align-items: center;
   justify-content: center;
 
