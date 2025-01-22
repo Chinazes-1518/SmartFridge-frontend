@@ -5,6 +5,9 @@ import { authStore } from "@/utils/auth";
 const auth = authStore()
 import {onMounted, ref} from "vue";
 import {APIRequest} from "@/utils/http";
+// import {Html5QrcodeScanner, Html5QrcodeResult} from "html5-qrcode";
+// import {Html5Qrcode} from "html5-qrcode";
+import QrScanner from "@/components/QrScanner.vue";
 
 let products = ref([])
 
@@ -40,23 +43,17 @@ function getDaysStr(diff) {
   }
 }
 
+function onScanSuccess(decodedText, result) {
+  console.log(`Code matched = ${decodedText}`);
+}
 </script>
-
-<!--<div class="products-cats" v-for="(value, key) in products">-->
-<!--{{ key }}-->
-<!--<div class="" v-for="(v, k) in value">-->
-<!--  {{k}}-->
-<!--  <div class="" v-for="(x, y) in v.items">-->
-<!--    {{date(x.expiry_date)[0]}} // {{date(x.expiry_date)[1]}}-->
-<!--  </div>-->
-<!--</div>-->
-<!--</div>-->
 
 <template>
   <div class="">
     <div class="products">
       <div class="products-container container">
         <div class="products-title">Список продуктов</div>
+        <QrScanner :fps="10" :qrbox="300" :on-scanned="onScanSuccess"></QrScanner>
         <div class="products-space">
           <div class="products-card" v-for="(category, cName) in products">
             <div class="products-card-title">{{ cName }}</div>
@@ -112,6 +109,20 @@ function getDaysStr(diff) {
     background: var(--color-sub-background);
     border: 1px solid var(--color-main);
     border-radius: 15px;
+
+    &-button {
+      width: 100%;
+      text-align: center;
+      padding: 15px 25px;
+      border-radius: 15px;
+      transition: .1s ease-in;
+      justify-content: center;
+      background-color: #ffcda6;
+      border: 1px solid #FFBD88;
+      display: flex;
+      align-items: center;
+      gap: 0 15px;
+    }
 
     &-title {
       font-size: 1.5rem;
