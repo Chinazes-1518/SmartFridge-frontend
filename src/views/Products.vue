@@ -60,8 +60,8 @@ function onScanSuccess(decodedText, result) {
         <div class="products-space">
           <div class="products-card" v-for="(category, cName) in products">
             <div class="products-card-title">{{ cName }}</div>
-            <div class="products-card-type" v-for="(type, tName) in category">
-              <div class="products-card-type-title" @click="e => e.target.closest('.products-card-table-pre').classList.toggle('active')"><div><PhCaretDown :size="26" /></div> {{ tName }}</div>
+            <section class="products-card-type" v-for="(type, tName) in category">
+              <div class="products-card-type-title" @click="e => e.target.closest('section').classList.toggle('active')"><div class="icon"><PhCaretDown :size="26" /></div> {{ tName }}</div>
               <div class="products-card-table-pre">
                 <table class="products-card-table">
                   <thead>
@@ -93,7 +93,7 @@ function onScanSuccess(decodedText, result) {
                   </tbody>
                 </table>
               </div>
-            </div>
+            </section>
           </div>
         </div>
       </div>
@@ -144,12 +144,27 @@ function onScanSuccess(decodedText, result) {
 
     &-type {
       margin-top: 25px;
+
       &-title {
         font-size: 1.2rem;
         font-weight: 400;
         display: flex;
         align-items: center;
         gap: 0 15px;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      & .products-card-table-pre {
+        display: none;
+      }
+
+      &.active .products-card-table-pre {
+        display: block;
+      }
+
+      &.active &-title .icon {
+        transform: rotate(180deg);
       }
     }
 
