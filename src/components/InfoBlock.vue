@@ -153,6 +153,10 @@ async function submitReg() {
     height: auto;
   }
 
+  &-wrapper {
+    width: 100%;
+  }
+
   &-card {
     padding: 25px;
     //background-color: rgba(255, 189, 136, 0.1);
@@ -160,6 +164,12 @@ async function submitReg() {
     border-radius: 15px;
     text-align: center;
     width: 600px;
+    margin: 0 auto;
+
+
+    @media (max-width: 700px) {
+      width: 100%;
+    }
 
     &-title {
       font-size: 1.5rem;
