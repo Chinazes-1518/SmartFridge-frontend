@@ -30,5 +30,6 @@ import Header from "@/components/Header.vue";
   flex-direction: column;
   width: 100%;
   flex: 1;
+  margin-top: 54px;
 }
 </style>
