@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {PhBasket} from "@phosphor-icons/vue";
+import {PhBasket, PhTrash, PhCaretDown} from "@phosphor-icons/vue";
 import { authStore } from "@/utils/auth";
 
 const auth = authStore()
@@ -8,6 +8,7 @@ import {APIRequest} from "@/utils/http";
 // import {Html5QrcodeScanner, Html5QrcodeResult} from "html5-qrcode";
 // import {Html5Qrcode} from "html5-qrcode";
 import QrScanner from "@/components/QrScanner.vue";
+import router from "@/router";
 
 let products = ref([])
 
@@ -19,7 +20,9 @@ onMounted(async () => {
       console.log(data.json)
       products.value = data.json
     }
-   }
+  } else {
+    await router.push('/')
+  }
 })
 
 function date(f) {
@@ -58,7 +61,7 @@ function onScanSuccess(decodedText, result) {
           <div class="products-card" v-for="(category, cName) in products">
             <div class="products-card-title">{{ cName }}</div>
             <div class="products-card-type" v-for="(type, tName) in category">
-              <div class="products-card-type-title"><div>—</div> {{ tName }}</div>
+              <div class="products-card-type-title" @click="e => e.target.closest('.products-card-table-pre').classList.toggle('active')"><div><PhCaretDown :size="26" /></div> {{ tName }}</div>
               <div class="products-card-table-pre">
                 <table class="products-card-table">
                   <thead>
@@ -66,16 +69,26 @@ function onScanSuccess(decodedText, result) {
                       <th class="products-card-table-th">ID</th>
                       <th class="products-card-table-th">Дата изготовления</th>
                       <th class="products-card-table-th">Дата истечения срока годности</th>
+                      <th class="products-card-table-th">Действия</th>
                     </tr>
                   </thead>
                   <tbody>
                   <tr class="products-card-table-tr" v-for="(item, itemID) in type.items">
                     <td class="products-card-table-td"><code>{{ item.prod_id }}</code></td>
                     <td class="products-card-table-td">{{ date(item.production_date)[0] }}</td>
-                    <td class="products-card-table-td expiry">{{ date(item.expiry_date)[0] }} (
-                      <div class="products-card-table-time" :class="{yellow:date(item.expiry_date)[1] <= 2,green:date(item.expiry_date)[1] > 2}" v-if="date(item.expiry_date)[1] > 0">{{ date(item.expiry_date)[1] }} {{ getDaysStr(date(item.expiry_date)[1]) }}</div>
-                      <div class="products-card-table-time-red" v-if="date(item.expiry_date)[1] == 0">истёк</div>
-                      )</td>
+                    <td class="products-card-table-td">
+                      <div class="products-card-table-expiry">
+                        {{ date(item.expiry_date)[0] }} (
+                        <div class="products-card-table-time" :class="{yellow:date(item.expiry_date)[1] <= 2,green:date(item.expiry_date)[1] > 2}" v-if="date(item.expiry_date)[1] > 0">{{ date(item.expiry_date)[1] }} {{ getDaysStr(date(item.expiry_date)[1]) }}</div>
+                        <div class="products-card-table-time-red" v-if="date(item.expiry_date)[1] == 0">истёк</div>)
+                      </div>
+                    </td>
+                    <td class="products-card-table-td">
+                      <div class="products-card-table-buttons">
+                        <button class="products-card-table-btn green"><PhBasket :size="25" /></button>
+                        <button class="products-card-table-btn red"><PhTrash :size="25" /></button>
+                      </div>
+                    </td>
                   </tr>
                   </tbody>
                 </table>
@@ -176,7 +189,7 @@ function onScanSuccess(decodedText, result) {
         border-bottom: none;
       }
 
-      &-td.expiry {
+      &-expiry {
         display: flex;
         align-items: center;
       }
@@ -188,15 +201,56 @@ function onScanSuccess(decodedText, result) {
       }
 
       &-time.yellow {
-        background: rgba(255, 183, 59, 0.2);
-        color: #ffb13b;
+        background: rgb(255, 217, 0, 0.2);
+        color: rgb(223, 182, 1);
         border-radius: 2px;
       }
 
       &-time.green {
-        background: rgba(137, 255, 59, 0.2);
-        color: #4fff3b;
+        background: rgb(0, 204, 0, 0.2);
+        color: rgb(0, 204, 0);
         border-radius: 2px;
+      }
+
+      &-buttons {
+        display: flex;
+        gap: 0 10px;
+      }
+
+      &-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 7px;
+        transition: .125s ease-in-out;
+
+        &.full {
+          width: 90px !important;
+        }
+
+        &.green {
+          border: 1px solid rgb(0, 204, 0, 0.25);
+          background: rgb(0, 204, 0, 0.2);
+
+          &:hover {
+            background: rgb(0, 204, 0, 0.25);
+          }
+        }
+
+        &.red {
+          border: 1px solid rgb(255, 59, 59, 0.25);
+          background: rgb(255, 59, 59, 0.2);
+
+          &:hover {
+            background: rgb(255, 59, 59, 0.25);
+          }
+        }
+
+        &:active {
+          opacity: 0.8;
+        }
       }
     }
   }
