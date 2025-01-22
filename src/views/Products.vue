@@ -30,6 +30,16 @@ function date(f) {
   return [finalDate, difference]
 }
 
+function getDaysStr(diff) {
+  if (diff % 10 === 1) {
+    return 'день'
+  } else if (diff % 10 === 2 || diff % 10 === 3 || diff % 10 === 4) {
+    return 'дня'
+  } else {
+    return 'дней'
+  }
+}
+
 </script>
 
 <!--<div class="products-cats" v-for="(value, key) in products">-->
@@ -65,7 +75,10 @@ function date(f) {
                   <tr class="products-card-table-tr" v-for="(item, itemID) in type.items">
                     <td class="products-card-table-td"><code>{{ item.prod_id }}</code></td>
                     <td class="products-card-table-td">{{ date(item.production_date)[0] }}</td>
-                    <td class="products-card-table-td expiry">{{ date(item.expiry_date)[0] }} (<div class="products-card-table-time">{{ date(item.expiry_date)[1] }} дней</div>)</td>
+                    <td class="products-card-table-td expiry">{{ date(item.expiry_date)[0] }} (
+                      <div class="products-card-table-time" :class="{yellow:date(item.expiry_date)[1] <= 2,green:date(item.expiry_date)[1] > 2}" v-if="date(item.expiry_date)[1] > 0">{{ date(item.expiry_date)[1] }} {{ getDaysStr(date(item.expiry_date)[1]) }}</div>
+                      <div class="products-card-table-time-red" v-if="date(item.expiry_date)[1] == 0">истёк</div>
+                      )</td>
                   </tr>
                   </tbody>
                 </table>
@@ -157,9 +170,21 @@ function date(f) {
         align-items: center;
       }
 
-      &-time {
+      &-time-red {
         background: rgb(255, 59, 59, 0.2);
         color: #ff3b3b;
+        border-radius: 2px;
+      }
+
+      &-time.yellow {
+        background: rgba(255, 183, 59, 0.2);
+        color: #ffb13b;
+        border-radius: 2px;
+      }
+
+      &-time.green {
+        background: rgba(137, 255, 59, 0.2);
+        color: #4fff3b;
         border-radius: 2px;
       }
     }
