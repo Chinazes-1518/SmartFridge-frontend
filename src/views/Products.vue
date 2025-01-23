@@ -56,7 +56,6 @@ function onScanSuccess(decodedText, result) {
     <div class="products">
       <div class="products-container container">
         <div class="products-title">Список продуктов</div>
-        <QrScanner :fps="10" :qrbox="300" :on-scanned="onScanSuccess"></QrScanner>
         <div class="products-space">
           <div class="products-card" v-for="(category, cName) in products">
             <div class="products-card-title">{{ cName }}</div>

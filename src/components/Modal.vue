@@ -1,6 +1,6 @@
 <template>
   <div v-if="isVisible" class="modal-overlay" @click="closeModal">
-    <div class="modal-content" @click.stop>
+    <div class="modal-content" @click.stop style="max-width:50%">
       <slot></slot>
       <button @click="closeModal">Закрыть</button>
     </div>

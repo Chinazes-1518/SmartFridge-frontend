@@ -37,7 +37,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div id="qr-code-full-region"></div>
+  <div id="qr-code-full-region" style="max-width: 70%; margin: auto"></div>
 </template>
 
 <style scoped lang="scss">
