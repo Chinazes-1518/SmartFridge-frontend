@@ -4,7 +4,6 @@ import {defineStore} from "pinia";
 
 import { APIRequest } from "@/utils/http";
 import router from "@/router";
-import VueCookie from "vue-cookies";
 
 export const authStore = defineStore("auth", () => {
     const isAuth = ref( false )
@@ -16,9 +15,9 @@ export const authStore = defineStore("auth", () => {
     })
 
     const prepareStore = async () => {
-        if (VueCookie.get('authToken')) {
+        if (window.localStorage.getItem('authToken')) {
             const data = await APIRequest("/auth/verify", "GET", {
-                token: VueCookie.get('authToken')
+                token: window.localStorage.getItem('authToken')
             })
 
             if (data.status === 200) {
@@ -35,7 +34,7 @@ export const authStore = defineStore("auth", () => {
     }
 
     const logout = () => {
-        VueCookie.remove('authToken');
+        window.localStorage.removeItem('authToken');
         isAuth.value = false
         user.value = {
             id: 0,

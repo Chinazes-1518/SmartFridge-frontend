@@ -7,7 +7,6 @@ const auth = authStore()
 
 import router from "@/router";
 
-import VueCookie from 'vue-cookies'
 
 let reg = ref( false )
 import {
@@ -43,7 +42,7 @@ async function submitAuth() {
   });
 
   if (data.status === 200) {
-    VueCookie.set('authToken', data.json.token)
+    window.localStorage.setItem('authToken', data.json.token)
     await auth.prepareStore()
     // await router.push("/")
 
@@ -61,7 +60,7 @@ async function submitReg() {
   });
 
   if (data.status === 200) {
-    VueCookie.set('authToken', data.json.token)
+    VueCookies.set('authToken', data.json.token)
     await auth.prepareStore()
   } else {
     errorReg.value = data.json.detail.error

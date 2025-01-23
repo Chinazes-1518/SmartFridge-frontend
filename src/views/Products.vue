@@ -20,9 +20,10 @@ onMounted(async () => {
       console.log(data.json)
       products.value = data.json
     }
-  } else {
-    await router.push('/')
   }
+  // } else {
+  //   await router.push('/')
+  // }
 })
 
 function date(f) {

@@ -1,5 +1,3 @@
-import VueCookie from "vue-cookies";
-
 export function APIRequest(
     path: string,
     method: string = 'GET',
@@ -15,7 +13,7 @@ export function APIRequest(
             }
         }
         if (auth) {
-            options.headers['token'] = `${VueCookie.get('authToken')}`
+            options.headers['token'] = window.localStorage.getItem('authToken')
         }
 
         if (method !== 'GET') {
