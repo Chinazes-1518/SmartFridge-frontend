@@ -11,7 +11,7 @@
           <component :is="Component" :key="route.fullPath" />
         </transition>
       </div>
-      <Modal :is-visible="qr_scan_opened" @close="args => qr_scan_opened = false">
+      <Modal :is-visible="this.$store.state.showQRPopup" @close="this.$store.commit('doShowQRPopup', {'value': false})">
         <h1>saslo</h1>
       </Modal>
     </router-view>
@@ -21,15 +21,6 @@
 <script setup lang="ts">
 import Header from "@/components/Header.vue";
 import Modal from "@/components/Modal.vue";
-import {ref} from "vue";
-
-let qr_scan_opened = ref(false);
-
-// export default {
-//   showQRPopup() {
-//     qr_scan_opened = true;
-//   }
-// }
 </script>
 
 <style scoped>

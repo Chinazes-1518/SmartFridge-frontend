@@ -1,6 +1,6 @@
 <template>
   <div class="header-overflow" @click="toggled = false" :class="{active:toggled}"></div>
-<div class="header" :class="{shadow:scrolled}">
+<div class="header" :class="{shadow:scrolled}" v-if="auth.isAuth">
   <div class="header-container">
     <div class="header-space">
       <div class="header-column tglbtn">
@@ -8,7 +8,7 @@
       </div>
       <div class="header-column toggle" :class="{active:toggled}">
         <ul class="header-list">
-          <li><button @click="toggled = false" class="header-button"><PhQrCode :size="24" />Сканировать код</button></li>
+          <li><button @click="toggled = false; this.$store.commit('doShowQRPopup', {'value': true})" class="header-button"><PhQrCode :size="24" />Сканировать код</button></li>
           <li><RouterLink to="/products" @click="toggled = false" class="header-button"><PhListDashes :size="24" />Список продуктов</RouterLink></li>
           <li><RouterLink to="/buy" @click="toggled = false" class="header-button"><PhBasket :size="24" />Список покупок</RouterLink></li>
           <li><RouterLink to="/analitics" @click="toggled = false" class="header-button"><PhChartLine :size="24" />Аналитика</RouterLink></li>
@@ -31,7 +31,6 @@ import {authStore} from "@/utils/auth";
 
 import {onUnmounted, ref} from "vue";
 import router from "@/router";
-import App from "@/App.vue";
 
 
 const auth = authStore()
