@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {PhBasket, PhTrash, PhCaretDown} from "@phosphor-icons/vue";
+import {PhBasket, PhTrash, PhCaretDown, PhScales, PhLightning, PhRuler, PhSparkle} from "@phosphor-icons/vue";
 import { authStore } from "@/utils/auth";
 
 const auth = authStore()
@@ -49,6 +49,12 @@ function getDaysStr(diff) {
 function onScanSuccess(decodedText, result) {
   console.log(`Code matched = ${decodedText}`);
 }
+
+let specs = {
+  0: "аллергенное",
+  1: "лактоза",
+  2: "глютен"
+}
 </script>
 
 <template>
@@ -61,36 +67,58 @@ function onScanSuccess(decodedText, result) {
             <div class="products-card-title">{{ cName }}</div>
             <section class="products-card-type" v-for="(type, tName) in category">
               <div class="products-card-type-title" @click="e => e.target.closest('section').classList.toggle('active')"><div class="icon"><PhCaretDown :size="26" /></div> {{ tName }}</div>
-              <div class="products-card-table-pre">
-                <table class="products-card-table">
-                  <thead>
+              <div class="products-card-type-toggle">
+                <div class="products-card-type-info">
+                  <div class="products-card-type-info-pos">
+                    <div class="products-card-type-info-name"><PhScales :size="24" />Масса:</div>
+                    <div class="products-card-type-info-value"><code>{{ type.amount }} {{ type.units }}.</code></div>
+                  </div>
+                  <div class="products-card-type-info-pos">
+                    <div class="products-card-type-info-name"><PhLightning :size="24" />Пищевая ценность:</div>
+                    <div class="products-card-type-info-value"><code>{{ type.nutritional * (type.amount / 100) }} ккал.</code></div>
+                  </div>
+                  <div class="products-card-type-info-pos">
+                    <div class="products-card-type-info-name"><PhRuler :size="24" />Тип измерения:</div>
+                    <div class="products-card-type-info-value">{{ type.measure_type }}</div>
+                  </div>
+                  <div class="products-card-type-info-pos" v-if="type.allergens != null">
+                    <div class="products-card-type-info-name"><PhSparkle :size="24" />Особенности:</div>
+                    <div class="products-card-type-info-value specs">
+                      <div class="products-card-type-info-value-spec" v-for="spec in type.allergens.split(',')">{{ specs[spec] }}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="products-card-table-pre">
+                  <table class="products-card-table">
+                    <thead>
                     <tr class="products-card-table-tr">
                       <th class="products-card-table-th">ID</th>
                       <th class="products-card-table-th">Дата изготовления</th>
-                      <th class="products-card-table-th">Дата истечения срока годности</th>
+                      <th class="products-card-table-th">Срок годности</th>
                       <th class="products-card-table-th">Действия</th>
                     </tr>
-                  </thead>
-                  <tbody>
-                  <tr class="products-card-table-tr" v-for="(item, itemID) in type.items">
-                    <td class="products-card-table-td"><code>{{ item.prod_id }}</code></td>
-                    <td class="products-card-table-td">{{ date(item.production_date)[0] }}</td>
-                    <td class="products-card-table-td">
-                      <div class="products-card-table-expiry">
-                        {{ date(item.expiry_date)[0] }} (
-                        <div class="products-card-table-time" :class="{yellow:date(item.expiry_date)[1] <= 2,green:date(item.expiry_date)[1] > 2}" v-if="date(item.expiry_date)[1] > 0">{{ date(item.expiry_date)[1] }} {{ getDaysStr(date(item.expiry_date)[1]) }}</div>
-                        <div class="products-card-table-time-red" v-if="date(item.expiry_date)[1] == 0">истёк</div>)
-                      </div>
-                    </td>
-                    <td class="products-card-table-td">
-                      <div class="products-card-table-buttons">
-                        <button class="products-card-table-btn green"><PhBasket :size="25" /></button>
-                        <button class="products-card-table-btn red"><PhTrash :size="25" /></button>
-                      </div>
-                    </td>
-                  </tr>
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                    <tr class="products-card-table-tr" v-for="(item, itemID) in type.items">
+                      <td class="products-card-table-td"><code>{{ item.prod_id }}</code></td>
+                      <td class="products-card-table-td">{{ date(item.production_date)[0] }}</td>
+                      <td class="products-card-table-td">
+                        <div class="products-card-table-expiry">
+                          {{ date(item.expiry_date)[0] }} (
+                          <div class="products-card-table-time" :class="{yellow:date(item.expiry_date)[1] <= 2,green:date(item.expiry_date)[1] > 2}" v-if="date(item.expiry_date)[1] > 0">{{ date(item.expiry_date)[1] }} {{ getDaysStr(date(item.expiry_date)[1]) }}</div>
+                          <div class="products-card-table-time-red" v-if="date(item.expiry_date)[1] == 0">истёк</div>)
+                        </div>
+                      </td>
+                      <td class="products-card-table-td">
+                        <div class="products-card-table-buttons">
+                          <button class="products-card-table-btn green"><PhBasket :size="25" /></button>
+                          <button class="products-card-table-btn red"><PhTrash :size="25" /></button>
+                        </div>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </section>
           </div>
@@ -121,6 +149,10 @@ function onScanSuccess(decodedText, result) {
     background: var(--color-sub-background);
     border: 1px solid var(--color-main);
     border-radius: 15px;
+
+    @media (max-width: 525px) {
+      padding: 20px;
+    }
 
     &-button {
       width: 100%;
@@ -154,16 +186,58 @@ function onScanSuccess(decodedText, result) {
         user-select: none;
       }
 
-      & .products-card-table-pre {
+      & .products-card-type-toggle {
         display: none;
       }
 
-      &.active .products-card-table-pre {
+      &.active .products-card-type-toggle {
         display: block;
       }
 
       &.active &-title .icon {
         transform: rotate(180deg);
+      }
+
+      &-info {
+        //margin-left: 41px;
+        margin: 20px 0;
+        display: flex;
+        flex-direction: column;
+        gap: 15px 0;
+
+        &-pos {
+          display: inline-flex;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 10px 10px;
+        }
+
+        &-name {
+          display: flex;
+          align-items: center;
+          gap: 0 8px;
+          font-weight: 400;
+          //font-size: 0.9rem;
+
+        }
+
+        &-value {
+          & code {
+            font-family: monospace;
+          }
+
+          &.specs {
+            display: flex;
+            gap: 0 10px;
+            flex-wrap: wrap;
+          }
+
+          &-spec {
+            padding: 3px 5px;
+            background: var(--color-main);
+            border-radius: 0.5rem;
+          }
+        }
       }
     }
 
