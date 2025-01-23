@@ -12,7 +12,6 @@
         </transition>
       </div>
       <Modal :is-visible="this.$store.state.showQRPopup" @close="this.$store.commit('doShowQRPopup', {'value': false})">
-        <h1 style="text-align: center">Сканировать QR код</h1>
         <QrScanner :fps="10" :qrbox="200" :on-scanned="onScanSuccess"></QrScanner>
       </Modal>
     </router-view>
