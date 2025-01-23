@@ -5,12 +5,15 @@ import { authStore } from "@/utils/auth";
 const auth = authStore()
 import {onMounted, ref} from "vue";
 import {APIRequest} from "@/utils/http";
-// import {Html5QrcodeScanner, Html5QrcodeResult} from "html5-qrcode";
-// import {Html5Qrcode} from "html5-qrcode";
-import QrScanner from "@/components/QrScanner.vue";
 import router from "@/router";
 
 let products = ref([])
+
+let specs = {
+  0: "аллергенное",
+  1: "лактоза",
+  2: "глютен"
+}
 
 onMounted(async () => {
   if (auth.isAuth) {
@@ -20,10 +23,9 @@ onMounted(async () => {
       console.log(data.json)
       products.value = data.json
     }
+  } else {
+    await router.push('/')
   }
-  // } else {
-  //   await router.push('/')
-  // }
 })
 
 function date(f) {
@@ -51,11 +53,21 @@ function onScanSuccess(decodedText, result) {
   console.log(`Code matched = ${decodedText}`);
 }
 
-let specs = {
-  0: "аллергенное",
-  1: "лактоза",
-  2: "глютен"
+async function toBuyList(id, amount) {
+  const data = APIRequest(`/buylist/add`, "POST", {}, {
+    prod_type_id: id,
+    amount: amount
+  }, true)
+
+  if (data.status === 200) {
+    alert("Успешно!");
+  }
 }
+
+async function deleteProduct(id) {
+  const data = APIRequest(`/buylist/delete`, "POST", {}, {})
+}
+
 </script>
 
 <template>
@@ -112,7 +124,7 @@ let specs = {
                       </td>
                       <td class="products-card-table-td">
                         <div class="products-card-table-buttons">
-                          <button class="products-card-table-btn green"><PhBasket :size="25" /></button>
+                          <button @click="toBuyList(type.type_id, type.amount)" class="products-card-table-btn green"><PhBasket :size="25" /></button>
                           <button class="products-card-table-btn red"><PhTrash :size="25" /></button>
                         </div>
                       </td>
@@ -141,7 +153,7 @@ let specs = {
     margin-top: 30px;
     display: flex;
     flex-direction: column;
-    gap: 20px 0;
+    gap: 30px 0;
   }
 
   &-card {
