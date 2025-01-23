@@ -2,7 +2,7 @@
   <div v-if="isVisible" class="modal-overlay" @click="closeModal">
     <div class="modal-content" @click.stop style="width: 600px">
       <div class="modal-title">
-        <div class="title">QR Сканнер</div>
+        <div class="title">{{ title }}</div>
         <div class="x" @click="closeModal"><PhX :size="40" /></div>
       </div>
       <slot></slot>
@@ -22,6 +22,10 @@ export default defineComponent({
       type: Boolean,
       required: true,
     },
+    title: {
+      type: String,
+      required: true
+    }
   },
   emits: ['close'],
   methods: {
