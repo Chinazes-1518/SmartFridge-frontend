@@ -21,11 +21,13 @@ export function APIRequest(
         }
 
         let finalPath = import.meta.env.VITE_API_URL + path
+        // alert(JSON.stringify(query))
         if (query) {
             finalPath += `?${new URLSearchParams(query)}`
         }
 
         console.log(finalPath, options)
+        // alert(finalPath)
         await fetch(finalPath, options)
             .then(async (res) => {
                 return resolve({
