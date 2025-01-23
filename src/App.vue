@@ -11,7 +11,7 @@
           <component :is="Component" :key="route.fullPath" />
         </transition>
       </div>
-      <Modal :is-visible="this.$store.state.showQRPopup" @close="this.$store.commit('doShowQRPopup', {'value': false})" :title="sdadas">
+      <Modal :is-visible="this.$store.state.showQRPopup" @close="this.$store.commit('doShowQRPopup', {'value': false})" title="Сканнер QR">
         <QrScanner :fps="10" :qrbox="200" :on-scanned="onScanSuccess"></QrScanner>
       </Modal>
     </router-view>
@@ -22,6 +22,10 @@
 import Header from "@/components/Header.vue";
 import Modal from "@/components/Modal.vue";
 import QrScanner from "@/components/QrScanner.vue";
+
+function onScanSuccess(text: String, error: any) {
+  console.log(`Scanned ${text}`);
+}
 </script>
 
 <style scoped>
