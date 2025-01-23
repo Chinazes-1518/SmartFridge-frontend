@@ -14,9 +14,9 @@
           <li><RouterLink to="/analitics" @click="toggled = false" class="header-button"><PhChartLine :size="24" />Аналитика</RouterLink></li>
         </ul>
         <ul class="header-list left" :class="{authed: auth.isAuth}">
-          <li v-if="!auth.isAuth"><button @click="auth.logout; toggled = false" class="header-button" style="font-weight: 400"><PhKey :size="24" />Войти</button></li>
+          <li v-if="!auth.isAuth"><button @click="router.push('/'); toggled = false" class="header-button" style="font-weight: 400"><PhKey :size="24" />Войти</button></li>
           <li v-if="auth.isAuth"><div class="header-username"><PhUser :size="24" />{{ auth.user.name }}</div></li>
-          <li v-if="auth.isAuth"><button @click="auth.logout; toggled = false" class="header-button" style="font-weight: 400"><PhDoorOpen :size="24" />Выйти</button></li>
+          <li v-if="auth.isAuth"><button @click="auth.logout(); toggled = false" class="header-button" style="font-weight: 400"><PhDoorOpen :size="24" />Выйти</button></li>
         </ul>
       </div>
     </div>
@@ -30,6 +30,7 @@ import {
 import {authStore} from "@/utils/auth";
 
 import {onUnmounted, ref} from "vue";
+import router from "@/router";
 
 const auth = authStore()
 
