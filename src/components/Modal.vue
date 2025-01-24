@@ -1,22 +1,31 @@
 <template>
   <div v-if="isVisible" class="modal-overlay" @click="closeModal">
-    <div class="modal-content" @click.stop style="max-width:50%">
+    <div class="modal-content" @click.stop style="width: 600px">
+      <div class="modal-title">
+        <div class="title">{{ title }}</div>
+        <div class="x" @click="closeModal"><PhX :size="40" /></div>
+      </div>
       <slot></slot>
-      <button @click="closeModal">Закрыть</button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import {PhX} from "@phosphor-icons/vue";
 
 export default defineComponent({
   name: 'Modal',
+  components: {PhX},
   props: {
     isVisible: {
       type: Boolean,
       required: true,
     },
+    title: {
+      type: String,
+      required: true
+    }
   },
   emits: ['close'],
   methods: {
@@ -38,13 +47,35 @@ export default defineComponent({
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1001;
 }
 
 .modal-content {
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  max-width: 500px;
   width: 100%;
+  padding: 30px;
+  background: var(--color-sub-background);
+  border: 1px solid var(--color-main);
+  border-radius: 15px;
 }
+
+.modal-title {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.modal-title .title {
+  font-size: 1.5rem !important;
+  font-weight: 600;
+}
+
+.modal-title .x {
+  cursor: pointer;
+  transition: 0.125s ease-in-out;
+}
+
+.modal-title .x:hover {
+  opacity: 0.5;
+}
+
 </style>

@@ -15,7 +15,7 @@
         </ul>
         <ul class="header-list left" :class="{authed: auth.isAuth}">
           <li v-if="!auth.isAuth"><button @click="router.push('/'); toggled = false" class="header-button" style="font-weight: 400"><PhKey :size="24" />Войти</button></li>
-          <li v-if="auth.isAuth"><div class="header-username"><PhUser :size="24" />{{ auth.user.name }}</div></li>
+          <li v-if="auth.isAuth"><div class="header-username"><PhUser :size="24" />{{ (auth.user.name.length <= 20) ? auth.user.name : auth.user.name.substring(0, 20).trimEnd() + '…' }}</div></li>
           <li v-if="auth.isAuth"><button @click="auth.logout(); toggled = false" class="header-button" style="font-weight: 400"><PhDoorOpen :size="24" />Выйти</button></li>
         </ul>
       </div>
@@ -206,10 +206,4 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
 }
-
-//.pt-3 {
-//  z-index: 1000;
-//  background-color: #fca952;
-//  width: 70%;
-//}
 </style>

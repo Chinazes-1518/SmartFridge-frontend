@@ -7,6 +7,7 @@ const auth = authStore()
 
 import router from "@/router";
 
+
 let reg = ref( false )
 import {
   PhBarcode,
@@ -41,7 +42,7 @@ async function submitAuth() {
   });
 
   if (data.status === 200) {
-    localStorage.setItem('authToken', data.json.token)
+    window.localStorage.setItem('authToken', data.json.token)
     await auth.prepareStore()
     // await router.push("/")
 
@@ -59,7 +60,7 @@ async function submitReg() {
   });
 
   if (data.status === 200) {
-    localStorage.setItem('authToken', data.json.token)
+    VueCookies.set('authToken', data.json.token)
     await auth.prepareStore()
   } else {
     errorReg.value = data.json.detail.error

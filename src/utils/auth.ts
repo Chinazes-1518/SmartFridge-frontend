@@ -1,6 +1,7 @@
 import { ref } from 'vue';
 import {defineStore} from "pinia";
 
+
 import { APIRequest } from "@/utils/http";
 import router from "@/router";
 
@@ -14,9 +15,9 @@ export const authStore = defineStore("auth", () => {
     })
 
     const prepareStore = async () => {
-        if (localStorage.getItem('authToken')) {
+        if (window.localStorage.getItem('authToken')) {
             const data = await APIRequest("/auth/verify", "GET", {
-                token: localStorage.getItem("authToken")
+                token: window.localStorage.getItem('authToken')
             })
 
             if (data.status === 200) {
@@ -33,7 +34,7 @@ export const authStore = defineStore("auth", () => {
     }
 
     const logout = () => {
-        localStorage.removeItem("authToken");
+        window.localStorage.removeItem('authToken');
         isAuth.value = false
         user.value = {
             id: 0,
