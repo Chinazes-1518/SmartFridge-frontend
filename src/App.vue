@@ -11,8 +11,17 @@
           <component :is="Component" :key="route.fullPath" />
         </transition>
       </div>
-      <Modal :is-visible="this.$store.state.showQRPopup" @close="this.$store.commit('doShowQRPopup', {'value': false})" title="Сканнер QR">
-        <QrScanner :fps="10" :qrbox="200" :on-scanned="onScanSuccess"></QrScanner>
+      <Modal id="qr_scan" title="Сканнер QR" @close="console.error('123'); dataref = ''">
+        {{ dataref }}
+        <div v-if="dataref === ''">
+          <QrScanner :fps="10" :qrbox="200" :on-scanned="onScanSuccess"></QrScanner>
+        </div>
+      </Modal>
+      <Modal id="qr_show" title="QR код продукта">
+<!--        {{ this.$store.state.currentProduct }} {{ this.$store.state.qrData }}-->
+        <div style="display: flex" v-if="this.$store.state.qrGenerated">
+          <qrcode-vue :value="this.$store.state.qrData" size="300" render-as="svg" level="H" background="#ffffff00" style="margin: 0 auto"/>
+        </div>
       </Modal>
     </router-view>
   </div>
@@ -22,9 +31,16 @@
 import Header from "@/components/Header.vue";
 import Modal from "@/components/Modal.vue";
 import QrScanner from "@/components/QrScanner.vue";
+import QrcodeVue from 'qrcode.vue'
+import {decodeQR} from "@/utils/qr.ts";
+import {ref} from "vue";
+
+let dataref = ref('')
 
 function onScanSuccess(text: String, error: any) {
   console.log(`Scanned ${text}`);
+  let data = decodeQR(text)
+  dataref.value = data
 }
 </script>
 

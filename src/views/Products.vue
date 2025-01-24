@@ -141,7 +141,7 @@ async function deleteProduct(id) {
                       </td>
                       <td class="products-card-table-td">
                         <div class="products-card-table-buttons">
-                          <button class="products-card-table-btn transparent"><PhQrCode :size="25" /></button>
+                          <button @click="this.$store.commit('setCurProd', {'value': item.prod_id}); this.$store.commit('showPopup', {'value': 'qr_show'})" class="products-card-table-btn transparent"><PhQrCode :size="25" /></button>
                           <button @click="toBuyList(type.type_id, type.amount)" class="products-card-table-btn green"><PhBasket :size="25" /></button>
                           <button class="products-card-table-btn blue"><PhKnife :size="25" /></button>
                         </div>

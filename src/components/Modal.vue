@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isVisible" class="modal-overlay" @click="closeModal">
+  <div v-if="this.$store.state.showPopup === id" class="modal-overlay" @click="closeModal">
     <div class="modal-content" @click.stop style="width: 600px">
       <div class="modal-title">
         <div class="title">{{ title }}</div>
@@ -18,19 +18,20 @@ export default defineComponent({
   name: 'Modal',
   components: {PhX},
   props: {
-    isVisible: {
-      type: Boolean,
+    id: {
+      type: String,
       required: true,
     },
     title: {
       type: String,
       required: true
-    }
+    },
   },
   emits: ['close'],
   methods: {
     closeModal() {
       this.$emit('close');
+      this.$store.commit('showPopup', {'value': ''})
     },
   },
 });
