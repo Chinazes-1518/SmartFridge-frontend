@@ -23,6 +23,9 @@
           <qrcode-vue :value="this.$store.state.qrData" size="300" render-as="svg" level="H" background="#ffffff00" style="margin: 0 auto"/>
         </div>
       </Modal>
+      <Notification />
+
+      <button @click="getNotification(0, 'e', 'ew')">dddd</button>
     </router-view>
   </div>
 </template>
@@ -34,14 +37,24 @@ import QrScanner from "@/components/QrScanner.vue";
 import QrcodeVue from 'qrcode.vue'
 import {decodeQR} from "@/utils/qr.ts";
 import {ref} from "vue";
+import Notification from "@/components/Notification.vue"
+import { viewNotify, notify, getNotification } from "@/utils/notification.ts";
 
 let dataref = ref('')
+
+
+// import {notifyStore} from "@/utils/notification.ts";
+
+// let n = notifyStore()
+
 
 function onScanSuccess(text: String, error: any) {
   console.log(`Scanned ${text}`);
   let data = decodeQR(text)
   dataref.value = data
 }
+
+
 </script>
 
 <style scoped>
