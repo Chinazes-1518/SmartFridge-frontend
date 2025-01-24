@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import {PhBasket, PhTrash, PhCaretDown, PhScales, PhLightning, PhRuler, PhSparkle} from "@phosphor-icons/vue";
+import {
+  PhBasket,
+  PhTrash,
+  PhCaretDown,
+  PhScales,
+  PhLightning,
+  PhRuler,
+  PhSparkle,
+  PhListMagnifyingGlass, PhBinoculars, PhKnife, PhQrCode
+} from "@phosphor-icons/vue";
 import { authStore } from "@/utils/auth";
 
 const auth = authStore()
@@ -14,6 +23,8 @@ let specs = {
   1: "лактоза",
   2: "глютен"
 }
+
+let searchInput = ref(false)
 
 onMounted(async () => {
   if (auth.isAuth) {
@@ -74,7 +85,13 @@ async function deleteProduct(id) {
   <div class="">
     <div class="products">
       <div class="products-container container">
-        <div class="products-title">Список продуктов</div>
+        <div class="products-title">
+          Список продуктов
+          <div class="products-title-search" :class="{focus:searchInput}">
+            <PhBinoculars class="products-title-search-icon" :size="26" />
+            <input type="text" class="products-title-search-input" placeholder="Начните поиск" @focus="searchInput = true" @blur="searchInput = false" />
+          </div>
+        </div>
         <div class="products-space">
           <div class="products-card" v-for="(category, cName) in products">
             <div class="products-card-title">{{ cName }}</div>
@@ -124,8 +141,9 @@ async function deleteProduct(id) {
                       </td>
                       <td class="products-card-table-td">
                         <div class="products-card-table-buttons">
+                          <button class="products-card-table-btn transparent"><PhQrCode :size="25" /></button>
                           <button @click="toBuyList(type.type_id, type.amount)" class="products-card-table-btn green"><PhBasket :size="25" /></button>
-                          <button class="products-card-table-btn red"><PhTrash :size="25" /></button>
+                          <button class="products-card-table-btn blue"><PhKnife :size="25" /></button>
                         </div>
                       </td>
                     </tr>
@@ -147,6 +165,55 @@ async function deleteProduct(id) {
   &-title {
     font-size: 2rem;
     font-weight: 600;
+    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px 20px;
+    
+    &-search {
+      display: flex;
+      align-items: center;
+      gap: 0 10px;
+      background: #f3ceac;
+      border: 1px solid #ffbd73;
+      padding: 0 10px;
+      font-weight: 200;
+      border-radius: 0.5rem;
+      outline: 0;
+      transition:
+          border,
+          background 0.25s ease;
+
+      &:hover {
+        border: 1px solid #fca952;
+      }
+
+      &.focus {
+        border: 1px solid #fd9a2f;
+        background: #fcc697;
+      }
+
+      &-input {
+        padding: 10px;
+        background: 0;
+        border: 0;
+        outline: 0;
+      }
+    }
+
+    @media (max-width: 830px) {
+      flex-direction: column;
+
+      &-search {
+        width: 100%;
+
+        &-input {
+          width: 100%;
+        }
+      }
+
+    }
   }
 
   &-space {
@@ -346,6 +413,24 @@ async function deleteProduct(id) {
 
           &:hover {
             background: rgb(255, 59, 59, 0.25);
+          }
+        }
+
+        &.blue {
+          border: 1px solid rgb(55, 109, 255, 0.25);
+          background: rgb(55, 109, 255, 0.2);
+
+          &:hover {
+            background: rgb(55, 109, 255, 0.25);
+          }
+        }
+
+        &.transparent {
+          border: 1px solid rgba(255, 140, 48, 0.25);
+          background: rgba(255, 140, 48, 0.2);
+
+          &:hover {
+            background: rgba(255, 140, 48, 0.25);
           }
         }
 
