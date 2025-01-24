@@ -31,11 +31,20 @@ import QrScanner from "@/components/QrScanner.vue";
   flex-direction: column;
   min-height: 100vh;
 }
+
 .layout {
   display: flex;
   flex-direction: column;
   width: 100%;
   flex: 1;
   margin-top: 54px;
+}
+
+.animate__animated.animate__fadeIn {
+  --animate-duration: 0.5s;
+}
+
+.animate__animated.animate__fadeOut {
+  --animate-duration: 0.5s;
 }
 </style>
