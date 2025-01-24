@@ -14,6 +14,9 @@
       <Modal :is-visible="this.$store.state.showQRPopup" @close="this.$store.commit('doShowQRPopup', {'value': false})" title="Сканнер QR">
         <QrScanner :fps="10" :qrbox="200" :on-scanned="onScanSuccess"></QrScanner>
       </Modal>
+      <Notification />
+
+      <button @click="getNotification(0, 'e', 'ew')">dddd</button>
     </router-view>
   </div>
 </template>
@@ -22,10 +25,20 @@
 import Header from "@/components/Header.vue";
 import Modal from "@/components/Modal.vue";
 import QrScanner from "@/components/QrScanner.vue";
+import Notification from "@/components/Notification.vue"
+import { viewNotify, notify, getNotification } from "@/utils/notification.ts";
+
+
+// import {notifyStore} from "@/utils/notification.ts";
+
+// let n = notifyStore()
+
 
 function onScanSuccess(text: String, error: any) {
   console.log(`Scanned ${text}`);
 }
+
+
 </script>
 
 <style scoped>
