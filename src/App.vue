@@ -1,5 +1,6 @@
 <template>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
   <div class="root" id="root">
     <router-view v-slot="{ Component, route }">
       <Header />
@@ -25,7 +26,7 @@
       </Modal>
       <Notification />
 
-      <button @click="getNotification(0, 'e', 'ew')">dddd</button>
+      <button @click="getNotification(0, 'Добавление продукта', 'Вы успешно добавили продукт в список покупок.')">dddd</button>
     </router-view>
   </div>
 </template>
