@@ -9,7 +9,11 @@ export function decodeQR(text: string) {
     for (let i = 0; i < keys.length; i++) {
         data[keys[i]] = obj[i]
     }
-    console.log(data)
+    
+    const prod_date = new Date(data['production_date'])
+    data['production_date'] = `${String(prod_date.getDate()).padStart(2, '0')}.${String(prod_date.getMonth() + 1).padStart(2, '0')}.${prod_date.getFullYear()}`
+    const exp_date = new Date(data['expiry_date'])
+    data['expiry_date'] = `${String(exp_date.getDate()).padStart(2, '0')}.${String(exp_date.getMonth() + 1).padStart(2, '0')}.${exp_date.getFullYear()}`
     return data
 }
 
