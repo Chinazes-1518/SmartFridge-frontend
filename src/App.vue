@@ -1,6 +1,5 @@
 <template>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
   <div class="root" id="root">
     <router-view v-slot="{ Component, route }">
       <Header />
@@ -24,9 +23,9 @@
           <qrcode-vue :value="this.$store.state.qrData" size="300" render-as="svg" level="H" background="#ffffff00" style="margin: 0 auto"/>
         </div>
       </Modal>
-      <Notification />
+<!--      <Notification />-->
 
-      <button @click="getNotification(0, 'Добавление продукта', 'Вы успешно добавили продукт в список покупок.')">dddd</button>
+<!--      <button @click="getNotification(0, 'Добавление продукта', 'Вы успешно добавили продукт в список покупок.')">dddd</button>-->
     </router-view>
   </div>
 </template>
