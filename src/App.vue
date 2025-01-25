@@ -11,7 +11,7 @@
           <component :is="Component" :key="route.fullPath" />
         </transition>
       </div>
-      <Modal id="qr_scan" title="Сканнер QR" @close="console.error('123'); dataref = ''">
+      <Modal id="qr_scan" title="Сканнер QR" @close="dataref = ''">
         {{ dataref }}
         <div v-if="dataref === ''">
           <QrScanner :fps="10" :qrbox="200" :on-scanned="onScanSuccess"></QrScanner>
@@ -40,16 +40,11 @@ import {ref} from "vue";
 
 let dataref = ref('')
 
-let lastDecodedText = ref('')
-
 
 function onScanSuccess(text: string, error: any) {
-  if (text != lastDecodedText.value) {
-    console.log(`Scanned ${text}`);
-    let data = decodeQR(text)
-    dataref.value = data
-    lastDecodedText.value = text
-  }
+  console.log(`Scanned ${text}`);
+  let data = decodeQR(text)
+  dataref.value = data
 }
 </script>
 

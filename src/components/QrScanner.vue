@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {onMounted} from "vue";
+import {onMounted, ref, type Ref} from "vue";
 import {type Html5QrcodeResult, Html5QrcodeScanner, type QrcodeSuccessCallback} from "html5-qrcode";
 import type {Html5QrcodeError} from "html5-qrcode/core";
 
@@ -17,8 +17,11 @@ const props = defineProps({
   }
 })
 
+let scanner: Ref<Html5QrcodeScanner | undefined> = ref(undefined)
+
 let onScanSuccess = function (decodedText: string, result: Html5QrcodeResult) {
   props.onScanned(decodedText, result)
+  scanner.value?.clear()
 }
 
 let onError = function (errorMessage: string, error: Html5QrcodeError) {
@@ -33,6 +36,7 @@ onMounted(async () => {
   console.log(config);
   const html5QrcodeScanner = new Html5QrcodeScanner('qr-code-full-region', config, false);
   html5QrcodeScanner.render(onScanSuccess, onError);
+  scanner.value = html5QrcodeScanner
 })
 </script>
 
