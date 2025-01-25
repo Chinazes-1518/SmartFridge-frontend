@@ -37,24 +37,20 @@ import QrScanner from "@/components/QrScanner.vue";
 import QrcodeVue from 'qrcode.vue'
 import {decodeQR} from "@/utils/qr.ts";
 import {ref} from "vue";
-import Notification from "@/components/Notification.vue"
-import { viewNotify, notify, getNotification } from "@/utils/notification.ts";
 
 let dataref = ref('')
 
-
-// import {notifyStore} from "@/utils/notification.ts";
-
-// let n = notifyStore()
+let lastDecodedText = ref('')
 
 
-function onScanSuccess(text: String, error: any) {
-  console.log(`Scanned ${text}`);
-  let data = decodeQR(text)
-  dataref.value = data
+function onScanSuccess(text: string, error: any) {
+  if (text != lastDecodedText.value) {
+    console.log(`Scanned ${text}`);
+    let data = decodeQR(text)
+    dataref.value = data
+    lastDecodedText.value = text
+  }
 }
-
-
 </script>
 
 <style scoped>
