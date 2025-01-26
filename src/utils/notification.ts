@@ -22,7 +22,7 @@ export function getNotification(status: number, title: string, msg: string) {
 
     setTimeout(() => {
         viewNotify.value = false
-    }, 2000)
+    }, 5000)
 
 }
 

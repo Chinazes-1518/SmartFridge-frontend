@@ -23,9 +23,8 @@
           <qrcode-vue :value="this.$store.state.qrData" size="300" render-as="svg" level="H" background="#ffffff00" style="margin: 0 auto"/>
         </div>
       </Modal>
-<!--      <Notification />-->
+      <Notification />
 
-<!--      <button @click="getNotification(0, 'Добавление продукта', 'Вы успешно добавили продукт в список покупок.')">dddd</button>-->
     </router-view>
   </div>
 </template>

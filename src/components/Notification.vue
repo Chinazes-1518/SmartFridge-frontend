@@ -12,11 +12,10 @@ import { viewNotify, notify, getNotification } from "@/utils/notification.ts";
 
 </script>
 <template>
-<div class="notification" v-if="!viewNotify">
+<div class="notification" v-if="viewNotify">
   <div class="notification-wrapper">
-    <div class="notification-card">
-      <div class="notification-title" v-if="notify.status === 0">
-<!--        <PhCheck :size="36"></PhCheck>-->
+    <div class="notification-card" :class="notify.status === 0 ? 'success' : 'error'">
+      <div class="notification-title">
         {{ notify.title }}
       </div>
       <div class="notification-body">{{ notify.msg }}</div>
@@ -34,10 +33,17 @@ import { viewNotify, notify, getNotification } from "@/utils/notification.ts";
   &-card {
     width: 400px;
     padding: 20px;
-    border: 1px solid #a3d886;
-    background: #d9dbb2;
-    //color: rgb(0, 204, 0);
     border-radius: 15px;
+
+    &.success {
+      border: 1px solid #a3d886;
+      background: #d9dbb2;
+    }
+
+    &.error {
+      border: 1px solid #f79d8f;
+      background: #f5bdaa;
+    }
   }
 
   &-title {
