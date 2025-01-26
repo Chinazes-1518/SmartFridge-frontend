@@ -16,7 +16,8 @@ import {onMounted, ref} from "vue";
 import {APIRequest} from "@/utils/http";
 import router from "@/router";
 
-let products = ref([])
+let orig_products = ref({})
+let products = ref({})
 
 let specs = {
   0: "аллергенное",
@@ -32,6 +33,7 @@ onMounted(async () => {
 
     if (data.status === 200) {
       console.log(data.json)
+      orig_products.value = data.json
       products.value = data.json
     }
   } else {
@@ -60,10 +62,6 @@ function getDaysStr(diff) {
   }
 }
 
-function onScanSuccess(decodedText, result) {
-  console.log(`Code matched = ${decodedText}`);
-}
-
 async function toBuyList(id, amount) {
   const data = APIRequest(`/buylist/add`, "POST", {}, {
     prod_type_id: id,
@@ -79,6 +77,41 @@ async function deleteProduct(id) {
   const data = APIRequest(`/buylist/delete`, "POST", {}, {})
 }
 
+let searchText = ref('')
+
+async function onSearchText() {
+  const lowerSearchText = searchText.value.toLowerCase().trim()
+
+  if (lowerSearchText === '') {
+    products.value = orig_products.value
+    return
+  }
+
+  let new_products = {}
+
+  for (let [cat_name, cat] of Object.entries(orig_products.value)) {
+    // console.log(cat_name, cat)
+    if (cat_name.toLowerCase().indexOf(lowerSearchText) !== -1) {
+      new_products[cat_name] = cat
+    } else {
+      for (let [type_name, type] of Object.entries(cat)) {
+        // console.log(type_name, type)
+        if (type_name.toLowerCase().indexOf(lowerSearchText) !== -1) {
+          if (Object.keys(new_products).indexOf(cat_name) === -1) {
+            new_products[cat_name] = {}
+          }
+
+          new_products[cat_name][type_name] = type
+        }
+      }
+    }
+  }
+
+  console.log(new_products)
+
+  products.value = new_products
+}
+
 </script>
 
 <template>
@@ -89,7 +122,7 @@ async function deleteProduct(id) {
           Список продуктов
           <div class="products-title-search" :class="{focus:searchInput}">
             <PhBinoculars class="products-title-search-icon" :size="26" />
-            <input type="text" class="products-title-search-input" placeholder="Начните поиск" @focus="searchInput = true" @blur="searchInput = false" />
+            <input type="text" class="products-title-search-input" placeholder="Начните поиск" @focus="searchInput = true" @blur="searchInput = false" @input="onSearchText()" v-model="searchText" />
           </div>
         </div>
         <div class="products-space">
