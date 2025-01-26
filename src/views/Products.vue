@@ -72,7 +72,7 @@ async function toBuyList(typeId, prodId, category, type, amount) {
   }, true)
 
   if (data.status === 200) {
-    const deleteData = await APIRequest(`/products/remov`, "POST", {
+    const deleteData = await APIRequest(`/products/remove`, "DELETE", {
       product_id: prodId
     }, {}, true)
 
