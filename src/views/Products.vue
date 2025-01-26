@@ -151,7 +151,7 @@ async function onSearchText() {
           </div>
         </div>
         <div class="products-space">
-          <div class="products-empty" v-if="empty"><PhEmpty :size="26" /> К сожалению, в списке продуктов пусто. Добавьте товар, <button class="lets-scan" @click="toggled = false; this.$store.commit('showPopup', {'value': 'qr_scan'})">отсканировав QR-код</button></div>
+          <div class="products-empty" v-if="empty">К сожалению, в списке продуктов пусто. Добавьте товар, <button class="lets-scan" @click="toggled = false; this.$store.commit('showPopup', {'value': 'qr_scan'})">отсканировав QR-код</button></div>
           <div class="products-card" v-for="(category, cName) in products">
             <div class="products-card-title">{{ cName }}</div>
             <section class="products-card-type" v-for="(type, tName) in category">
@@ -221,20 +221,17 @@ async function onSearchText() {
 <style scoped lang="scss">
 .lets-scan {
   font-weight: 400;
+  text-decoration: underline;
+  transition: .125s ease-in-out;
 
   &:hover {
-    text-decoration: underline;
+    opacity: 0.7;
   }
 }
 
 .products {
   margin-top: 60px;
 
-  &-empty {
-    display: flex;
-    align-items: center;
-    gap: 0 5px;
-  }
 
   &-title {
     font-size: 2rem;
