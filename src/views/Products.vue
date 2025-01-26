@@ -7,12 +7,12 @@ import {
   PhLightning,
   PhRuler,
   PhSparkle,
-  PhListMagnifyingGlass, PhBinoculars, PhKnife, PhQrCode
+  PhListMagnifyingGlass, PhBinoculars, PhKnife, PhQrCode, PhEmpty
 } from "@phosphor-icons/vue";
 import { authStore } from "@/utils/auth";
 
 const auth = authStore()
-import {onMounted, ref} from "vue";
+import {onBeforeMount, onMounted, ref} from "vue";
 import {APIRequest} from "@/utils/http";
 import router from "@/router";
 
@@ -20,6 +20,7 @@ import {getNotification} from "@/utils/notification.ts";
 
 let orig_products = ref({})
 let products = ref({})
+let empty = ref(false)
 
 let specs = {
   0: "аллергенное",
@@ -29,7 +30,11 @@ let specs = {
 
 let searchInput = ref(false)
 
-onMounted(async () => {
+onBeforeMount(async () => {
+  await loadProducts()
+})
+
+async function loadProducts() {
   if (auth.isAuth) {
     const data = await APIRequest('/products/all', 'GET', {}, {}, true)
 
@@ -37,11 +42,16 @@ onMounted(async () => {
       console.log(data.json)
       orig_products.value = data.json
       products.value = data.json
+
+      if (Object.keys(data.json).length === 0) {
+        empty.value = true
+      }
+
     }
   } else {
     await router.push('/')
   }
-})
+}
 
 function date(f) {
   const date = new Date(Date.parse(f))
@@ -78,7 +88,7 @@ async function toBuyList(typeId, prodId, category, type, amount) {
 
     if (deleteData.status === 200) {
       await getNotification(0, "Добавление в корзину", `Продукт «${category} — ${type}» успешно добавлен в корзину`)
-      await router.push('/products')
+      await loadProducts()
     } else {
       await getNotification(1, "Добавление в корзину", `Произошла ошибка добавления продукта «${category} — ${type}» на стадии удаления просроченного`)
     }
@@ -141,6 +151,7 @@ async function onSearchText() {
           </div>
         </div>
         <div class="products-space">
+          <div class="products-empty" v-if="empty"><PhEmpty :size="26" /> К сожалению, в списке продуктов пусто. Добавьте товар, <button class="lets-scan" @click="toggled = false; this.$store.commit('showPopup', {'value': 'qr_scan'})">отсканировав QR-код</button></div>
           <div class="products-card" v-for="(category, cName) in products">
             <div class="products-card-title">{{ cName }}</div>
             <section class="products-card-type" v-for="(type, tName) in category">
@@ -208,8 +219,23 @@ async function onSearchText() {
 </template>
 
 <style scoped lang="scss">
+.lets-scan {
+  font-weight: 400;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 .products {
   margin-top: 60px;
+
+  &-empty {
+    display: flex;
+    align-items: center;
+    gap: 0 5px;
+  }
+
   &-title {
     font-size: 2rem;
     font-weight: 600;
