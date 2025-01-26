@@ -64,6 +64,7 @@ function getDaysStr(diff) {
   }
 }
 
+
 async function toBuyList(typeId, prodId, category, type, amount) {
   const data = await APIRequest(`/buylist/add`, "POST", {}, {
     prod_type_id: typeId,
@@ -71,7 +72,7 @@ async function toBuyList(typeId, prodId, category, type, amount) {
   }, true)
 
   if (data.status === 200) {
-    const deleteData = APIRequest(`/products/remove`, "DELETE", {
+    const deleteData = await APIRequest(`/products/remov`, "POST", {
       product_id: prodId
     }, {}, true)
 

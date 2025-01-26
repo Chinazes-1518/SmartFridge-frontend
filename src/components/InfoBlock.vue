@@ -60,10 +60,11 @@ async function submitReg() {
   });
 
   if (data.status === 200) {
-    VueCookies.set('authToken', data.json.token)
+    window.localStorage.setItem('authToken', data.json.token)
     await auth.prepareStore()
   } else {
     errorReg.value = data.json.detail.error
+    console.log(data.json)
   }
 }
 
