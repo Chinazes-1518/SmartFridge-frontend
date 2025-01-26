@@ -16,6 +16,8 @@ import {onMounted, ref} from "vue";
 import {APIRequest} from "@/utils/http";
 import router from "@/router";
 
+import {getNotification} from "@/utils/notification.ts";
+
 let orig_products = ref({})
 let products = ref({})
 
@@ -62,14 +64,26 @@ function getDaysStr(diff) {
   }
 }
 
-async function toBuyList(id, amount) {
-  const data = APIRequest(`/buylist/add`, "POST", {}, {
-    prod_type_id: id,
+async function toBuyList(typeId, prodId, category, type, amount) {
+  const data = await APIRequest(`/buylist/add`, "POST", {}, {
+    prod_type_id: typeId,
     amount: amount
   }, true)
 
   if (data.status === 200) {
-    alert("Успешно!");
+    const deleteData = APIRequest(`/products/remove`, "DELETE", {
+      product_id: prodId
+    }, {}, true)
+
+    if (deleteData.status === 200) {
+      await getNotification(0, "Добавление в корзину", `Продукт «${category} — ${type}» успешно добавлен в корзину`)
+      await router.push('/products')
+    } else {
+      await getNotification(1, "Добавление в корзину", `Произошла ошибка добавления продукта «${category} — ${type}» на стадии удаления просроченного`)
+    }
+  } else {
+    await getNotification(1, "Добавление в корзину", `Произошла ошибка добавления продукта «${category} — ${type}» на стадии добавления в список покупок`)
+
   }
 }
 
@@ -175,7 +189,7 @@ async function onSearchText() {
                       <td class="products-card-table-td">
                         <div class="products-card-table-buttons">
                           <button @click="this.$store.commit('setCurProd', {'value': item.prod_id}); this.$store.commit('showPopup', {'value': 'qr_show'})" class="products-card-table-btn transparent"><PhQrCode :size="25" /></button>
-                          <button @click="toBuyList(type.type_id, type.amount)" class="products-card-table-btn green"><PhBasket :size="25" /></button>
+                          <button @click="toBuyList(type.type_id, item.prod_id ,cName, tName, type.amount);" class="products-card-table-btn green"><PhBasket :size="25" /></button>
                           <button class="products-card-table-btn blue"><PhKnife :size="25" /></button>
                         </div>
                       </td>
