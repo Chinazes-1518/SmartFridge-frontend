@@ -25,6 +25,7 @@ async function getProductType(id) {
   if (data.status === 200) {
     console.log(data.json)
     return (data.json)
+    
   }
 
   return 0
