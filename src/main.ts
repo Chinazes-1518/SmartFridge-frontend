@@ -13,10 +13,10 @@ const app = createApp(App)
 const store = createStore({
     state() {
         return {
-            showPopup: String,
-            currentProduct: Number,
-            qrData: String,
-            qrGenerated: Boolean
+            showPopup: '',
+            currentProduct: -1,
+            qrData: '',
+            qrGenerated: false
         }
     },
     mutations: {

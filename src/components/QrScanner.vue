@@ -13,7 +13,8 @@ const props = defineProps({
     default: 10
   },
   onScanned: {
-    type: Function
+    type: Function,
+    required: true
   }
 })
 

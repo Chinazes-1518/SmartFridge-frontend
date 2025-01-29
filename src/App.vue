@@ -12,11 +12,11 @@
         </transition>
       </div>
       <Modal id="qr_scan" title="Сканнер QR">
-        <!-- {{ dataref }} -->
-        <div v-if="dataref === ''">
+        {{dataref}}
+        <div v-if="dataref === null">
           <QrScanner :fps="10" :qrbox="200" :on-scanned="onScanSuccess"></QrScanner>
         </div>
-        <div v-if="dataref !== ''" class="qr-scanner-info">
+        <div v-if="dataref !== null" class="qr-scanner-info">
           <div class="qr-scanner-info-title"><PhInfo :size="25" /> Информация о продукте</div>
           <div class="qr-scanner-info-pos">
             <div class="qr-scanner-name name">{{ dataref.type_name }} ({{ dataref.cat_name }})</div>
@@ -49,14 +49,14 @@
             <button @click="" class="qr-scanner-button green"><PhPlusCircle :size="25" />В холодильник</button>
 <!--            <button @click="" class="qr-scanner-button red"><PhTrash :size="25" />В мусорку</button>-->
             <button @click="" class="qr-scanner-button purple"><PhBasket :size="25" />В список покупок</button>
-            <button @click="dataref = ''" class="qr-scanner-button yellow"><PhArrowCounterClockwise :size="22" /> Сканировать заново</button>
+            <button @click="dataref = null" class="qr-scanner-button yellow"><PhArrowCounterClockwise :size="22" /> Сканировать заново</button>
           </div>
         </div>
       </Modal>
       <Modal id="qr_show" title="QR код продукта">
 <!--        {{ this.$store.state.currentProduct }} {{ this.$store.state.qrData }}-->
         <div style="display: flex" v-if="this.$store.state.qrGenerated">
-          <qrcode-vue :value="this.$store.state.qrData" size="300" render-as="svg" level="H" background="#ffffff00" style="margin: 0 auto"/>
+          <qrcode-vue :value="this.$store.state.qrData" :size="300" render-as="svg" level="H" background="#ffffff00" style="margin: 0 auto"/>
         </div>
       </Modal>
       <Notification />
@@ -71,7 +71,7 @@ import Modal from "@/components/Modal.vue";
 import QrScanner from "@/components/QrScanner.vue";
 import QrcodeVue from 'qrcode.vue'
 import {decodeQR} from "@/utils/qr.ts";
-import {ref} from "vue";
+import {type Ref, ref} from "vue";
 
 import {
   PhBasket,
@@ -84,13 +84,28 @@ import {
   PhListMagnifyingGlass, PhBinoculars, PhKnife, PhQrCode, PhArrowCounterClockwise, PhPlusCircle, PhInfo, PhHandTap
 } from "@phosphor-icons/vue";
 
-let specs = {
-  0: "аллергенное",
-  1: "лактоза",
-  2: "глютен"
+const specs: {[_: string]: string} = {
+  "0": "аллергенное",
+  "1": "лактоза",
+  "2": "глютен"
 }
 
-let dataref = ref('')
+type QRData = {
+  prod_id: number,
+  production_date: string,
+  expiry_date: string,
+  type_name: string,
+  amount: number,
+  units: string,
+  type_id: number,
+  nutritional: number,
+  measure_type: string,
+  allergens: string | null,
+  cat_name: string,
+  cat_id: number
+}
+
+let dataref: Ref<QRData | null> = ref(null)
 
 function onScanSuccess(text: string, error: any) {
   console.log(`Scanned ${text}`);

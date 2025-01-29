@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import {PhCheck} from "@phosphor-icons/vue";
 
 
@@ -11,6 +10,7 @@ import { viewNotify, notify, getNotification } from "@/utils/notification.ts";
 
 
 </script>
+
 <template>
 <div class="notification" v-if="viewNotify">
   <div class="notification-wrapper">

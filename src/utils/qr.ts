@@ -3,9 +3,9 @@ import {APIRequest} from "@/utils/http";
 export function decodeQR(text: string) {
     let obj = JSON.parse(text)
 
-    const keys = ['prod_id', 'production_date', 'expiry_date', 'type_name', 'amount', 'units', 'type_id', 'nutritional', 'measure_type', 'allergens', 'cat_name', 'cat_id']
+    const keys: string[] = ['prod_id', 'production_date', 'expiry_date', 'type_name', 'amount', 'units', 'type_id', 'nutritional', 'measure_type', 'allergens', 'cat_name', 'cat_id']
 
-    let data = {}
+    let data: Object = {}
     for (let i = 0; i < keys.length; i++) {
         data[keys[i]] = obj[i]
     }
