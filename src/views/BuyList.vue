@@ -7,6 +7,7 @@ import {PhBackspace, PhBasket, PhKnife, PhQrCode} from "@phosphor-icons/vue";
 let buy = ref({})
 let empty = ref(false)
 let types = ref({})
+let cats = ref({})
 
 onBeforeMount(async () => {
   await loadBuyList()
@@ -17,20 +18,19 @@ async function loadBuyList() {
 
   if (data.status === 200) {
     buy.value = data.json
-    if (buy.value.length === 0) {
+    if (buy.value.buylist.length === 0) {
       empty.value = true
     }
-    let productsInfo = {}
-    let m: any = Object.values(data.json)[0]
-    console.log(m)
-    let d: any = {}
-    for (let key in m) {
-      let value = m[key]
-      let pData = await APIRequest(`/product_types/get`, "GET", {id: value.prod_type_id}, {}, true)
-      let p: string = value.prod_type_id
-      d[p] = pData.json
+
+    const pData = await APIRequest('/product_types/all', "GET", {}, {}, true)
+    if (pData.status === 200) {
+      types.value = pData.json
     }
-    types.value = d
+
+    const cData = await APIRequest('/product_categories/all', "GET", {}, {}, true)
+    if (cData.status === 200) {
+      cats.value = cData.json
+    }
   }
 }
 
@@ -42,6 +42,7 @@ async function buyProduct(id) {
   }
 }
 
+
 </script>
 
 <template>
@@ -50,12 +51,13 @@ async function buyProduct(id) {
       <div class="buy-container container">
         <div class="buy-title">Список покупок</div>
         <div class="products-empty" v-if="empty">К сожалению, в списке продуктов пусто. Добавьте товар, <button class="lets-scan" @click="toggled = false; this.$store.commit('showPopup', {'value': 'qr_scan'})">отсканировав QR-код</button></div>
-        <div class="buy-table-pre">
+        <div class="buy-table-pre" v-else>
           <table class="buy-table">
             <thead>
             <tr class="buy-table-tr">
               <th class="buy-table-th">ID</th>
               <th class="buy-table-th">Название продукта</th>
+              <th class="buy-table-th">Количество, штука</th>
               <th class="buy-table-th">Масса</th>
               <th class="buy-table-th">Действия</th>
             </tr>
@@ -63,8 +65,9 @@ async function buyProduct(id) {
             <tbody>
             <tr class="buy-table-tr" v-for="item in Object.values(buy)[0]">
               <td class="buy-table-td"><code>{{ item.id }}</code></td>
-              <td class="buy-table-td">{{ types[item.prod_type_id].name }} (<code>Type ID: {{item.prod_type_id }}</code>)</td>
-              <td class="buy-table-td">{{ item.amount }} {{ types[item.prod_type_id].units }}</td>
+              <td class="buy-table-td">{{ types[item.prod_type_id].name }} ({{ cats[types[item.prod_type_id].category_id] }})</td>
+              <td class="buy-table-td"><code>{{ item.count }}</code></td>
+              <td class="buy-table-td">{{ types[item.prod_type_id].amount }} {{ types[item.prod_type_id].units }}</td>
               <td class="buy-table-td">
                 <div class="buy-table-buttons">
                   <button @click="buyProduct(item.id)" class="buy-table-btn red"><PhBackspace :size="25" />Удалить</button>
