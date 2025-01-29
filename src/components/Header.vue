@@ -11,7 +11,7 @@
           <li><button @click="toggled = false; this.$store.commit('showPopup', {'value': 'qr_scan'})" class="header-button"><PhQrCode :size="24" />Сканировать код</button></li>
           <li><RouterLink to="/products" @click="toggled = false" class="header-button"><PhListDashes :size="24" />Список продуктов</RouterLink></li>
           <li><RouterLink to="/buy" @click="toggled = false" class="header-button"><PhBasket :size="24" />Список покупок</RouterLink></li>
-          <li><RouterLink to="/analitics" @click="toggled = false" class="header-button"><PhChartLine :size="24" />Аналитика</RouterLink></li>
+          <li><RouterLink to="/analytics" @click="toggled = false" class="header-button"><PhChartLine :size="24" />Аналитика</RouterLink></li>
         </ul>
         <ul class="header-list left" :class="{authed: auth.isAuth}">
           <li v-if="!auth.isAuth"><button @click="router.push('/'); toggled = false" class="header-button" style="font-weight: 400"><PhKey :size="24" />Войти</button></li>
