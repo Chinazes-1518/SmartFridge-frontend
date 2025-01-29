@@ -20,6 +20,7 @@ export function APIRequest(
             options.body = JSON.stringify(body)
         }
 
+        // @ts-ignore
         let finalPath = import.meta.env.VITE_API_URL + path
         // alert(JSON.stringify(query))
         if (query) {
