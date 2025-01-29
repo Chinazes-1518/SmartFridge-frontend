@@ -72,17 +72,9 @@ import QrScanner from "@/components/QrScanner.vue";
 import QrcodeVue from 'qrcode.vue'
 import {decodeQR} from "@/utils/qr.ts";
 import {type Ref, ref} from "vue";
+import type {QRData} from "@/utils/types.ts";
 
-import {
-  PhBasket,
-  PhTrash,
-  PhCaretDown,
-  PhScales,
-  PhLightning,
-  PhRuler,
-  PhSparkle,
-  PhListMagnifyingGlass, PhBinoculars, PhKnife, PhQrCode, PhArrowCounterClockwise, PhPlusCircle, PhInfo, PhHandTap
-} from "@phosphor-icons/vue";
+import {PhArrowCounterClockwise, PhBasket, PhHandTap, PhInfo, PhKnife, PhPlusCircle} from "@phosphor-icons/vue";
 
 const specs: {[_: string]: string} = {
   "0": "аллергенное",
@@ -90,27 +82,11 @@ const specs: {[_: string]: string} = {
   "2": "глютен"
 }
 
-type QRData = {
-  prod_id: number,
-  production_date: string,
-  expiry_date: string,
-  type_name: string,
-  amount: number,
-  units: string,
-  type_id: number,
-  nutritional: number,
-  measure_type: string,
-  allergens: string | null,
-  cat_name: string,
-  cat_id: number
-}
-
 let dataref: Ref<QRData | null> = ref(null)
 
 function onScanSuccess(text: string, error: any) {
   console.log(`Scanned ${text}`);
-  let data = decodeQR(text)
-  dataref.value = data
+  dataref.value = decodeQR(text);
 }
 </script>
 
