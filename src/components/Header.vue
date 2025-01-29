@@ -8,7 +8,7 @@
       </div>
       <div class="header-column toggle" :class="{active:toggled}">
         <ul class="header-list">
-          <li><button @click="toggled = false; this.$store.commit('showPopup', {'value': 'qr_scan'})" class="header-button"><PhQrCode :size="24" />Сканировать код</button></li>
+          <li><button @click="toggled = false; $store.commit('showPopup', {'value': 'qr_scan'});" class="header-button"><PhQrCode :size="24" />Сканировать код</button></li>
           <li><RouterLink to="/products" @click="toggled = false" class="header-button"><PhListDashes :size="24" />Список продуктов</RouterLink></li>
           <li><RouterLink to="/buy" @click="toggled = false" class="header-button"><PhBasket :size="24" />Список покупок</RouterLink></li>
           <li><RouterLink to="/analytics" @click="toggled = false" class="header-button"><PhChartLine :size="24" />Аналитика</RouterLink></li>
@@ -32,12 +32,10 @@ import {authStore} from "@/utils/auth";
 import {onUnmounted, ref} from "vue";
 import router from "@/router";
 
-
 const auth = authStore()
 
 let scrolled = ref(false);
 let toggled = ref(false);
-let scan_popup = ref(false);
 
 const handleScroll = () => {
   scrolled.value = window.scrollY > 0;

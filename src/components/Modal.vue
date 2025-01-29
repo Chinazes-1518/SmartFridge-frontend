@@ -1,5 +1,5 @@
 <template>
-  <div v-if="this.$store.state.showPopup === id" class="modal-overlay" @click="closeModal">
+  <div v-if="$store.state.showPopup === id" class="modal-overlay" @click="closeModal">
     <div class="modal-content" @click.stop style="width: 600px">
       <div class="modal-title">
         <div class="title">{{ title }}</div>

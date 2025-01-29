@@ -12,22 +12,15 @@ import {
 import { authStore } from "@/utils/auth";
 
 const auth = authStore()
-import {onBeforeMount, onMounted, ref} from "vue";
+import {onBeforeMount, ref, type Ref} from "vue";
 import {APIRequest} from "@/utils/http";
 import router from "@/router";
-
+import { allergens_specs, type ProductsData } from "@/utils/types";
 import {getNotification} from "@/utils/notification.ts";
 
-let orig_products = ref({})
-let products = ref({})
+let orig_products: Ref<ProductsData | null> = ref({})
+let products: Ref<ProductsData | null> = ref({})
 let empty = ref(false)
-
-let specs = {
-  0: "аллергенное",
-  1: "лактоза",
-  2: "глютен"
-}
-
 let searchInput = ref(false)
 
 onBeforeMount(async () => {
@@ -47,22 +40,22 @@ async function loadProducts() {
       }
 
     } else if (data.status === 403) {
-    await router.push("/")
-  }
+      await router.push("/")
+    }
 }
 
-function date(f) {
+function date(f: string): [string, number] {
   const date = new Date(Date.parse(f))
   const day = date.getDate() > 10 ? date.getDate() : `0${date.getDate()}`
   const month = date.getMonth() > 10 ? date.getMonth() + 1 : `0${date.getMonth() + 1}`
 
-  const difference = (date - Date.now()) > 0 ? Math.ceil((date - Date.now()) / 1000 / 60 / 60 / 24) : 0
+  const difference = (date.getTime() - Date.now()) > 0 ? Math.ceil((date.getTime() - Date.now()) / 1000 / 60 / 60 / 24) : 0
   const finalDate = `${day}.${month}.${date.getFullYear()}`
 
   return [finalDate, difference]
 }
 
-function getDaysStr(diff) {
+function getDaysStr(diff: number) {
   if (diff % 10 === 1) {
     return 'день'
   } else if (diff % 10 === 2 || diff % 10 === 3 || diff % 10 === 4) {
@@ -71,7 +64,6 @@ function getDaysStr(diff) {
     return 'дней'
   }
 }
-
 
 async function toBuyList(typeId: number, prodId: number, category: string, type: string, count: number) {
   const data = await APIRequest(`/buylist/add`, "POST", {}, {
@@ -91,11 +83,10 @@ async function toBuyList(typeId: number, prodId: number, category: string, type:
     }
   } else {
     getNotification(1, "Добавление в корзину", `Произошла ошибка добавления продукта «${category} — ${type}» на стадии добавления в список покупок`)
-
   }
 }
 
-async function deleteProduct(id) {
+async function deleteProduct(id: number) {
   const data = APIRequest(`/buylist/delete`, "POST", {}, {})
 }
 
@@ -111,27 +102,47 @@ async function onSearchText() {
 
   let new_products = {}
 
-  for (let [cat_name, cat] of Object.entries(orig_products.value)) {
-    // console.log(cat_name, cat)
-    if (cat_name.toLowerCase().indexOf(lowerSearchText) !== -1) {
-      new_products[cat_name] = cat
-    } else {
-      for (let [type_name, type] of Object.entries(cat)) {
-        // console.log(type_name, type)
-        if (type_name.toLowerCase().indexOf(lowerSearchText) !== -1) {
-          if (Object.keys(new_products).indexOf(cat_name) === -1) {
-            new_products[cat_name] = {}
-          }
+  // for (let [cat_name, cat] of Object.entries(orig_products.value)) {
+  //   // console.log(cat_name, cat)
+  //   if (cat_name.toLowerCase().indexOf(lowerSearchText) !== -1) {
+  //     new_products[cat_name] = cat
+  //   } else {
+  //     for (let [type_name, type] of Object.entries(cat)) {
+  //       // console.log(type_name, type)
+  //       if (type_name.toLowerCase().indexOf(lowerSearchText) !== -1) {
+  //         if (Object.keys(new_products).indexOf(cat_name) === -1) {
+  //           new_products[cat_name] = {}
+  //         }
 
-          new_products[cat_name][type_name] = type
+  //         new_products[cat_name][type_name] = type
+  //       }
+  //     }
+  //   }
+  // }
+
+  if (orig_products !== null) {
+    for (let [cat_name, cat] of orig_products.value!) {
+      // console.log(cat_name, cat)
+      if (cat_name.toLowerCase().indexOf(lowerSearchText) !== -1) {
+        new_products[cat_name] = cat
+      } else {
+        for (let [type_name, type] of Object.entries(cat)) {
+          // console.log(type_name, type)
+          if (type_name.toLowerCase().indexOf(lowerSearchText) !== -1) {
+            if (Object.keys(new_products).indexOf(cat_name) === -1) {
+              new_products[cat_name] = {}
+            }
+
+            new_products[cat_name][type_name] = type
+          }
         }
       }
     }
+
+    console.log(new_products)
+
+    products.value = new_products
   }
-
-  console.log(new_products)
-
-  products.value = new_products
 }
 
 </script>
@@ -148,11 +159,11 @@ async function onSearchText() {
           </div>
         </div>
         <div class="products-space">
-          <div class="products-empty" v-if="empty">К сожалению, в списке продуктов пусто. Добавьте товар, <button class="lets-scan" @click="toggled = false; this.$store.commit('showPopup', {'value': 'qr_scan'})">отсканировав QR-код</button></div>
+          <div class="products-empty" v-if="empty">К сожалению, в списке продуктов пусто. Добавьте товар, <button class="lets-scan" @click="$store.commit('showPopup', {'value': 'qr_scan'})">отсканировав QR-код</button></div>
           <div class="products-card" v-for="(category, cName) in products">
             <div class="products-card-title">{{ cName }}</div>
             <section class="products-card-type" v-for="(type, tName) in category">
-              <div class="products-card-type-title" @click="e => e.target.closest('section').classList.toggle('active')"><div class="icon"><PhCaretDown :size="26" /></div> {{ tName }}</div>
+              <div class="products-card-type-title" @click="(e: MouseEvent) => { if (e.target !== null) { (e.target as Element).closest('section')?.classList.toggle('active'); } }"><div class="icon"><PhCaretDown :size="26" /></div> {{ tName }}</div>
               <div class="products-card-type-toggle">
                 <div class="products-card-type-info">
                   <div class="products-card-type-info-pos">
@@ -167,10 +178,10 @@ async function onSearchText() {
                     <div class="products-card-type-info-name"><PhRuler :size="24" />Тип измерения:</div>
                     <div class="products-card-type-info-value">{{ type.measure_type }}</div>
                   </div>
-                  <div class="products-card-type-info-pos" v-if="type.allergens != null">
+                  <div class="products-card-type-info-pos" v-if="type.allergens != null && type.allergens !== ''">
                     <div class="products-card-type-info-name"><PhSparkle :size="24" />Особенности:</div>
                     <div class="products-card-type-info-value specs">
-                      <div class="products-card-type-info-value-spec" v-for="spec in type.allergens.split(',')">{{ specs[spec] }}</div>
+                      <div class="products-card-type-info-value-spec" v-for="spec in type.allergens.split(',')">{{ allergens_specs[spec] }}</div>
                     </div>
                   </div>
                 </div>
@@ -197,8 +208,8 @@ async function onSearchText() {
                       </td>
                       <td class="products-card-table-td">
                         <div class="products-card-table-buttons">
-                          <button @click="this.$store.commit('setCurProd', {'value': item.prod_id}); this.$store.commit('showPopup', {'value': 'qr_show'})" class="products-card-table-btn transparent"><PhQrCode :size="25" /></button>
-                          <button @click="toBuyList(type.type_id, item.prod_id ,cName, tName, type.amount);" class="products-card-table-btn green"><PhBasket :size="25" /></button>
+                          <button @click="$store.commit('setCurProd', {'value': item.prod_id}); $store.commit('showPopup', {'value': 'qr_show'})" class="products-card-table-btn transparent"><PhQrCode :size="25" /></button>
+                          <button @click="toBuyList(type.type_id, item.prod_id, cName as string, tName as string, type.amount);" class="products-card-table-btn green"><PhBasket :size="25" /></button>
                           <button class="products-card-table-btn blue"><PhKnife :size="25" /></button>
                         </div>
                       </td>

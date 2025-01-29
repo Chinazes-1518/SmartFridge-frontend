@@ -2,7 +2,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
   <div class="root" id="root">
     <router-view v-slot="{ Component, route }">
-      <Header />
+      <Header/>
       <div class="layout">
         <transition
             enter-active-class="animate__animated animate__fadeIn"
@@ -12,7 +12,7 @@
         </transition>
       </div>
       <Modal id="qr_scan" title="Сканнер QR">
-        {{dataref}}
+        <!-- {{dataref}} -->
         <div v-if="dataref === null">
           <QrScanner :fps="10" :qrbox="200" :on-scanned="onScanSuccess"></QrScanner>
         </div>
@@ -40,7 +40,7 @@
             <div class="qr-scanner-name">Единицы измерения:</div> <div class="qr-scanner-value">{{ dataref.measure_type }}</div>
           </div>
           <div class="qr-scanner-info-pos">
-            <div class="qr-scanner-name">Особенности:</div> <div class="qr-scanner-value" v-if="dataref.allergens !== null">{{ dataref.allergens.split(',').map((x) => specs[x]).join(', ') }}</div><span v-if="dataref.allergens === null">нет</span>
+            <div class="qr-scanner-name">Особенности:</div> <div class="qr-scanner-value" v-if="dataref.allergens !== null">{{ dataref.allergens.split(',').map((x) => allergens_specs[x]).join(', ') }}</div><span v-if="dataref.allergens === null">нет</span>
           </div>
           <br>
           <div class="qr-scanner-info-title"><PhHandTap :size="25" /> Действия</div>
@@ -49,14 +49,14 @@
             <button @click="" class="qr-scanner-button green"><PhPlusCircle :size="25" />В холодильник</button>
 <!--            <button @click="" class="qr-scanner-button red"><PhTrash :size="25" />В мусорку</button>-->
             <button @click="" class="qr-scanner-button purple"><PhBasket :size="25" />В список покупок</button>
-            <button @click="dataref = null" class="qr-scanner-button yellow"><PhArrowCounterClockwise :size="22" /> Сканировать заново</button>
+            <button @click="dataref = null" class="qr-scanner-button yellow"><PhArrowCounterClockwise :size="22" />Сканировать заново</button>
           </div>
         </div>
       </Modal>
       <Modal id="qr_show" title="QR код продукта">
-<!--        {{ this.$store.state.currentProduct }} {{ this.$store.state.qrData }}-->
-        <div style="display: flex" v-if="this.$store.state.qrGenerated">
-          <qrcode-vue :value="this.$store.state.qrData" :size="300" render-as="svg" level="H" background="#ffffff00" style="margin: 0 auto"/>
+       <!-- {{ $store.state.currentProduct }} {{ $store.state.qrData }} -->
+        <div style="display: flex" v-if="$store.state.qrGenerated">
+          <qrcode-vue :value="$store.state.qrData" :size="300" render-as="svg" level="H" background="#ffffff00" style="margin: 0 auto"/>
         </div>
       </Modal>
       <Notification />
@@ -72,15 +72,9 @@ import QrScanner from "@/components/QrScanner.vue";
 import QrcodeVue from 'qrcode.vue'
 import {decodeQR} from "@/utils/qr.ts";
 import {type Ref, ref} from "vue";
-import type {QRData} from "@/utils/types.ts";
+import {allergens_specs, type QRData} from "@/utils/types.ts";
 
 import {PhArrowCounterClockwise, PhBasket, PhHandTap, PhInfo, PhKnife, PhPlusCircle} from "@phosphor-icons/vue";
-
-const specs: {[_: string]: string} = {
-  "0": "аллергенное",
-  "1": "лактоза",
-  "2": "глютен"
-}
 
 let dataref: Ref<QRData | null> = ref(null)
 

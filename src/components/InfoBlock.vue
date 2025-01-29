@@ -277,9 +277,3 @@ async function submitReg() {
   }
 }
 </style>
-
-<style lang="scss">
-.header {
-  //display: none;
-}
-</style>
