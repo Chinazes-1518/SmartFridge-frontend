@@ -73,10 +73,10 @@ function getDaysStr(diff) {
 }
 
 
-async function toBuyList(typeId, prodId, category, type, amount) {
+async function toBuyList(typeId: number, prodId: number, category: string, type: string, count: number) {
   const data = await APIRequest(`/buylist/add`, "POST", {}, {
     prod_type_id: typeId,
-    amount: amount
+    count: count
   }, true)
 
   if (data.status === 200) {
@@ -85,13 +85,12 @@ async function toBuyList(typeId, prodId, category, type, amount) {
     }, {}, true)
 
     if (deleteData.status === 200) {
-      await getNotification(0, "Добавление в корзину", `Продукт «${category} — ${type}» успешно добавлен в корзину`)
       await loadProducts()
     } else {
-      await getNotification(1, "Добавление в корзину", `Произошла ошибка добавления продукта «${category} — ${type}» на стадии удаления просроченного`)
+      getNotification(1, "Добавление в корзину", `Произошла ошибка добавления продукта «${category} — ${type}» на стадии удаления просроченного`)
     }
   } else {
-    await getNotification(1, "Добавление в корзину", `Произошла ошибка добавления продукта «${category} — ${type}» на стадии добавления в список покупок`)
+    getNotification(1, "Добавление в корзину", `Произошла ошибка добавления продукта «${category} — ${type}» на стадии добавления в список покупок`)
 
   }
 }
