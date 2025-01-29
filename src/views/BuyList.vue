@@ -3,6 +3,7 @@
 import {onBeforeMount, ref} from "vue";
 import {APIRequest} from "@/utils/http.ts";
 import {PhBackspace, PhBasket, PhKnife, PhQrCode} from "@phosphor-icons/vue";
+import router from "@/router";
 
 let buy = ref({})
 let empty = ref(false)
@@ -31,6 +32,8 @@ async function loadBuyList() {
     if (cData.status === 200) {
       cats.value = cData.json
     }
+  } else if (data.status === 403) {
+    await router.push("/")
   }
 }
 

@@ -35,19 +35,17 @@ onBeforeMount(async () => {
 })
 
 async function loadProducts() {
-  if (auth.isAuth) {
-    const data = await APIRequest('/products/all', 'GET', {}, {}, true)
+  const data = await APIRequest('/products/all', 'GET', {}, {}, true)
 
-    if (data.status === 200) {
-      console.log(data.json)
-      orig_products.value = data.json
-      products.value = data.json
+  if (data.status === 200) {
+    console.log(data.json)
+    orig_products.value = data.json
+    products.value = data.json
 
-      if (Object.keys(data.json).length === 0) {
-        empty.value = true
-      }
-
+    if (Object.keys(data.json).length === 0) {
+      empty.value = true
     }
+
   } else {
     await router.push('/')
   }
