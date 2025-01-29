@@ -20,6 +20,11 @@ const router = createRouter({
             name: 'BuyList',
             component: () => import('@/views/BuyList.vue'),
         },
+        {
+            path: '/charts',
+            name: 'BuyList',
+            component: () => import('@/views/BuyList.vue'),
+        },
     ]
 })
 

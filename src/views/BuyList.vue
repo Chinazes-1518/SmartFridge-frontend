@@ -53,7 +53,7 @@ async function buyProduct(id) {
     <div class="buy">
       <div class="buy-container container">
         <div class="buy-title">Список покупок</div>
-        <div class="products-empty" v-if="empty">К сожалению, в списке продуктов пусто. Добавьте товар, <button class="lets-scan" @click="toggled = false; this.$store.commit('showPopup', {'value': 'qr_scan'})">отсканировав QR-код</button></div>
+        <div class="buy-empty" v-if="empty">К сожалению, в списке покупок пусто</div>
         <div class="buy-table-pre" v-else>
           <table class="buy-table">
             <thead>
@@ -88,6 +88,10 @@ async function buyProduct(id) {
 <style scoped lang="scss">
 .buy {
   margin-top: 60px;
+
+  &-empty {
+    margin-top: 30px;
+  }
 
   &-title {
     font-size: 2rem;
