@@ -3,7 +3,7 @@ import {GoogleCharts} from 'google-charts';
 import {APIRequest} from "@/utils/http.ts";
 import {onBeforeMount, ref} from 'vue';
 
-GoogleCharts.load('current', {'packages':['corechart']});
+GoogleCharts.load('current', {'packages':['corechart', 'line']});
 GoogleCharts.load(drawChart);
 
 let stats = ref({})
@@ -38,15 +38,27 @@ function drawChart() {
   }
 
   console.log(k)
+  const j = Object.keys(k).sort(function(a, b){
+    a = a.split(",")
+    b = b.split(",")
+    return new Date(a[0], a[1], a[2]) - new Date(b[0], b[1], b[2]);
+  })
+
+  const q = {}
+  j.forEach((item) => {
+    console.log(item)
+    q[item] = k[item]
+  })
+
+  // for (let v in j) {
+  //   console.log(v)
+  // }
 
 
 
-  for (let i: any in Object.keys(k).sort()) {
+  for (let i in q) {
     i = i.split(",")
-    console.log(i)
     const info = k[i]
-    console.log(i[0], i[1], i[2])
-    // console.log(new Date(i[0], i[1], i[2]))
     array.push([new Date(i[0], i[1], i[2]), info])
   }
   // console.log(array)
@@ -58,7 +70,7 @@ function drawChart() {
 
   var options = {
     title: '',
-    curveType: 'function',
+    // curveType: 'function',
     legend: { position: 'bottom' },
     backgroundColor: 'transparent',
     vAxis: {
@@ -69,13 +81,13 @@ function drawChart() {
     },
     hAxis: {
       gridlines: {
-        count: 15
+        count: 5
       },
       format: 'M/d/yy',
     }
   };
 
-  var chart = new GoogleCharts.api.visualization.LineChart(document.getElementById('curve_chart'));
+  var chart = new GoogleCharts.api.visualization.AreaChart(document.getElementById('curve_chart'));
 
   chart.draw(data, options);
 }
