@@ -46,8 +46,8 @@ async function loadProducts() {
 
 function date(f: string): [string, number] {
   const date = new Date(Date.parse(f))
-  const day = date.getDate() > 10 ? date.getDate() : `0${date.getDate()}`
-  const month = date.getMonth() > 10 ? date.getMonth() + 1 : `0${date.getMonth() + 1}`
+  const day = date.getDate() > 10 ? date.getDate() : `${String(date.getDate()).padStart(2, '0')}`
+  const month = date.getMonth() > 10 ? date.getMonth() + 1 : `${String(date.getMonth() + 1).padStart(2, '0')}`
 
   const difference = (date.getTime() - Date.now()) > 0 ? Math.ceil((date.getTime() - Date.now()) / 1000 / 60 / 60 / 24) : 0
   const finalDate = `${day}.${month}.${date.getFullYear()}`
