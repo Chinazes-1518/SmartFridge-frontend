@@ -73,7 +73,7 @@ function drawChart() {
   var options = {
     title: '',
     // curveType: 'function',
-    legend: { position: 'bottom', alignment: 'center', textStyle: {marginLeft: "30px"}},
+    legend: { position: 'bottom', alignment: 'center', textStyle: {fontSize: 20}},
     backgroundColor: 'transparent',
     colors: ['#0b73c4', '#3dc94a', '#ff3b3b'],
     vAxis: {
@@ -109,8 +109,8 @@ function drawChart() {
 }
 </script>
 <template>
-<div class="chart" style="width: 100%">
-  <div id="curve_chart" style="width: 100%; height: 500px"></div>
+<div class="chart" style=" height: auto">
+  <div id="curve_chart" style="width: 1000px; height: 500px"></div>
 </div>
 </template>
 
