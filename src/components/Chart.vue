@@ -59,12 +59,14 @@ function drawChart() {
   for (let i in q) {
     i = i.split(",")
     const info = k[i]
-    array.push([new Date(i[0], i[1], i[2]), info])
+    array.push([new Date(i[0], i[1], i[2]), info, 1, 2])
   }
   // console.log(array)
   var data = new GoogleCharts.api.visualization.DataTable();
   data.addColumn('date', 'X')
-  data.addColumn('number', 'Deleted')
+  data.addColumn('number', 'Использовано', )
+  data.addColumn('number', 'Добавлено')
+  data.addColumn('number', 'Просрочено')
 
   data.addRows(array)
 
@@ -73,6 +75,7 @@ function drawChart() {
     // curveType: 'function',
     legend: { position: 'bottom' },
     backgroundColor: 'transparent',
+    colors: ['#0b73c4', '#3dc94a', '#ff3b3b'],
     vAxis: {
       gridlines: {
         color: '#FFBD88',
@@ -84,7 +87,7 @@ function drawChart() {
     },
     hAxis: {
       gridlines: {
-        count: 4,
+        count: 5,
         color: '#FFBD88',
 
       },
