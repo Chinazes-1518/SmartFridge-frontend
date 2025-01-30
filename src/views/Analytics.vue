@@ -26,6 +26,7 @@ import Chart from "@/components/Chart.vue";
   }
 
   &-card {
+    margin-top: 30px;
     width: 100%;
     padding: 30px;
     background: var(--color-sub-background);

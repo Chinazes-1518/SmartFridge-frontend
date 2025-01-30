@@ -9,7 +9,7 @@ GoogleCharts.load(drawChart);
 let stats = ref({})
 
 onBeforeMount(async() => {
-  await loadStats('removed', '2024-01-25 08:54:22.690597', '2025-01-29 15:33:42.611162')
+  await loadStats('removed', '2024-01-25 08:54:22.690597', '2026-01-30 15:33:42.611162')
   drawChart()
 })
 
@@ -64,7 +64,7 @@ function drawChart() {
   // console.log(array)
   var data = new GoogleCharts.api.visualization.DataTable();
   data.addColumn('date', 'X')
-  data.addColumn('number', 'Удалено')
+  data.addColumn('number', 'Deleted')
 
   data.addRows(array)
 
@@ -77,13 +77,24 @@ function drawChart() {
       gridlines: {
         color: '#FFBD88',
       },
+      minorGridlines: {
+        color: '#FFBD88',
+      }
 
     },
     hAxis: {
       gridlines: {
-        count: 5
+        count: 4,
+        color: '#FFBD88',
+
       },
-      format: 'M/d/yy',
+      minorGridlines: {
+        count: 0,
+      },
+      format: 'dd.MM.yyyy',
+    },
+    tooltip: {
+      isHtml: true
     }
   };
 
@@ -94,7 +105,7 @@ function drawChart() {
 </script>
 <template>
 <div class="">
-  <div id="curve_chart" style="width: 900px; height: 500px"></div>
+  <div id="curve_chart" style="width: calc(100vw - 120px); height: 500px"></div>
 </div>
 </template>
 
