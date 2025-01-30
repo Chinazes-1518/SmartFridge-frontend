@@ -73,12 +73,9 @@ function drawChart() {
   var options = {
     title: '',
     // curveType: 'function',
-    legend: { position: 'bottom' },
+    legend: { position: 'bottom', alignment: 'center', textStyle: {marginLeft: "30px"}},
     backgroundColor: 'transparent',
     colors: ['#0b73c4', '#3dc94a', '#ff3b3b'],
-    legend: {
-      position: 'top'
-    },
     vAxis: {
       gridlines: {
         color: '#FFBD88',
@@ -123,5 +120,4 @@ function drawChart() {
   overflow-x: scroll;
   scrollbar-width: none;
 }
-
 </style>
