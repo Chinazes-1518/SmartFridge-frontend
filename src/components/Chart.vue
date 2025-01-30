@@ -110,7 +110,7 @@ function drawChart() {
 </script>
 <template>
 <div class="chart" style=" height: auto">
-  <div id="curve_chart" style="width: 1000px; height: 500px"></div>
+  <div id="curve_chart" style="width: 1200px; height: 500px"></div>
 </div>
 </template>
 
