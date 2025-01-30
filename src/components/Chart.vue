@@ -76,12 +76,17 @@ function drawChart() {
     legend: { position: 'bottom' },
     backgroundColor: 'transparent',
     colors: ['#0b73c4', '#3dc94a', '#ff3b3b'],
+    legend: {
+      position: 'top'
+    },
     vAxis: {
       gridlines: {
         color: '#FFBD88',
+        interval: 1
       },
       minorGridlines: {
         color: '#FFBD88',
+        interval: 1
       }
 
     },
@@ -107,11 +112,16 @@ function drawChart() {
 }
 </script>
 <template>
-<div class="">
-  <div id="curve_chart" style="width: calc(100vw - 120px); height: 500px"></div>
+<div class="chart" style="width: 100%">
+  <div id="curve_chart" style="width: 100%; height: 500px"></div>
 </div>
 </template>
 
 <style scoped lang="scss">
+.chart {
+  display: block;
+  overflow-x: scroll;
+  scrollbar-width: none;
+}
 
 </style>
