@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {onBeforeMount, ref} from "vue";
+import {onBeforeMount, ref, type Ref} from "vue";
 import {APIRequest} from "@/utils/http.ts";
 import {
   PhBackspace,
@@ -12,11 +12,11 @@ import {
   PhQrCode, PhRuler, PhScales
 } from "@phosphor-icons/vue";
 import router from "@/router";
+import {type BuylistData, type TypesData, type CategoriesData} from "@/utils/types.ts";
 
-let buy = ref({})
-let empty = ref(false)
-let types = ref({})
-let cats = ref({})
+let buy: Ref<BuylistData | null> = ref(null)
+let types: Ref<TypesData | null> = ref(null)
+let cats: Ref<CategoriesData | null> = ref(null)
 
 let inputName = ref(false)
 let inputCount = ref(false)
@@ -31,9 +31,6 @@ async function loadBuyList() {
 
   if (data.status === 200) {
     buy.value = data.json
-    if (buy.value.buylist.length === 0) {
-      empty.value = true
-    }
 
     const pData = await APIRequest('/product_types/all', "GET", {}, {}, true)
     if (pData.status === 200) {
@@ -49,15 +46,13 @@ async function loadBuyList() {
   }
 }
 
-async function buyProduct(id) {
+async function buyProduct(id: number) {
   const data = await APIRequest('/buylist/remove', "DELETE", {buylist_id: id}, {}, true)
 
   if (data.status === 200) {
     await loadBuyList()
   }
 }
-
-
 </script>
 
 <template>
@@ -82,7 +77,7 @@ async function buyProduct(id) {
             <PhPlusCircle :size="26"></PhPlusCircle>
           </div>
         </div>
-        <div class="buy-empty" v-if="empty">К сожалению, в списке покупок пусто</div>
+        <div class="buy-empty" v-if="buy === null">К сожалению, в списке покупок пусто</div>
         <div class="buy-table-pre" v-else>
           <table class="buy-table">
             <thead>
@@ -95,11 +90,11 @@ async function buyProduct(id) {
             </tr>
             </thead>
             <tbody>
-            <tr class="buy-table-tr" v-for="item in Object.values(buy)[0]">
+            <tr class="buy-table-tr" v-for="item in buy">
               <td class="buy-table-td"><code>{{ item.id }}</code></td>
-              <td class="buy-table-td">{{ types[item.prod_type_id].name }} ({{ cats[types[item.prod_type_id].category_id] }})</td>
+              <td class="buy-table-td">{{ types![String(item.prod_type_id)].name }} ({{ cats![types![String(item.prod_type_id)].category_id] }})</td>
               <td class="buy-table-td"><code>{{ item.count }}</code></td>
-              <td class="buy-table-td">{{ types[item.prod_type_id].amount }} {{ types[item.prod_type_id].units }}</td>
+              <td class="buy-table-td">{{ types![String(item.prod_type_id)].amount }} {{ types![String(item.prod_type_id)].units }}</td>
               <td class="buy-table-td">
                 <div class="buy-table-buttons">
                   <button @click="buyProduct(item.id)" class="buy-table-btn red"><PhBackspace :size="25" />Удалить</button>

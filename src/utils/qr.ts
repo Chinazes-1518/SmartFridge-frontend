@@ -40,23 +40,20 @@ export function decodeQR(text: string) : QRData {
     return res;
 }
 
-export async function genQR(id) {
-    console.log(`genQR ${id}`)
+export async function genQR(id: number) {
     const data = await APIRequest('/products/product', 'GET', {'id': id}, {}, true)
 
     if (data.status === 200) {
-        // console.log(data.json)
         const keys = ['prod_id', 'production_date', 'expiry_date', 'type_name', 'amount', 'units', 'type_id', 'nutritional', 'measure_type', 'allergens', 'cat_name', 'cat_id']
 
-        let vals = []
+        let vals: any[] = []
         keys.forEach((k) => {
             vals.push(data.json[k])
         })
 
-        console.log(vals)
-        console.log(JSON.stringify(vals))
+        // console.log(vals)
+        // console.log(JSON.stringify(vals))
 
-        // this.$store.commit('setQRData', {'value': JSON.stringify(vals)})
         return JSON.stringify(vals)
     }
 

@@ -48,3 +48,27 @@ export type AnalyticsData = {
         }
     ]
 }
+
+export type BuylistData = [
+    {
+        prod_type_id: number,
+        count: number,
+        id: number
+    }
+]
+
+export type TypesData = {
+    [_: string]: {
+        amount: number,
+        nutritional: number,
+        allergens: string | null,
+        category_id: number,
+        units: string,
+        name: string,
+        measure_type: string
+    }
+}
+
+export type CategoriesData = {
+    [_: string]: string
+}
