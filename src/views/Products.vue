@@ -9,9 +9,6 @@ import {
   PhSparkle,
   PhListMagnifyingGlass, PhBinoculars, PhKnife, PhQrCode, PhEmpty
 } from "@phosphor-icons/vue";
-import { authStore } from "@/utils/auth";
-
-const auth = authStore()
 import {onBeforeMount, ref, type Ref} from "vue";
 import {APIRequest} from "@/utils/http";
 import router from "@/router";
@@ -100,34 +97,14 @@ async function onSearchText() {
     return
   }
 
-  let new_products = {}
-
-  // for (let [cat_name, cat] of Object.entries(orig_products.value)) {
-  //   // console.log(cat_name, cat)
-  //   if (cat_name.toLowerCase().indexOf(lowerSearchText) !== -1) {
-  //     new_products[cat_name] = cat
-  //   } else {
-  //     for (let [type_name, type] of Object.entries(cat)) {
-  //       // console.log(type_name, type)
-  //       if (type_name.toLowerCase().indexOf(lowerSearchText) !== -1) {
-  //         if (Object.keys(new_products).indexOf(cat_name) === -1) {
-  //           new_products[cat_name] = {}
-  //         }
-
-  //         new_products[cat_name][type_name] = type
-  //       }
-  //     }
-  //   }
-  // }
+  let new_products: ProductsData = {}
 
   if (orig_products !== null) {
-    for (let [cat_name, cat] of orig_products.value!) {
-      // console.log(cat_name, cat)
+    for (let [cat_name, cat] of Object.entries(orig_products.value!)) {
       if (cat_name.toLowerCase().indexOf(lowerSearchText) !== -1) {
         new_products[cat_name] = cat
       } else {
         for (let [type_name, type] of Object.entries(cat)) {
-          // console.log(type_name, type)
           if (type_name.toLowerCase().indexOf(lowerSearchText) !== -1) {
             if (Object.keys(new_products).indexOf(cat_name) === -1) {
               new_products[cat_name] = {}
@@ -138,8 +115,6 @@ async function onSearchText() {
         }
       }
     }
-
-    console.log(new_products)
 
     products.value = new_products
   }
