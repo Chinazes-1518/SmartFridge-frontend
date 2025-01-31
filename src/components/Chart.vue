@@ -2,11 +2,15 @@
 import {GoogleCharts} from 'google-charts';
 import {APIRequest} from "@/utils/http.ts";
 import {onBeforeMount, ref} from 'vue';
+import {PhBinoculars, PhCalendarPlus, PhCalendarX, PhMagnifyingGlass} from "@phosphor-icons/vue";
 
 GoogleCharts.load('current', {'packages':['corechart', 'line']});
 GoogleCharts.load(drawChart);
 
 let stats = ref({})
+
+let focusStartDate = ref(false)
+let focusEndDate = ref(false)
 
 onBeforeMount(async() => {
   await loadStats('removed', '2024-01-25 08:54:22.690597', '2026-01-30 15:33:42.611162')
@@ -109,15 +113,119 @@ function drawChart() {
 }
 </script>
 <template>
-<div class="chart" style=" height: auto">
-  <div id="curve_chart" style="width: 1200px; height: 500px"></div>
-</div>
+  <div class="chart">
+    <div class="chart-options">
+      <div class="chart-options-date" :class="{focus:focusStartDate}">
+<!--        <PhCalendarPlus class="chart-options-date-icon" :size="26" />-->
+        <input type="date" class="chart-options-date-input" placeholder="Начните поиск" @focus="focusStartDate = true" @blur="focusStartDate = false" />
+      </div>
+      <div class="chart-options-separator">—</div>
+      <div class="chart-options-date" :class="{focus:focusEndDate}">
+<!--        <PhCalendarX class="chart-options-date-icon" :size="26" />-->
+        <input type="date" class="chart-options-date-input" placeholder="Начните поиск" @focus="focusEndDate = true" @blur="focusEndDate = false" />
+      </div>
+      <div class="chart-options-button transparent">
+        <PhMagnifyingGlass :size="26"></PhMagnifyingGlass>
+      </div>
+    </div>
+    <div class="chart-wrapper" style=" height: auto">
+      <div id="curve_chart" style="width: 1200px; height: 500px"></div>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss">
 .chart {
-  display: block;
-  overflow-x: scroll;
-  scrollbar-width: none;
+width: 100%;
+
+  &-wrapper {
+    display: block;
+    overflow-x: scroll;
+    scrollbar-width: none;
+    width: 100%;
+  }
+
+  &-options {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0 20px;
+
+    @media (max-width: 670px) {
+      flex-direction: column;
+      gap: 15px 0;
+    }
+
+    &-separator {
+      @media (max-width: 670px) {
+        display: none;
+      }
+    }
+
+    &-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 45.2px;
+      height: 45.2px;
+      border-radius: 7px;
+      transition: .125s ease-in-out;
+      cursor: pointer;
+
+      &.transparent {
+        border: 1px solid rgba(255, 140, 48, 0.25);
+        background: rgba(255, 140, 48, 0.2);
+
+        &:hover {
+          background: rgba(255, 140, 48, 0.25);
+        }
+
+        @media (max-width: 670px) {
+          width: 100%;
+        }
+      }
+    }
+
+    &-date {
+      display: flex;
+      align-items: center;
+      gap: 0 10px;
+      background: #f3ceac;
+      border: 1px solid #ffbd73;
+      padding: 0 10px;
+      font-weight: 200;
+      border-radius: 0.5rem;
+      outline: 0;
+      transition:
+          border,
+          background 0.25s ease;
+
+      @media (max-width: 670px) {
+        width: 100%;
+      }
+
+      &:hover {
+        border: 1px solid #fca952;
+      }
+
+      &.focus {
+        border: 1px solid #fd9a2f;
+        background: #fcc697;
+      }
+
+      &-input {
+        padding: 10px;
+        background: 0;
+        border: 0;
+        outline: 0;
+        user-select: none;
+
+        @media (max-width: 670px) {
+          width: 100%;
+        }
+      }
+    }
+
+  }
 }
 </style>
