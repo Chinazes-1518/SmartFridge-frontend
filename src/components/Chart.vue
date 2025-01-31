@@ -129,7 +129,7 @@ function drawChart() {
       </div>
     </div>
     <div class="chart-wrapper" style=" height: auto">
-      <div id="curve_chart" style="width: 1200px; height: 500px"></div>
+      <div id="curve_chart" style="width: 1200px; height: 550px"></div>
     </div>
   </div>
 </template>
@@ -141,6 +141,7 @@ width: 100%;
   &-wrapper {
     display: block;
     overflow-x: scroll;
+    overflow-y: initial;
     scrollbar-width: none;
     width: 100%;
   }
