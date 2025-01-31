@@ -2,13 +2,25 @@
 
 import {onBeforeMount, ref} from "vue";
 import {APIRequest} from "@/utils/http.ts";
-import {PhBackspace, PhBasket, PhKnife, PhQrCode} from "@phosphor-icons/vue";
+import {
+  PhBackspace,
+  PhBasket,
+  PhBowlFood,
+  PhKnife,
+  PhMagnifyingGlass,
+  PhNavigationArrow, PhPlusCircle,
+  PhQrCode, PhRuler, PhScales
+} from "@phosphor-icons/vue";
 import router from "@/router";
 
 let buy = ref({})
 let empty = ref(false)
 let types = ref({})
 let cats = ref({})
+
+let inputName = ref(false)
+let inputCount = ref(false)
+let inputWeight = ref(false)
 
 onBeforeMount(async () => {
   await loadBuyList()
@@ -53,6 +65,23 @@ async function buyProduct(id) {
     <div class="buy">
       <div class="buy-container container">
         <div class="buy-title">Список покупок</div>
+        <div class="buy-add">
+          <div class="buy-add-col" :class="{focus:inputName}">
+            <PhBowlFood :size="26" />
+            <input type="text" class="buy-add-input" placeholder="Название" @focus="inputName = true" @blur="inputName = false">
+          </div>
+          <div class="buy-add-col" :class="{focus:inputCount}">
+            <PhRuler :size="26" />
+            <input type="text" class="buy-add-input count" placeholder="Количество" @focus="inputCount = true" @blur="inputCount = false">
+          </div>
+<!--          <div class="buy-add-col" :class="{focus:inputWeight}">-->
+<!--            <PhScales :size="26" />-->
+<!--            <input type="text" class="buy-add-input m" placeholder="Масса" @focus="inputWeight = true" @blur="inputWeight = false">-->
+<!--          </div>-->
+          <div class="buy-add-button blue">
+            <PhPlusCircle :size="26"></PhPlusCircle>
+          </div>
+        </div>
         <div class="buy-empty" v-if="empty">К сожалению, в списке покупок пусто</div>
         <div class="buy-table-pre" v-else>
           <table class="buy-table">
@@ -192,6 +221,79 @@ async function buyProduct(id) {
 
       &:active {
         opacity: 0.8;
+      }
+    }
+  }
+
+  &-add {
+    display: flex;
+    gap: 0 20px;
+    margin: 15px 0;
+
+    @media (max-width: 640px) {
+      flex-direction: column;
+      gap: 15px 0;
+    }
+
+    &-col {
+      display: flex;
+      align-items: center;
+      gap: 0 10px;
+      background: #f3ceac;
+      border: 1px solid #ffbd73;
+      padding: 0 10px;
+      font-weight: 200;
+      border-radius: 0.5rem;
+      outline: 0;
+      transition: border,
+      background 0.25s ease;
+
+      &:hover {
+        border: 1px solid #fca952;
+      }
+
+      &.focus {
+        border: 1px solid #fd9a2f;
+        background: #fcc697;
+      }
+    }
+
+    &-input {
+      padding: 10px;
+      background: 0;
+      border: 0;
+      outline: 0;
+
+      @media (max-width: 640px) {
+        width: 100% !important;
+      }
+
+      &.count, &.m {
+        width: 120px;
+      }
+    }
+
+    &-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 45.2px;
+      height: 45.2px;
+      border-radius: 7px;
+      transition: .125s ease-in-out;
+      cursor: pointer;
+
+      @media (max-width: 640px) {
+        width: 100%;
+      }
+
+      &.blue {
+        border: 1px solid rgb(55, 109, 255, 0.25);
+        background: rgb(55, 109, 255, 0.2);
+
+        &:hover {
+          background: rgb(55, 109, 255, 0.25);
+        }
       }
     }
   }
