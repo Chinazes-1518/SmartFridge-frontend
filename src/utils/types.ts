@@ -29,8 +29,6 @@ export type ProductsData = {
     }
 }
 
-// export type ProductsData = Map<string, Map<string, TypeData>>;
-
 export const allergens_specs: {[_: string]: string} = {
     "0": "аллергенное",
     "1": "лактоза",
@@ -50,17 +48,3 @@ export type AnalyticsData = {
         }
     ]
 }
-
-// export class AnalyticsDayData {
-//     constructor(date: Date, added: number, used: number, expired: number) {
-//         this.date = date;
-//         this.added = added;
-//         this.used = used;
-//         this.expired = expired;
-//     }
-//
-//     date: Date;
-//     added: number;
-//     used: number;
-//     expired: number;
-// }

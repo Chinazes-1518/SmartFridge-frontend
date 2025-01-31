@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import {GoogleCharts} from 'google-charts';
 import {APIRequest} from "@/utils/http.ts";
-import {onBeforeMount, ref} from 'vue';
+import {ref} from 'vue';
 import {PhBinoculars, PhCalendarPlus, PhCalendarX, PhMagnifyingGlass} from "@phosphor-icons/vue";
-import {type AnalyticsData, AnalyticsDayData} from "@/utils/types.ts";
+import {type AnalyticsData} from "@/utils/types.ts";
 
 GoogleCharts.load('current', {'packages':['corechart', 'line']});
 GoogleCharts.load(drawChart);
@@ -11,74 +11,9 @@ GoogleCharts.load(drawChart);
 let focusStartDate = ref(false)
 let focusEndDate = ref(false)
 
-// onBeforeMount(async() => {
-//   await loadStats('removed', '2024-01-25 08:54:22.690597', '2026-01-30 15:33:42.611162')
-//   drawChart()
-// })
-
 function drawChart(adata: AnalyticsData | null = null) {
   if (adata === null)
     return;
-  // let array = []
-  // let k: any = {}
-  // for (let i in stats.value) {
-  //   const info = stats.value[i]
-  //   const date = new Date(Date.parse(info.date))
-  //   const day: number = date.getDate()
-  //   const month: number = date.getMonth()
-  //   const year: number = date.getFullYear()
-  //   k[[year, month, day]] === undefined ? k[[year, month, day]] = 1 : k[[year, month, day]] = k[[year, month, day]] + 1
-  // }
-  //
-  // console.log(k)
-  // const j = Object.keys(k).sort(function(a, b){
-  //   a = a.split(",")
-  //   b = b.split(",")
-  //   return new Date(a[0], a[1], a[2]) - new Date(b[0], b[1], b[2]);
-  // })
-  //
-  // const q = {}
-  // j.forEach((item) => {
-  //   console.log(item)
-  //   q[item] = k[item]
-  // })
-
-  // for (let v in j) {
-  //   console.log(v)
-  // }
-
-
-
-  // for (let i in q) {
-  //   i = i.split(",")
-  //   const info = k[i]
-  //   array.push([new Date(i[0], i[1], i[2]), info, 1, 2])
-  // }
-  // console.log(array)
-
-
-//   console.log(adata)
-//   const allDays = adata!.days.map(val =>
-//       new AnalyticsDayData(
-//     new Date(val.date), val.added, val.used, val.expired
-// )).sort((x1, x2) => x1.date.getTime() - x2.date.getTime());
-//   console.log(allDays);
-  // const firstDate = allDays.d[0];
-  // const lastDate = allDates[allDates.length - 1];
-
-  // console.log(firstDate, lastDate);
-
-  // let resdata = [];
-
-  // for (let d = allDays[0].date; d <= allDays[allDays.length - 1].date; d.setDate(d.getDate() + 1)) {
-    // console.log(d)
-
-  // }
-
-  // let arr = [];
-  // for (let [date, data] of Object.entries(adata!.days)) {
-  //
-  // }
 
   let resdata = [];
 
