@@ -36,3 +36,31 @@ export const allergens_specs: {[_: string]: string} = {
     "1": "лактоза",
     "2": "глютен"
 }
+
+export type AnalyticsData = {
+    total: {
+        [_: string]: number
+    },
+    days: [
+        {
+            date: string,
+            added: number,
+            used: number,
+            expired: number
+        }
+    ]
+}
+
+// export class AnalyticsDayData {
+//     constructor(date: Date, added: number, used: number, expired: number) {
+//         this.date = date;
+//         this.added = added;
+//         this.used = used;
+//         this.expired = expired;
+//     }
+//
+//     date: Date;
+//     added: number;
+//     used: number;
+//     expired: number;
+// }

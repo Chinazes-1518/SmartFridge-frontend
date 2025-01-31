@@ -3,56 +3,45 @@ import {GoogleCharts} from 'google-charts';
 import {APIRequest} from "@/utils/http.ts";
 import {onBeforeMount, ref} from 'vue';
 import {PhBinoculars, PhCalendarPlus, PhCalendarX, PhMagnifyingGlass} from "@phosphor-icons/vue";
+import {type AnalyticsData, AnalyticsDayData} from "@/utils/types.ts";
 
 GoogleCharts.load('current', {'packages':['corechart', 'line']});
 GoogleCharts.load(drawChart);
 
-let stats = ref({})
-
 let focusStartDate = ref(false)
 let focusEndDate = ref(false)
 
-onBeforeMount(async() => {
-  await loadStats('removed', '2024-01-25 08:54:22.690597', '2026-01-30 15:33:42.611162')
-  drawChart()
-})
+// onBeforeMount(async() => {
+//   await loadStats('removed', '2024-01-25 08:54:22.690597', '2026-01-30 15:33:42.611162')
+//   drawChart()
+// })
 
-async function loadStats(type, start, end) {
-  const data = await APIRequest(`/analytics/${type}`, 'GET', {
-    start_date: start,
-    end_date: end,
-  }, {}, true)
-
-  if (data.status === 200) {
-    console.log(data.json)
-    stats.value = data.json[`${type}_products`]
-  }
-}
-
-function drawChart() {
-  let array = []
-  let k: any = {}
-  for (let i in stats.value) {
-    const info = stats.value[i]
-    const date = new Date(Date.parse(info.date))
-    const day: number = date.getDate()
-    const month: number = date.getMonth()
-    const year: number = date.getFullYear()
-    k[[year, month, day]] === undefined ? k[[year, month, day]] = 1 : k[[year, month, day]] = k[[year, month, day]] + 1
-  }
-
-  console.log(k)
-  const j = Object.keys(k).sort(function(a, b){
-    a = a.split(",")
-    b = b.split(",")
-    return new Date(a[0], a[1], a[2]) - new Date(b[0], b[1], b[2]);
-  })
-
-  const q = {}
-  j.forEach((item) => {
-    console.log(item)
-    q[item] = k[item]
-  })
+function drawChart(adata: AnalyticsData | null = null) {
+  if (adata === null)
+    return;
+  // let array = []
+  // let k: any = {}
+  // for (let i in stats.value) {
+  //   const info = stats.value[i]
+  //   const date = new Date(Date.parse(info.date))
+  //   const day: number = date.getDate()
+  //   const month: number = date.getMonth()
+  //   const year: number = date.getFullYear()
+  //   k[[year, month, day]] === undefined ? k[[year, month, day]] = 1 : k[[year, month, day]] = k[[year, month, day]] + 1
+  // }
+  //
+  // console.log(k)
+  // const j = Object.keys(k).sort(function(a, b){
+  //   a = a.split(",")
+  //   b = b.split(",")
+  //   return new Date(a[0], a[1], a[2]) - new Date(b[0], b[1], b[2]);
+  // })
+  //
+  // const q = {}
+  // j.forEach((item) => {
+  //   console.log(item)
+  //   q[item] = k[item]
+  // })
 
   // for (let v in j) {
   //   console.log(v)
@@ -60,21 +49,54 @@ function drawChart() {
 
 
 
-  for (let i in q) {
-    i = i.split(",")
-    const info = k[i]
-    array.push([new Date(i[0], i[1], i[2]), info, 1, 2])
-  }
+  // for (let i in q) {
+  //   i = i.split(",")
+  //   const info = k[i]
+  //   array.push([new Date(i[0], i[1], i[2]), info, 1, 2])
+  // }
   // console.log(array)
-  var data = new GoogleCharts.api.visualization.DataTable();
+
+
+//   console.log(adata)
+//   const allDays = adata!.days.map(val =>
+//       new AnalyticsDayData(
+//     new Date(val.date), val.added, val.used, val.expired
+// )).sort((x1, x2) => x1.date.getTime() - x2.date.getTime());
+//   console.log(allDays);
+  // const firstDate = allDays.d[0];
+  // const lastDate = allDates[allDates.length - 1];
+
+  // console.log(firstDate, lastDate);
+
+  // let resdata = [];
+
+  // for (let d = allDays[0].date; d <= allDays[allDays.length - 1].date; d.setDate(d.getDate() + 1)) {
+    // console.log(d)
+
+  // }
+
+  // let arr = [];
+  // for (let [date, data] of Object.entries(adata!.days)) {
+  //
+  // }
+
+  let resdata = [];
+
+  for (let val of adata!.days) {
+    resdata.push([new Date(val.date), val.used, val.added, val.expired]);
+  }
+
+  console.log(resdata);
+
+  let data = new GoogleCharts.api.visualization.DataTable();
   data.addColumn('date', 'X')
   data.addColumn('number', 'Использовано', )
   data.addColumn('number', 'Добавлено')
   data.addColumn('number', 'Просрочено')
 
-  data.addRows(array)
+  data.addRows(resdata)
 
-  var options = {
+  let options = {
     title: '',
     // curveType: 'function',
     legend: { position: 'bottom', alignment: 'center', textStyle: {fontSize: 20}},
@@ -111,22 +133,40 @@ function drawChart() {
 
   chart.draw(data, options);
 }
+
+let dateStart = ref(Date())
+let dateEnd = ref(Date())
+
+async function onSearchClicked() {
+  console.log(dateStart.value, dateEnd.value)
+
+  const data = await APIRequest('/analytics/get', 'GET', {
+    start_date: dateStart.value,
+    end_date: dateEnd.value,
+  }, {}, true)
+
+  if (data.status === 200) {
+    console.log(data.json)
+    drawChart(data.json)
+  }
+}
 </script>
+
 <template>
   <div class="chart">
     <div class="chart-options">
       <div class="chart-options-date" :class="{focus:focusStartDate}">
 <!--        <PhCalendarPlus class="chart-options-date-icon" :size="26" />-->
-        <input type="date" class="chart-options-date-input" placeholder="Начните поиск" @focus="focusStartDate = true" @blur="focusStartDate = false" />
+        <input v-model="dateStart" type="date" class="chart-options-date-input" placeholder="Начните поиск" @focus="focusStartDate = true" @blur="focusStartDate = false" />
       </div>
       <div class="chart-options-separator">—</div>
       <div class="chart-options-date" :class="{focus:focusEndDate}">
 <!--        <PhCalendarX class="chart-options-date-icon" :size="26" />-->
-        <input type="date" class="chart-options-date-input" placeholder="Начните поиск" @focus="focusEndDate = true" @blur="focusEndDate = false" />
+        <input v-model="dateEnd" type="date" class="chart-options-date-input" placeholder="Начните поиск" @focus="focusEndDate = true" @blur="focusEndDate = false" />
       </div>
-      <div class="chart-options-button transparent">
+      <button class="chart-options-button transparent" @click="onSearchClicked()">
         <PhMagnifyingGlass :size="26"></PhMagnifyingGlass>
-      </div>
+      </button>
     </div>
     <div class="chart-wrapper" style=" height: auto">
       <div id="curve_chart" style="width: 1200px; height: 550px"></div>
