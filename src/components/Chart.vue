@@ -44,7 +44,7 @@ function drawChart(adata: AnalyticsData | null = null) {
       },
       minorGridlines: {
         color: '#FFBD88',
-        interval: 1
+        // interval: 2
       }
 
     },
@@ -64,7 +64,7 @@ function drawChart(adata: AnalyticsData | null = null) {
     }
   };
 
-  var chart = new GoogleCharts.api.visualization.AreaChart(document.getElementById('curve_chart'));
+  var chart = new GoogleCharts.api.visualization.LineChart(document.getElementById('curve_chart'));
 
   chart.draw(data, options);
 }
