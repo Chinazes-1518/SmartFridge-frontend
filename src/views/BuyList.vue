@@ -77,7 +77,7 @@ async function buyProduct(id: number) {
             <PhPlusCircle :size="26"></PhPlusCircle>
           </div>
         </div>
-        <div class="buy-empty" v-if="buy === null">К сожалению, в списке покупок пусто</div>
+        <div class="buy-empty" v-if="buy.length === 0">К сожалению, в списке покупок пусто</div>
         <div class="buy-table-pre" v-else>
           <table class="buy-table">
             <thead>
