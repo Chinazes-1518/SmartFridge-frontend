@@ -2,6 +2,7 @@
 
 import {onBeforeMount, ref, type Ref} from "vue";
 import {APIRequest} from "@/utils/http.ts";
+import {watch} from "vue";
 import {
   PhBackspace,
   PhBasket,
@@ -9,7 +10,7 @@ import {
   PhKnife,
   PhMagnifyingGlass,
   PhNavigationArrow, PhPlusCircle,
-  PhQrCode, PhRuler, PhScales
+  PhQrCode, PhRuler, PhScales, PhSortAscending
 } from "@phosphor-icons/vue";
 import router from "@/router";
 import {type BuylistData, type TypesData, type CategoriesData} from "@/utils/types.ts";
@@ -20,7 +21,11 @@ let cats: Ref<CategoriesData | null> = ref(null)
 
 let inputName = ref(false)
 let inputCount = ref(false)
-let inputWeight = ref(false)
+let inputDropdown = ref(false)
+
+let add = ref('')
+
+let mode = ref(0)
 
 onBeforeMount(async () => {
   await loadBuyList()
@@ -53,6 +58,15 @@ async function buyProduct(id: number) {
     await loadBuyList()
   }
 }
+
+watch(add, async (a, b) => {
+  console.log(a, b)
+  if ("sigma".indexOf(add.value) !== -1) {
+    mode.value = 1
+  } else {
+    mode.value = 0
+  }
+})
 </script>
 
 <template>
@@ -63,19 +77,27 @@ async function buyProduct(id: number) {
         <div class="buy-add">
           <div class="buy-add-col" :class="{focus:inputName}">
             <PhBowlFood :size="26" />
-            <input type="text" class="buy-add-input" placeholder="Название" @focus="inputName = true" @blur="inputName = false">
+            <input type="text" class="buy-add-input" placeholder="Название категории" @focus="inputName = true" @blur="inputName = false" v-model="add">
           </div>
-          <div class="buy-add-col" :class="{focus:inputCount}">
+          <div class="buy-add-col" :class="{focus:inputDropdown}" v-if="mode == 1">
+            <PhSortAscending :size="26" />
+            <select class="buy-add-input select" @focus="inputDropdown = true" @blur="inputDropdown = false">
+              <option v-for="(k, v) in types" class="buy-add-input-option">
+                {{ k.name }} ({{ cats[k.category_id] }})
+              </option>
+            </select>
+          </div>
+          <div class="buy-add-col" :class="{focus:inputCount}" v-if="mode == 1">
             <PhRuler :size="26" />
             <input type="text" class="buy-add-input count" placeholder="Количество" @focus="inputCount = true" @blur="inputCount = false">
           </div>
-<!--          <div class="buy-add-col" :class="{focus:inputWeight}">-->
-<!--            <PhScales :size="26" />-->
-<!--            <input type="text" class="buy-add-input m" placeholder="Масса" @focus="inputWeight = true" @blur="inputWeight = false">-->
-<!--          </div>-->
-          <div class="buy-add-button blue">
+          <button class="buy-add-button green" v-if="mode == 1">
             <PhPlusCircle :size="26"></PhPlusCircle>
-          </div>
+          </button>
+          <button class="buy-add-button blue newct" v-if="mode == 0">
+            <PhPlusCircle :size="26"></PhPlusCircle>
+            Создать категорию
+          </button>
         </div>
         <div class="buy-empty" v-if="buy.length === 0">К сожалению, в списке покупок пусто</div>
         <div class="buy-table-pre" v-else>
@@ -266,6 +288,14 @@ async function buyProduct(id: number) {
       &.count, &.m {
         width: 120px;
       }
+
+      &.select {
+        width: 200px;
+      }
+
+      &-option {
+        background: #f3ceac;
+      }
     }
 
     &-button {
@@ -289,6 +319,21 @@ async function buyProduct(id: number) {
         &:hover {
           background: rgb(55, 109, 255, 0.25);
         }
+      }
+
+      &.green {
+        border: 1px solid rgb(0, 204, 0, 0.25);
+        background: rgb(0, 204, 0, 0.2);
+
+        &:hover {
+          background: rgb(0, 204, 0, 0.25);
+        }
+      }
+
+      &.newct {
+        width: auto;
+        padding: 0 15px;
+        gap: 10px;
       }
     }
   }
