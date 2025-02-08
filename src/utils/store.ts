@@ -1,5 +1,6 @@
 import { createStore } from 'vuex'
 import { genQR } from "@/utils/qr";
+import { APIRequest } from './http';
 
 export const store = createStore({
     state() {
@@ -7,7 +8,9 @@ export const store = createStore({
             showPopup: '',
             currentProduct: -1,
             qrData: '',
-            qrGenerated: false
+            qrGenerated: false,
+            cats: {},
+            shouldUpdateBuylist: false
         }
     },
     mutations: {
@@ -17,6 +20,11 @@ export const store = createStore({
                 state.qrGenerated = false;
                 state.qrData = await genQR(state.currentProduct)
                 state.qrGenerated = true;
+            } else if (value['value'] == 'create_type') {
+                const cData = await APIRequest('/product_categories/all', "GET", {}, {}, true);
+                if (cData.status === 200) {
+                    state.cats = cData.json;
+                }
             }
         },
         setCurProd(state, value) {
@@ -24,6 +32,13 @@ export const store = createStore({
         },
         setQrGen(state, value) {
             state.qrGenerated = value['value'];
+        },
+        async updateBuylist(state) {
+            const cData = await APIRequest('/product_categories/all', "GET", {}, {}, true);
+            if (cData.status === 200) {
+                state.cats = cData.json;
+            }
+            state.shouldUpdateBuylist = !state.shouldUpdateBuylist;
         }
     }
 })

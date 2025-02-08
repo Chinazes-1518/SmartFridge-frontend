@@ -36,7 +36,7 @@ let errorReg = ref( '' )
 let authData = ref()
 
 async function submitAuth() {
-  const data = await APIRequest( '/auth/login', 'GET', {
+  const data = await APIRequest('/auth/login', 'GET', {
     login: login.value,
     password: password.value
   });

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {onBeforeMount, ref, type Ref} from "vue";
+import {getCurrentInstance, onBeforeMount, onMounted, ref, type Ref} from "vue";
 import {APIRequest} from "@/utils/http.ts";
 import {watch} from "vue";
 import {
@@ -14,6 +14,7 @@ import {
 } from "@phosphor-icons/vue";
 import router from "@/router";
 import {type BuylistData, type TypesData, type CategoriesData} from "@/utils/types.ts";
+import { useStore } from "vuex";
 
 let buy: Ref<BuylistData | null> = ref(null)
 let types_orig: Ref<TypesData | null> = ref(null)
@@ -25,14 +26,20 @@ let inputCount = ref(false)
 let inputDropdown = ref(false)
 
 let add = ref('')
-
 let mode = ref(0)
+
+const store = useStore();
 
 onBeforeMount(async () => {
   await loadBuyList()
 })
 
+watch(() => store.state.shouldUpdateBuylist, (newValue) => {
+  loadBuyList()
+})
+
 async function loadBuyList() {
+  console.log('JGHJKAHSJKAHSJKA')
   const data = await APIRequest("/buylist/get", "GET", {}, {}, true)
 
   if (data.status === 200) {

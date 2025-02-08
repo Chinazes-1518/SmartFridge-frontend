@@ -14,7 +14,8 @@
 
       <QrScannerModal/>
       <QrShowModal/>
-      <CreateTypeModal/>      
+      <CreateTypeModal/>
+      <CreateCategoryModal/>
 
       <Notification />
     </router-view>
@@ -26,6 +27,7 @@ import Header from "@/components/Header.vue";
 import QrScannerModal from "./modals/QrScannerModal.vue";
 import QrShowModal from "./modals/QrShowModal.vue";
 import CreateTypeModal from "./modals/CreateTypeModal.vue";
+import CreateCategoryModal from "./modals/CreateCategoryModal.vue";
 </script>
 
 <style scoped lang="scss">
