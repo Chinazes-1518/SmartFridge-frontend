@@ -52,7 +52,7 @@ async function submitAuth() {
 }
 
 async function submitReg() {
-  const data = await APIRequest( '/auth/register', 'POST', {}, {
+  const data = await APIRequest('/auth/register', 'POST', {}, {
     name: registerData.value.name,
     password: registerData.value.password,
     login: registerData.value.login,
