@@ -33,7 +33,7 @@
             <br>
             <div class="qr-scanner-info-title"><PhHandTap :size="25" /> Действия</div>
             <div class="qr-scanner-buttons">
-            <button @click="" class="qr-scanner-button blue"><PhKnife :size="25" />Приготовить</button>
+            <button @click="useProduct(dataref.prod_id)" class="qr-scanner-button blue"><PhKnife :size="25" />Приготовить</button>
             <button @click="" class="qr-scanner-button green"><PhPlusCircle :size="25" />В холодильник</button>
         <!--            <button @click="" class="qr-scanner-button red"><PhTrash :size="25" />В мусорку</button>-->
             <button @click="" class="qr-scanner-button purple"><PhBasket :size="25" />В список покупок</button>
@@ -50,6 +50,7 @@ import {type Ref, ref} from "vue";
 import {allergens_specs, type QRData} from "@/utils/types.ts";
 import {decodeQR} from "@/utils/qr.ts";
 import {PhArrowCounterClockwise, PhBasket, PhHandTap, PhInfo, PhKnife, PhPlusCircle} from "@phosphor-icons/vue";
+import {APIRequest} from "@/utils/http.ts";
 
 let dataref: Ref<QRData | null> = ref(null)
 
@@ -57,6 +58,19 @@ function onScanSuccess(text: string, error: any) {
 //   console.log(`Scanned ${text}`);
   dataref.value = decodeQR(text);
 }
+
+async function useProduct(prodId: number) {
+  const data = await APIRequest('/products/use', 'POST', {prod_id: prodId}, {}, true)
+
+  if (data.status === 200) {
+    dataref.value = null
+    window.location.reload()
+  }
+}
+
+// async function addProduct(prodId: number) {}
+
+async function toBuylist()
 </script>
 
 <style lang="scss">
