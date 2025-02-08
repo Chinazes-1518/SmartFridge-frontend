@@ -16,6 +16,7 @@ import router from "@/router";
 import {type BuylistData, type TypesData, type CategoriesData} from "@/utils/types.ts";
 
 let buy: Ref<BuylistData | null> = ref(null)
+let types_orig: Ref<TypesData | null> = ref(null)
 let types: Ref<TypesData | null> = ref(null)
 let cats: Ref<CategoriesData | null> = ref(null)
 
@@ -37,14 +38,20 @@ async function loadBuyList() {
   if (data.status === 200) {
     buy.value = data.json
 
-    const pData = await APIRequest('/product_types/all', "GET", {}, {}, true)
-    if (pData.status === 200) {
-      types.value = pData.json
-    }
-
     const cData = await APIRequest('/product_categories/all', "GET", {}, {}, true)
     if (cData.status === 200) {
       cats.value = cData.json
+    }
+
+    const pData = await APIRequest('/product_types/all', "GET", {}, {}, true)
+    if (pData.status === 200) {
+      types_orig.value = pData.json
+
+      for (let [k, v] of Object.entries(types_orig.value!)) {
+        types_orig.value![k].name += ` (${cats.value![v.category_id]})`
+      }
+
+      types.value = types_orig.value
     }
   } else if (data.status === 403) {
     await router.push("/")
@@ -59,14 +66,20 @@ async function buyProduct(id: number) {
   }
 }
 
-watch(add, async (a, b) => {
-  console.log(a, b)
-  if ("sigma".indexOf(add.value) !== -1) {
-    mode.value = 1
-  } else {
-    mode.value = 0
+function onInput() {
+  const add_val = add.value.trim().toLowerCase();
+  mode.value = 0
+  types.value = {}
+  if (add_val === '')
+    return;
+
+  for (let [k, v] of Object.entries(types_orig.value!)) {
+    if (v.name.toLowerCase().indexOf(add_val) !== -1) {
+      types.value[k] = v
+      mode.value = 1
+    }
   }
-})
+}
 </script>
 
 <template>
@@ -77,13 +90,13 @@ watch(add, async (a, b) => {
         <div class="buy-add">
           <div class="buy-add-col" :class="{focus:inputName}">
             <PhBowlFood :size="26" />
-            <input type="text" class="buy-add-input" placeholder="Название категории" @focus="inputName = true" @blur="inputName = false" v-model="add">
+            <input type="text" class="buy-add-input" placeholder="Название типа/категории" @focus="inputName = true" @blur="inputName = false" v-model="add" @input="onInput">
           </div>
           <div class="buy-add-col" :class="{focus:inputDropdown}" v-if="mode == 1">
             <PhSortAscending :size="26" />
             <select class="buy-add-input select" @focus="inputDropdown = true" @blur="inputDropdown = false">
               <option v-for="(k, v) in types" class="buy-add-input-option">
-                {{ k.name }} ({{ cats[k.category_id] }})
+                {{ k.name }}
               </option>
             </select>
           </div>
@@ -94,12 +107,12 @@ watch(add, async (a, b) => {
           <button class="buy-add-button green" v-if="mode == 1">
             <PhPlusCircle :size="26"></PhPlusCircle>
           </button>
-          <button class="buy-add-button blue newct" v-if="mode == 0">
+          <button class="buy-add-button blue newct" v-if="mode == 0" @click="$store.commit('showPopup', {'value': 'create_type'})">
             <PhPlusCircle :size="26"></PhPlusCircle>
-            Создать категорию
+            Создать тип
           </button>
         </div>
-        <div class="buy-empty" v-if="buy.length === 0">К сожалению, в списке покупок пусто</div>
+        <div class="buy-empty" v-if="buy === null || buy?.length <= 0">К сожалению, в списке покупок пусто</div>
         <div class="buy-table-pre" v-else>
           <table class="buy-table">
             <thead>

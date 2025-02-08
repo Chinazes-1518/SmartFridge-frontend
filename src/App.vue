@@ -11,6 +11,7 @@
           <component :is="Component" :key="route.fullPath" />
         </transition>
       </div>
+
       <Modal id="qr_scan" title="Сканнер QR">
         <!-- {{dataref}} -->
         <div v-if="dataref === null">
@@ -53,14 +54,23 @@
           </div>
         </div>
       </Modal>
+
       <Modal id="qr_show" title="QR код продукта">
        <!-- {{ $store.state.currentProduct }} {{ $store.state.qrData }} -->
         <div style="display: flex" v-if="$store.state.qrGenerated">
           <qrcode-vue :value="$store.state.qrData" :size="300" render-as="svg" level="H" background="#ffffff00" style="margin: 0 auto"/>
         </div>
       </Modal>
-      <Notification />
 
+      <Modal id="create_type" title="Создать новый тип">
+        <input type="text" placeholder="Название типа">
+        <div style="display: flex;">
+          <input type="text" placeholder="Название категории">
+          <button>тут значок плюса</button>
+        </div>
+      </Modal>
+
+      <Notification />
     </router-view>
   </div>
 </template>
