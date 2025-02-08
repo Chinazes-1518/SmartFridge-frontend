@@ -70,7 +70,7 @@ async function useProduct(prodId: number) {
 
 // async function addProduct(prodId: number) {}
 
-async function toBuylist()
+// async function toBuylist()
 </script>
 
 <style lang="scss">
