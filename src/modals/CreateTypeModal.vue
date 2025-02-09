@@ -20,6 +20,8 @@
     <br>
     <input type="text" placeholder="Особенности" v-model="allergens">
     <br>
+    <input type="number" placeholder="Кол-во дней до истечения срока годности" v-model="expiry_days">
+    <br>
 
     <p v-if="error !== ''">{{ error }}</p>
 
@@ -47,6 +49,7 @@ let units: Ref<string> = ref('');
 let nutritional: Ref<number> = ref(0);
 let measure_type: Ref<string> = ref('');
 let allergens: Ref<string> = ref('');
+let expiry_days: Ref<number> = ref(0);
 
 async function onCatInput() {
   const cat_val = catname.value.trim().toLowerCase();
@@ -69,7 +72,7 @@ async function onAddClicked() {
       return false;
     }
   }
-  if (cat_chosen.value === undefined || cat_chosen.value.trim() === '' || amount.value <= 0 || nutritional.value <= 0)
+  if (cat_chosen.value === undefined || cat_chosen.value.trim() === '' || amount.value <= 0 || nutritional.value <= 0 || expiry_days.value <= 0)
     return false;
 
   const data = await APIRequest('/product_types/add', 'POST', {
@@ -79,7 +82,8 @@ async function onAddClicked() {
     'units': units.value,
     'nutritional': nutritional.value,
     'measure_type': measure_type.value,
-    'allergens': allergens.value
+    'allergens': allergens.value,
+    'expiry_days': expiry_days.value
   }, {}, true)
 
   if (data.status !== 200) {
