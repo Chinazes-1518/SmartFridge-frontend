@@ -184,7 +184,7 @@ async function onSearchText() {
                       <td class="products-card-table-td">
                         <div class="products-card-table-buttons">
                           <button @click="$store.commit('setCurProd', {'value': item.prod_id}); $store.commit('showPopup', {'value': 'qr_show'})" class="products-card-table-btn transparent"><PhQrCode :size="25" /></button>
-                          <button @click="toBuyList(type.type_id, item.prod_id, cName as string, tName as string, type.amount);" class="products-card-table-btn green"><PhBasket :size="25" /></button>
+                          <button @click="toBuyList(type.type_id, item.prod_id, cName as string, tName as string, 1);" class="products-card-table-btn green"><PhBasket :size="25" /></button>
                           <button class="products-card-table-btn blue"><PhKnife :size="25" /></button>
                         </div>
                       </td>

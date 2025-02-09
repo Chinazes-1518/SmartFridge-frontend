@@ -134,7 +134,7 @@ function onInput() {
             <tbody>
             <tr class="buy-table-tr" v-for="item in buy">
               <td class="buy-table-td"><code>{{ item.id }}</code></td>
-              <td class="buy-table-td">{{ types![String(item.prod_type_id)].name }} ({{ cats![types![String(item.prod_type_id)].category_id] }})</td>
+              <td class="buy-table-td">{{ types![String(item.prod_type_id)].name }}</td>
               <td class="buy-table-td"><code>{{ item.count }}</code></td>
               <td class="buy-table-td">{{ types![String(item.prod_type_id)].amount }} {{ types![String(item.prod_type_id)].units }}</td>
               <td class="buy-table-td">

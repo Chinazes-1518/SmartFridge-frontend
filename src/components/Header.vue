@@ -68,8 +68,8 @@ onUnmounted(() => {
 
   &-container {
     margin: 0 auto;
-    max-width: 1320px;
-    padding: 0 30px;
+    //max-width: 1320px;
+    padding: 0 50px;
   }
 
   &-space {
