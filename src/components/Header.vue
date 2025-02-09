@@ -12,10 +12,14 @@
           <li><RouterLink to="/products" @click="toggled = false" class="header-button"><PhListDashes :size="24" />Список продуктов</RouterLink></li>
           <li><RouterLink to="/buy" @click="toggled = false" class="header-button"><PhBasket :size="24" />Список покупок</RouterLink></li>
           <li><RouterLink to="/analytics" @click="toggled = false" class="header-button"><PhChartLine :size="24" />Аналитика</RouterLink></li>
-          <li><button @click="toggled = false; $store.commit('showPopup', {'value': 'create_type'});" class="header-button"><PhPlus :size="24" /> Добавить</button></li>
+<!--          <li><button @click="toggled = false; $store.commit('showPopup', {'value': 'create_type'});" class="header-button"><PhPlus :size="24" /> Добавить</button></li>-->
         </ul>
         <ul class="header-list left" :class="{authed: auth.isAuth}">
           <li v-if="!auth.isAuth"><button @click="router.push('/'); toggled = false" class="header-button" style="font-weight: 400"><PhKey :size="24" />Войти</button></li>
+          <li class="header-iconbtns">
+            <button @click="toggled = false; $store.commit('showPopup', {'value': 'create_type'});" class="header-button header-iconbtns-btn"><PhPlus :size="24" /><span>Добавить тип</span></button>
+            <button @click="" class="header-button header-iconbtns-btn"><PhBell :size="24" /><span>Уведомления</span></button>
+          </li>
           <li v-if="auth.isAuth"><div class="header-username"><PhUser :size="24" />{{ (auth.user.name.length <= 20) ? auth.user.name : auth.user.name.substring(0, 20).trimEnd() + '…' }}</div></li>
           <li v-if="auth.isAuth"><button @click="auth.logout(); toggled = false" class="header-button" style="font-weight: 400"><PhDoorOpen :size="24" />Выйти</button></li>
         </ul>
@@ -27,7 +31,18 @@
 
 <script setup lang="ts">
 import {
-  PhBarcode, PhBasket, PhChartLine, PhKey, PhUser, PhDoorOpen, PhListDashes, PhQrCode, PhList, PhPlusCircle, PhPlus
+  PhBarcode,
+  PhBasket,
+  PhChartLine,
+  PhKey,
+  PhUser,
+  PhDoorOpen,
+  PhListDashes,
+  PhQrCode,
+  PhList,
+  PhPlusCircle,
+  PhPlus,
+  PhNotification, PhBell
 } from "@phosphor-icons/vue";
 import {authStore} from "@/utils/auth";
 
@@ -79,6 +94,24 @@ onUnmounted(() => {
     justify-content: space-between;
     align-items: center;
     //justify-content: space-between;
+  }
+
+  &-iconbtns {
+    display: flex;
+    align-items: center;
+    gap: 0 20px;
+
+    & span {
+      display: none;
+    }
+
+    @media (max-width: 1300px) {
+      flex-direction: column;
+
+      & span {
+        display: block;
+      }
+    }
   }
 
   &-column {
@@ -178,7 +211,7 @@ onUnmounted(() => {
 
     &-overflow.active {
       position: fixed;
-      width: 100vh;
+      width: 100vw;
       height: 100vh;
       z-index: 500;
       background: rgba(0, 0, 0, 0.4);
