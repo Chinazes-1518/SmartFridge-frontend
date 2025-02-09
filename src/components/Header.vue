@@ -208,7 +208,8 @@ onUnmounted(() => {
     }
 
     &-username {
-      padding: 0;
+      padding: 15px 0;
+      height: 100%;
       border: none;
       background: none;
     }
