@@ -33,7 +33,7 @@ export const authStore = defineStore("auth", () => {
         }
     }
 
-    const logout = () => {
+    const logout = async () => {
         window.localStorage.removeItem('authToken');
         isAuth.value = false
         user.value = {
@@ -41,7 +41,7 @@ export const authStore = defineStore("auth", () => {
             name: '',
             login: ''
         }
-        router.push("/")
+        await router.push("/")
     }
 
     prepareStore()

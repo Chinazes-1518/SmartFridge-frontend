@@ -1,6 +1,17 @@
 <script setup lang="ts">
 
 import Chart from "@/components/Chart.vue";
+import {onBeforeMount} from "vue";
+import {authStore} from "@/utils/auth.ts";
+import router from "@/router";
+
+const auth = authStore()
+
+onBeforeMount(async () => {
+  if (!auth.isAuth) {
+    await router.push("/")
+  }
+})
 </script>
 
 <template>
