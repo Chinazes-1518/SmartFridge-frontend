@@ -77,13 +77,23 @@ async function buyProduct(id: number) {
 }
 
 async function addToList() {
-  const typeId = Object.keys(types_orig.value).find(key => types_orig.value[key].name === selectedType.value.trim())
   if (selectedCount.value < 1) {
     alert("Количество должно быть больше нуля!");
-  } else if (!Number.isInteger(selectedCount.value)) {
+  } else if (Number(selectedCount.value) % 1 !== 0) {
     alert("Количество должно быть целым числом!");
+  } else if (selectedType.value === '') {
+    alert("Укажите тип продукта!")
+  } else {
+    const typeId = Object.keys(types_orig.value).find(key => types_orig.value[key].name === selectedType.value.trim())
+    const data = await APIRequest('/buylist/add', 'POST', {}, {
+      prod_type_id: typeId,
+      count: selectedCount.value
+    }, true)
+
+    if (data.status === 200) {
+      await loadBuyList()
+    }
   }
-  console.log(typeId)
 }
 
 function onInput() {
@@ -153,6 +163,7 @@ function onInput() {
               <td class="buy-table-td">
                 <div class="buy-table-buttons">
                   <button @click="buyProduct(item.id)" class="buy-table-btn red"><PhBackspace :size="25" />Удалить</button>
+                  <button @click="buyProduct(item.id)" class="buy-table-btn green"><PhBasket :size="25" />Купить</button>
                 </div>
               </td>
             </tr>
