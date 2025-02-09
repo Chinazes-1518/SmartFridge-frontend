@@ -28,6 +28,9 @@ let inputDropdown = ref(false)
 let add = ref('')
 let mode = ref(0)
 
+let selectedType = ref('')
+let selectedCount = ref(1)
+
 const store = useStore();
 
 onBeforeMount(async () => {
@@ -73,6 +76,16 @@ async function buyProduct(id: number) {
   }
 }
 
+async function addToList() {
+  const typeId = Object.keys(types_orig.value).find(key => types_orig.value[key].name === selectedType.value.trim())
+  if (selectedCount.value < 1) {
+    alert("Количество должно быть больше нуля!");
+  } else if (!Number.isInteger(selectedCount.value)) {
+    alert("Количество должно быть целым числом!");
+  }
+  console.log(typeId)
+}
+
 function onInput() {
   const add_val = add.value.trim().toLowerCase();
   mode.value = 0
@@ -101,7 +114,7 @@ function onInput() {
           </div>
           <div class="buy-add-col" :class="{focus:inputDropdown}" v-if="mode == 1">
             <PhSortAscending :size="26" />
-            <select class="buy-add-input select" @focus="inputDropdown = true" @blur="inputDropdown = false">
+            <select class="buy-add-input select" @focus="inputDropdown = true" @blur="inputDropdown = false" v-model="selectedType">
               <option v-for="(k, v) in types" class="buy-add-input-option">
                 {{ k.name }}
               </option>
@@ -109,9 +122,9 @@ function onInput() {
           </div>
           <div class="buy-add-col" :class="{focus:inputCount}" v-if="mode == 1">
             <PhRuler :size="26" />
-            <input type="text" class="buy-add-input count" placeholder="Количество" @focus="inputCount = true" @blur="inputCount = false">
+            <input type="text" class="buy-add-input count" placeholder="Количество" @focus="inputCount = true" @blur="inputCount = false" v-model="selectedCount">
           </div>
-          <button class="buy-add-button green" v-if="mode == 1">
+          <button @click="addToList()" class="buy-add-button green" v-if="mode == 1">
             <PhPlusCircle :size="26"></PhPlusCircle>
           </button>
           <button class="buy-add-button blue newct" v-if="mode == 0" @click="$store.commit('showPopup', {'value': 'create_type'})">
@@ -126,8 +139,8 @@ function onInput() {
             <tr class="buy-table-tr">
               <th class="buy-table-th">ID</th>
               <th class="buy-table-th">Название продукта</th>
-              <th class="buy-table-th">Количество, штука</th>
-              <th class="buy-table-th">Масса</th>
+              <th class="buy-table-th">Количество</th>
+<!--              <th class="buy-table-th">Масса</th>-->
               <th class="buy-table-th">Действия</th>
             </tr>
             </thead>
@@ -135,8 +148,8 @@ function onInput() {
             <tr class="buy-table-tr" v-for="item in buy">
               <td class="buy-table-td"><code>{{ item.id }}</code></td>
               <td class="buy-table-td">{{ types![String(item.prod_type_id)].name }}</td>
-              <td class="buy-table-td"><code>{{ item.count }}</code></td>
-              <td class="buy-table-td">{{ types![String(item.prod_type_id)].amount }} {{ types![String(item.prod_type_id)].units }}</td>
+              <td class="buy-table-td"><code>{{ item.count }}</code> ({{ types![String(item.prod_type_id)].measure_type }})</td>
+<!--              <td class="buy-table-td">{{ types![String(item.prod_type_id)].amount }} {{ types![String(item.prod_type_id)].units }}</td>-->
               <td class="buy-table-td">
                 <div class="buy-table-buttons">
                   <button @click="buyProduct(item.id)" class="buy-table-btn red"><PhBackspace :size="25" />Удалить</button>
