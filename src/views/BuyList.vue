@@ -84,7 +84,7 @@ async function addToList() {
   } else if (selectedType.value === '') {
     alert("Укажите тип продукта!")
   } else {
-    const typeId = Object.keys(types_orig.value).find(key => types_orig.value[key].name === selectedType.value.trim())
+    const typeId = Object.keys(types_orig.value!).find(key => types_orig.value![key].name === selectedType.value.trim())
     const data = await APIRequest('/buylist/add', 'POST', {}, {
       prod_type_id: typeId,
       count: selectedCount.value
@@ -93,6 +93,14 @@ async function addToList() {
     if (data.status === 200) {
       await loadBuyList()
     }
+  }
+}
+
+async function buyAll() {
+  const data = await APIRequest("/buylist/buy", "GET", {}, {}, true)
+
+  if (data.status === 200) {
+    await loadBuyList()
   }
 }
 
@@ -163,7 +171,6 @@ function onInput() {
               <td class="buy-table-td">
                 <div class="buy-table-buttons">
                   <button @click="buyProduct(item.id)" class="buy-table-btn red"><PhBackspace :size="25" />Удалить</button>
-                  <button @click="buyProduct(item.id)" class="buy-table-btn green"><PhBasket :size="25" />Купить</button>
                 </div>
               </td>
             </tr>
