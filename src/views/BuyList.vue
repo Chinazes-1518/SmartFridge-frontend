@@ -91,6 +91,9 @@ async function addToList() {
     }, true)
 
     if (data.status === 200) {
+      add.value = ''
+      mode.value = 0
+      selectedType.value = ''
       await loadBuyList()
     }
   }
@@ -165,9 +168,9 @@ function onInput() {
             <tbody>
             <tr class="buy-table-tr" v-for="item in buy">
               <td class="buy-table-td"><code>{{ item.id }}</code></td>
-              <td class="buy-table-td">{{ types![String(item.prod_type_id)].name }}</td>
-              <td class="buy-table-td"><code>{{ item.count }}</code> ({{ types![String(item.prod_type_id)].measure_type }})</td>
-<!--              <td class="buy-table-td">{{ types![String(item.prod_type_id)].amount }} {{ types![String(item.prod_type_id)].units }}</td>-->
+              <td class="buy-table-td">{{ types_orig![String(item.prod_type_id)].name }}</td>
+              <td class="buy-table-td"><code>{{ item.count }}</code> ({{ types_orig![String(item.prod_type_id)].measure_type }})</td>
+<!--              <td class="buy-table-td">{{ types_orig![String(item.prod_type_id)].amount }} {{ types_orig![String(item.prod_type_id)].units }}</td>-->
               <td class="buy-table-td">
                 <div class="buy-table-buttons">
                   <button @click="buyProduct(item.id)" class="buy-table-btn red"><PhBackspace :size="25" />Удалить</button>
