@@ -6,7 +6,7 @@ import {watch} from "vue";
 import {
   PhBackspace,
   PhBasket,
-  PhBowlFood,
+  PhBowlFood, PhBroom,
   PhKnife,
   PhMagnifyingGlass,
   PhNavigationArrow, PhPlusCircle,
@@ -99,8 +99,8 @@ async function addToList() {
   }
 }
 
-async function buyAll() {
-  const data = await APIRequest("/buylist/buy", "GET", {}, {}, true)
+async function clearList() {
+  const data = await APIRequest("/buylist/clear", "DELETE", {}, {}, true)
 
   if (data.status === 200) {
     await loadBuyList()
@@ -153,6 +153,9 @@ function onInput() {
             Создать тип
           </button>
         </div>
+        <div class="buy-clear-btn">
+          <button @click="clearList()" class="buy-table-btn red"><PhBroom :size="25" />Очистить список</button>
+        </div>
         <div class="buy-empty" v-if="buy === null || buy?.length <= 0">К сожалению, в списке покупок пусто</div>
         <div class="buy-table-pre" v-else>
           <table class="buy-table">
@@ -191,6 +194,14 @@ function onInput() {
 
   &-empty {
     margin-top: 30px;
+  }
+
+  &-clear-btn {
+    @media (max-width: 945px) {
+      & button {
+        width: 100%;
+      }
+    }
   }
 
   &-title {
@@ -301,7 +312,7 @@ function onInput() {
     gap: 0 20px;
     margin: 15px 0;
 
-    @media (max-width: 640px) {
+    @media (max-width: 945px) {
       flex-direction: column;
       gap: 15px 0;
     }
@@ -335,7 +346,7 @@ function onInput() {
       border: 0;
       outline: 0;
 
-      @media (max-width: 640px) {
+      @media (max-width: 945px) {
         width: 100% !important;
       }
 
@@ -362,7 +373,7 @@ function onInput() {
       transition: .125s ease-in-out;
       cursor: pointer;
 
-      @media (max-width: 640px) {
+      @media (max-width: 945px) {
         width: 100%;
       }
 
