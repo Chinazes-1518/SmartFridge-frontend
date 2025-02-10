@@ -8,6 +8,7 @@
       </div>
       <div class="header-column toggle" :class="{active:toggled}">
         <ul class="header-list">
+          <li><button @click="toggled = false; $store.state.qrGenerated = true; $store.state.qrData = helpme; $store.commit('showPopup', {'value': 'qr_show'});" class="header-button"><PhQrCode :size="24" />TEST</button></li>
           <li><button @click="toggled = false; $store.commit('showPopup', {'value': 'qr_scan'});" class="header-button"><PhQrCode :size="24" />Сканировать код</button></li>
           <li><RouterLink to="/products" @click="toggled = false" class="header-button"><PhListDashes :size="24" />Список продуктов</RouterLink></li>
           <li><RouterLink to="/buy" @click="toggled = false" class="header-button"><PhBasket :size="24" />Список покупок</RouterLink></li>
@@ -48,6 +49,8 @@ import {authStore} from "@/utils/auth";
 
 import {onUnmounted, ref} from "vue";
 import router from "@/router";
+
+const helpme = '[-1,"2025-01-01T00:00:00","2025-02-01T00:00:00",-1,"NEWTYPE3",200,"г",500,"шт","1",1888,10,"NEWCAT2"]';
 
 const auth = authStore()
 

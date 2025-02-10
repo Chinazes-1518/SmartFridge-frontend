@@ -18,7 +18,8 @@ export const store = createStore({
             state.showPopup = value['value'];
             if (value['value'] == 'qr_show') {
                 state.qrGenerated = false;
-                state.qrData = await genQR(state.currentProduct)
+                state.qrData = await genQR(state.currentProduct, state.qrData)
+                console.log(state.qrData)
                 state.qrGenerated = true;
             } else if (value['value'] == 'create_type') {
                 const cData = await APIRequest('/product_categories/all', "GET", {}, {}, true);

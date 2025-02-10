@@ -30,7 +30,7 @@ export function decodeQR(text: string) : QRData {
     return res;
 }
 
-export async function genQR(id: number) {
+export async function genQR(id: number, fff: string) {
     const data = await APIRequest('/products/product', 'GET', {'id': id}, {}, true)
     console.log(data)
 
@@ -45,5 +45,5 @@ export async function genQR(id: number) {
         return JSON.stringify(vals)
     }
 
-    return 'wtf'
+    return fff
 }
