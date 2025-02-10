@@ -49,7 +49,7 @@ function date(f: string): [string, number] {
   const difference = (date.getTime() - Date.now()) > 0 ? Math.ceil((date.getTime() - Date.now()) / 1000 / 60 / 60 / 24) : 0
   const finalDate = `${day}.${month}.${date.getFullYear()}`
 
-  return [finalDate, difference]
+  return [finalDate, difference + 1]
 }
 
 function getDaysStr(diff: number) {

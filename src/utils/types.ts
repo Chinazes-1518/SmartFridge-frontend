@@ -1,16 +1,19 @@
 export type QRData = {
-    prod_id: number,
+    prod_id: number | null,
     production_date: string,
     expiry_date: string,
+
+    type_id: number | null,
     type_name: string,
     amount: number,
     units: string,
-    type_id: number,
     nutritional: number,
     measure_type: string,
     allergens: string | null,
-    cat_name: string,
-    cat_id: number
+    expiry_days: number,
+
+    cat_id: number | null,
+    cat_name: string
 }
 
 export type TypeData = {
@@ -20,6 +23,7 @@ export type TypeData = {
     measure_type: string,
     allergens: string | null,
     type_id: number,
+    expiry_days: number,
     items: [any]
 }
 
