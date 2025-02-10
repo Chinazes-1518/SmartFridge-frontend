@@ -1,32 +1,34 @@
 <template>
   <Modal id="create_type" title="Создать новый тип">
-    <input type="text" placeholder="Название типа" v-model="name">
-    <div style="display: flex;">
-      <input type="text" placeholder="Название категории" v-model="catname" @input="catsvar = $store.state.cats; onCatInput()">
-      <button v-if="mode === 0" @click="$store.commit('showPopup', {'value': 'create_cat'})">тут значок плюса</button>
-      <select v-if="mode === 1" v-model="cat_chosen">
+    <input class="modal-input" type="text" placeholder="Название типа" v-model="name">
+    <div style="display: flex; gap: 15px; align-items: center;">
+      <input class="modal-input special" type="text" placeholder="Название категории" v-model="catname" @input="catsvar = $store.state.cats; onCatInput()">
+      <button class="modal-icon-btn blue" v-if="mode === 0" @click="$store.commit('showPopup', {'value': 'create_cat'})"><PhPlusCircle :size="25" /></button>
+      <select  class="modal-input" v-if="mode === 1" v-model="cat_chosen">
         <option v-for="(k, v) in newcats">
           {{ k }}
         </option>
       </select>
     </div>
-    <input type="number" placeholder="Кол-во (в ед.изм)" v-model="amount">
+    <input class="modal-input" type="number" placeholder="Кол-во (в ед.изм)" v-model="amount">
     <br>
-    <input type="text" placeholder="Единицы измерения" v-model="units">
+    <input class="modal-input" type="text" placeholder="Единицы измерения" v-model="units">
     <br>
-    <input type="number" placeholder="Пищевая ценность (в ккал)" v-model="nutritional">
+    <input class="modal-input" type="number" placeholder="Пищевая ценность (в ккал)" v-model="nutritional">
     <br>
-    <input type="text" placeholder="Тип измерения" v-model="measure_type">
+    <input class="modal-input" type="text" placeholder="Тип измерения" v-model="measure_type">
     <br>
-    <input type="text" placeholder="Особенности" v-model="allergens">
+    <input class="modal-input" type="text" placeholder="Особенности" v-model="allergens">
     <br>
-    <input type="number" placeholder="Кол-во дней до истечения срока годности" v-model="expiry_days">
+    <input class="modal-input" type="number" placeholder="Кол-во дней до истечения срока годности" v-model="expiry_days">
     <br>
+    <div class="modal-error" v-if="error !== ''">
+      <PhXCircle :size="24" />
+      {{ error }}
+    </div>
 
-    <p v-if="error !== ''">{{ error }}</p>
-
     <br>
-    <button @click="async () => {if (await onAddClicked()) {$store.commit('updateBuylist'); $store.commit('showPopup', {'value': ''});}}">Добавить</button>
+    <button class="modal-button green" @click="async () => {if (await onAddClicked()) {$store.commit('updateBuylist'); $store.commit('showPopup', {'value': ''});}}"><PhPlusCircle :size="24" />Добавить тип</button>
   </Modal>
 </template>
 
@@ -35,6 +37,7 @@ import Modal from "@/components/Modal.vue";
 import {type Component, type Ref, ref} from 'vue';
 import { type BuylistData, type CategoriesData } from "@/utils/types";
 import { APIRequest } from "@/utils/http";
+import {PhPlusCircle, PhXCircle} from "@phosphor-icons/vue";
 
 let catname: Ref<string> = ref('');
 let newcats: Ref<CategoriesData> = ref({});
@@ -44,12 +47,12 @@ let error: Ref<string> = ref('');
 
 let name: Ref<string> = ref('');
 let cat_chosen: Ref<string> = ref('');
-let amount: Ref<number> = ref(0);
+let amount: Ref<number> = ref();
 let units: Ref<string> = ref('');
-let nutritional: Ref<number> = ref(0);
+let nutritional: Ref<number> = ref();
 let measure_type: Ref<string> = ref('');
 let allergens: Ref<string> = ref('');
-let expiry_days: Ref<number> = ref(0);
+let expiry_days: Ref<number> = ref();
 
 async function onCatInput() {
   const cat_val = catname.value.trim().toLowerCase();
