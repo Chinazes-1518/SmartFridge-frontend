@@ -50,6 +50,9 @@ import {allergens_specs, type CategoriesData, type QRData} from "@/utils/types.t
 import {decodeQR} from "@/utils/qr.ts";
 import {PhArrowCounterClockwise, PhBasket, PhHandTap, PhInfo, PhKnife, PhPlusCircle} from "@phosphor-icons/vue";
 import {APIRequest} from "@/utils/http.ts";
+import { useStore } from "vuex";
+
+const store = useStore();
 
 let dataref: Ref<QRData | null> = ref(null)
 
@@ -114,17 +117,21 @@ async function toFridge() {
     }
 
     if (dataref.value.prod_id === -1) {
-      const ffff = new Date(dataref.value.production_date);
-      const ffff2 = new Date(dataref.value.expiry_date);
+      const [d1, m1, y1] = dataref.value.production_date.split('.');
+      const [d2, m2, y2] = dataref.value.expiry_date.split('.');
       const dataa = await APIRequest('/products/add', 'POST', {
         'type_id': typeid,
-        'prod_date': `${ffff.getFullYear()}-${String(ffff.getMonth() + 1).padStart(2, '0')}-${String(ffff.getDate()).padStart(2, '0')}`,
-        'exp_date': `${ffff2.getFullYear()}-${String(ffff2.getMonth() + 1).padStart(2, '0')}-${String(ffff2.getDate()).padStart(2, '0')}`
+        'prod_date': `${y1}-${m1}-${d1}`,
+        'exp_date': `${y2}-${m2}-${d2}`
       }, {}, true)
 
       if (dataa.status !== 200) {
         console.error('shjkadhjkasdhjkashkdj')
       } else {
+        store.state.showPopup = '';
+        store.state.currentProduct = -1;
+        store.state.qrData = '';
+        dataref.value = null;
         window.location.reload()
       }
     }

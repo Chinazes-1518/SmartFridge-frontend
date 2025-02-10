@@ -150,12 +150,13 @@ async function onSearchText() {
               <div class="products-card-type-toggle">
                 <div class="products-card-type-info">
                   <div class="products-card-type-info-pos">
-                    <div class="products-card-type-info-name"><PhScales :size="24" />Масса:</div>
+                    <div class="products-card-type-info-name"><PhScales :size="24" />Количество:</div>
                     <div class="products-card-type-info-value"><code>{{ type.amount }} {{ type.units }}.</code></div>
                   </div>
                   <div class="products-card-type-info-pos">
-                    <div class="products-card-type-info-name"><PhLightning :size="24" />Пищевая ценность:</div>
-                    <div class="products-card-type-info-value"><code>{{ type.nutritional * (type.amount / 100) }} ккал.</code></div>
+                    <div class="products-card-type-info-name"><PhLightning :size="24" />Пищевая ценность на 100г:</div>
+                    <!-- <div class="products-card-type-info-value"><code>{{ type.nutritional * (type.amount / 100) }} ккал.</code></div> -->
+                    <div class="products-card-type-info-value"><code>{{ type.nutritional }} ккал.</code></div>
                   </div>
                   <div class="products-card-type-info-pos">
                     <div class="products-card-type-info-name"><PhRuler :size="24" />Тип измерения:</div>
