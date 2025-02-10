@@ -18,16 +18,27 @@
     <br>
     <input class="modal-input" type="text" placeholder="Тип измерения" v-model="measure_type">
     <br>
-    <input class="modal-input" type="text" placeholder="Особенности" v-model="allergens">
-    <br>
     <input class="modal-input" type="number" placeholder="Кол-во дней до истечения срока годности" v-model="expiry_days">
+<!--    <input class="modal-input" type="text" placeholder="Особенности" v-model="allergens">-->
+    <br>
+    <label class="modal-option">
+      <input type="checkbox" class="modal-option--btn" />
+      <span>Алергенное</span>
+    </label>
+    <label class="modal-option">
+      <input type="checkbox" class="modal-option--btn" />
+      <span>Содержит лактозу</span>
+    </label>
+    <label class="modal-option">
+      <input type="checkbox" class="modal-option--btn" />
+      <span>Содержит глютен</span>
+    </label>
     <br>
     <div class="modal-error" v-if="error !== ''">
       <PhXCircle :size="24" />
       {{ error }}
     </div>
 
-    <br>
     <button class="modal-button green" @click="async () => {if (await onAddClicked()) {$store.commit('updateBuylist'); $store.commit('showPopup', {'value': ''});}}"><PhPlusCircle :size="24" />Добавить тип</button>
   </Modal>
 </template>
@@ -100,3 +111,55 @@ async function onAddClicked() {
   return true
 }
 </script>
+
+<style lang="scss">
+.modal {
+  &-option {
+    display: flex;
+    flex-direction: initial;
+    align-items: center;
+    gap: 25px;
+    margin: 20px 0;
+    cursor: pointer;
+
+    &--btn:after {
+      width: 25px;
+      height: 25px;
+      border-radius: 15px;
+      top: -8px;
+      left: -6px;
+      position: relative;
+      background: #f3ceac;
+      border: 2px solid #ffbd73;
+      content: '';
+      display: inline-block;
+      visibility: visible;
+      cursor: pointer;
+      transition: 0.25s ease;
+    }
+
+    &--btn:after:hover {
+      border: 2px solid #fca952;
+      //background: #efefef;
+    }
+    &--btn:checked:after {
+      width: 25px;
+      height: 25px;
+      border-radius: 15px;
+      top: -8px;
+      left: -6px;
+      position: relative;
+      border: 2px solid #fd9a2f;
+      background: #fcc697;
+      content: '';
+      display: inline-block;
+      visibility: visible;
+    }
+
+    @media (max-width: 810px) {
+      flex-direction: initial;
+      gap: 0 25px;
+    }
+  }
+}
+</style>
