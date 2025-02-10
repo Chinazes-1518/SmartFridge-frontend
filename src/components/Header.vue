@@ -18,7 +18,7 @@
           <li v-if="!auth.isAuth"><button @click="router.push('/'); toggled = false" class="header-button" style="font-weight: 400"><PhKey :size="24" />Войти</button></li>
           <li class="header-iconbtns">
             <button @click="toggled = false; $store.commit('showPopup', {'value': 'create_type'});" class="header-button header-iconbtns-btn"><PhPlus :size="24" /><span>Добавить тип</span></button>
-            <RouterLink to="/notifications" class="header-button header-iconbtns-btn"><PhBell :size="24" /><span>Уведомления</span></RouterLink>
+            <RouterLink to="/notifications" @click="toggled = false;" class="header-button header-iconbtns-btn"><PhBell :size="24" /><span>Уведомления</span></RouterLink>
           </li>
           <li v-if="auth.isAuth"><div class="header-username"><PhUser :size="24" />{{ (auth.user.name.length <= 20) ? auth.user.name : auth.user.name.substring(0, 20).trimEnd() + '…' }}</div></li>
           <li v-if="auth.isAuth"><button @click="auth.logout(); toggled = false" class="header-button" style="font-weight: 400"><PhDoorOpen :size="24" />Выйти</button></li>
