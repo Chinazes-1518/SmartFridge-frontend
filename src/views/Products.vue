@@ -87,6 +87,14 @@ async function deleteProduct(id: number) {
   const data = APIRequest(`/buylist/delete`, "POST", {}, {})
 }
 
+async function useProduct(prodId: number) {
+  const data = await APIRequest('/products/use', 'POST', {prod_id: prodId}, {}, true)
+
+  if (data.status === 200) {
+    await loadProducts()
+  }
+}
+
 let searchText = ref('')
 
 async function onSearchText() {
@@ -185,7 +193,7 @@ async function onSearchText() {
                         <div class="products-card-table-buttons">
                           <button @click="$store.commit('setCurProd', {'value': item.prod_id}); $store.commit('showPopup', {'value': 'qr_show'})" class="products-card-table-btn transparent"><PhQrCode :size="25" /></button>
                           <button @click="toBuyList(type.type_id, item.prod_id, cName as string, tName as string, 1);" class="products-card-table-btn green"><PhBasket :size="25" /></button>
-                          <button class="products-card-table-btn blue"><PhKnife :size="25" /></button>
+                          <button @click="useProduct(item.prod_id)" class="products-card-table-btn blue"><PhKnife :size="25" /></button>
                         </div>
                       </td>
                     </tr>

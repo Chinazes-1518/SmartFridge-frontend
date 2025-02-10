@@ -50,7 +50,7 @@ import {authStore} from "@/utils/auth";
 import {onUnmounted, ref} from "vue";
 import router from "@/router";
 
-const helpme = '[-1,"2025-01-01T00:00:00","2025-02-01T00:00:00",-1,"NEWTYPE3",200,"г",500,"шт","1",1888,10,"NEWCAT2"]';
+const helpme = '[-1,"2025-01-01T00:00:00","2025-02-01T00:00:00",-1,"Белый111",200,"г",166,"шт","",180,-1,"Хлеб222"]';
 
 const auth = authStore()
 

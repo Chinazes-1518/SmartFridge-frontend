@@ -28,13 +28,13 @@
             <div class="qr-scanner-name">Единицы измерения:</div> <div class="qr-scanner-value">{{ dataref.measure_type }}</div>
             </div>
             <div class="qr-scanner-info-pos">
-            <div class="qr-scanner-name">Особенности:</div> <div class="qr-scanner-value" v-if="dataref.allergens !== null">{{ dataref.allergens.split(',').map((x: any) => allergens_specs[x]).join(', ') }}</div><span v-if="dataref.allergens === null">нет</span>
+            <div class="qr-scanner-name">Особенности:</div> <div class="qr-scanner-value" v-if="dataref.allergens !== null && dataref.allergens !== undefined">{{ dataref.allergens.split(',').map((x: any) => allergens_specs[x]).join(', ') }}</div><span v-if="dataref.allergens === null">нет</span>
             </div>
             <br>
             <div class="qr-scanner-info-title"><PhHandTap :size="25" /> Действия</div>
             <div class="qr-scanner-buttons">
             <button v-if="dataref.prod_id !== -1" @click="useProduct(dataref.prod_id)" class="qr-scanner-button blue"><PhKnife :size="25" />Приготовить</button>
-            <button @click="toFridge()" class="qr-scanner-button green"><PhPlusCircle :size="25" />В холодильник</button>
+            <button v-if="dataref.prod_id === -1" @click="toFridge()" class="qr-scanner-button green"><PhPlusCircle :size="25" />В холодильник</button>
             <button @click="" class="qr-scanner-button purple"><PhBasket :size="25" />В список покупок</button>
             <button @click="dataref = null" class="qr-scanner-button yellow"><PhArrowCounterClockwise :size="22" />Сканировать заново</button>
             </div>
@@ -66,28 +66,35 @@ async function useProduct(prodId: number) {
   }
 }
 
-async function toFridge() {  
+async function toFridge() {
   if (dataref.value !== null) {
+    let catid = String(dataref.value?.cat_id)
+
     if (dataref.value.cat_id === -1) {
       console.log('creating cat')
       const data = await APIRequest('/product_categories/add', 'POST', {'name': dataref.value.cat_name}, {}, true)
 
       if (data.status !== 200) {
         console.error('not created cat')
+
+        catid = data.json.detail.id
+      } else {
+        catid = data.json.id
       }
     }
 
     let typeid = String(dataref.value?.type_id)
 
     if (dataref.value.type_id === -1) {
-      const cData = await APIRequest('/product_categories/all', "GET", {}, {}, true)
-      if (cData.status === 200) {
-        const cDataJson: CategoriesData = cData.json;
-        console.log(cDataJson)
+      // const cData = await APIRequest('/product_categories/all', "GET", {}, {}, true)
+      // if (cData.status === 200) {
+      //   const cDataJson: CategoriesData = cData.json;
+      //   console.log(cDataJson)
 
         const data2 = await APIRequest('/product_types/add', 'POST', {
           'name': dataref.value.type_name,
-          'category_id': Object.keys(cDataJson).find(key => cDataJson[key] === dataref.value?.cat_name),
+          // 'category_id': Object.keys(cDataJson).find(key => cDataJson[key] === dataref.value?.cat_name),
+          'category_id': catid,
           'amount': dataref.value.amount,
           'units': dataref.value.units,
           'nutritional': dataref.value.nutritional,
@@ -98,11 +105,12 @@ async function toFridge() {
 
         if (data2.status !== 200) {
           console.error('not adding type')
+          typeid = data2.json.detail.id
         } else {
           typeid = data2.json.id;
           console.log('NEW TYPE ID', typeid)
         }
-      }
+      // }
     }
 
     if (dataref.value.prod_id === -1) {
