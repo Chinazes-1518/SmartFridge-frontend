@@ -47,12 +47,12 @@ let error: Ref<string> = ref('');
 
 let name: Ref<string> = ref('');
 let cat_chosen: Ref<string> = ref('');
-let amount: Ref<number> = ref();
+let amount: Ref<number | undefined> = ref();
 let units: Ref<string> = ref('');
-let nutritional: Ref<number> = ref();
+let nutritional: Ref<number | undefined> = ref();
 let measure_type: Ref<string> = ref('');
 let allergens: Ref<string> = ref('');
-let expiry_days: Ref<number> = ref();
+let expiry_days: Ref<number | undefined> = ref();
 
 async function onCatInput() {
   const cat_val = catname.value.trim().toLowerCase();
@@ -75,7 +75,8 @@ async function onAddClicked() {
       return false;
     }
   }
-  if (cat_chosen.value === undefined || cat_chosen.value.trim() === '' || amount.value <= 0 || nutritional.value <= 0 || expiry_days.value <= 0)
+  if (cat_chosen.value === undefined || cat_chosen.value.trim() === '' || amount.value === undefined || nutritional.value === undefined || expiry_days.value === undefined ||
+      amount.value <= 0 || nutritional.value <= 0 || expiry_days.value <= 0)
     return false;
 
   const data = await APIRequest('/product_types/add', 'POST', {
