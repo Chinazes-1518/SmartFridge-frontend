@@ -27,8 +27,8 @@
             <div class="qr-scanner-info-pos">
             <div class="qr-scanner-name">Единицы измерения:</div> <div class="qr-scanner-value">{{ dataref.measure_type }}</div>
             </div>
-            <div class="qr-scanner-info-pos">
-            <div class="qr-scanner-name">Особенности:</div> <div class="qr-scanner-value" v-if="dataref.allergens !== null && dataref.allergens !== undefined">{{ dataref.allergens.split(',').map((x: any) => allergens_specs[x]).join(', ') }}</div><span v-if="dataref.allergens === null">нет</span>
+            <div class="qr-scanner-info-pos" v-if="dataref.allergens !== null && dataref.allergens !== undefined && dataref.allergens !== ''">
+            <div class="qr-scanner-name">Особенности:</div> <div class="qr-scanner-value">{{ dataref.allergens.split(',').map((x: any) => allergens_specs[x]).join(', ') }}</div><span v-if="dataref.allergens === null">нет</span>
             </div>
             <br>
             <div class="qr-scanner-info-title"><PhHandTap :size="25" /> Действия</div>
