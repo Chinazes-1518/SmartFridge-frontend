@@ -35,7 +35,7 @@
             <div class="qr-scanner-buttons">
             <button v-if="dataref.prod_id !== -1" @click="useProduct(dataref.prod_id)" class="qr-scanner-button blue"><PhKnife :size="25" />Приготовить</button>
             <button v-if="dataref.prod_id === -1" @click="toFridge()" class="qr-scanner-button green"><PhPlusCircle :size="25" />В холодильник</button>
-            <button @click="" class="qr-scanner-button purple"><PhBasket :size="25" />В список покупок</button>
+            <button v-if="dataref.prod_id !== -1 && dataref.type_id !== -1" @click="toBuyList()" class="qr-scanner-button purple"><PhBasket :size="25" />В список покупок</button>
             <button @click="dataref = null" class="qr-scanner-button yellow"><PhArrowCounterClockwise :size="22" />Сканировать заново</button>
             </div>
         </div>
@@ -138,9 +138,9 @@ async function toFridge() {
   }
 }
 
-// async function addProduct(prodId: number) {}
-
-// async function toBuylist()
+async function toBuyList() {
+  const data = await APIRequest('/buylist/add', 'POST', {}, {'prod_type_id': dataref.value?.type_id, 'count': 1}, true)
+}
 </script>
 
 <style lang="scss">
