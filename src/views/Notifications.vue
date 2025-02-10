@@ -61,7 +61,7 @@ async function loadNotifications() {
             <div class="notify-card-title">Срок годности истёк</div>
             <div class="notify-card-info">
               <ul class="notify-card-ul" v-for="(k, v) in notifications_expired">
-                <li class="notify-card-pos"><code>ID: {{ k.id }}</code> • {{ types_orig![String(k['type_id'])].name }}</li>
+                <li class="notify-card-pos"><code>ID: {{ k['id'] }}</code> • {{ types_orig![String(k['type_id'])].name }}</li>
               </ul>
             </div>
           </div>
@@ -69,7 +69,7 @@ async function loadNotifications() {
             <div class="notify-card-title">Срок годности истекает сегодня</div>
             <div class="notify-card-info">
               <ul class="notify-card-ul" v-for="(k, v) in notifications_expiresToday">
-                <li class="notify-card-pos"><code>ID: {{ k.id }}</code> • {{ types_orig![String(k['type_id'])].name }}</li>
+                <li class="notify-card-pos"><code>ID: {{ k['id'] }}</code> • {{ types_orig![String(k['type_id'])].name }}</li>
               </ul>
             </div>
           </div>
